@@ -1,16 +1,17 @@
 #' Posterior probability calculation for composite hypotheses
 #'
 #' @description
-#' This function calculates a posterior probability for hypotheses about population densities of the form \eqn{H:\mu > \psi}, given the data at a single
+#' This function calculates a posterior probability for hypotheses about population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi}, given the data at a single
 #' iteration. This function is to be used in a sequential framework, and called on the sequential test \code{\link{stbp_composite}}.
 #'
 #'
 #' @param data Vector with count data for a single sampling bout.
+#' @param greater_than logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
 #' @param hypothesis Single value with the hypothesized value of \eqn{\mu}.
 #' @param likelihood_func Kernel probability density function for the data. See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}
-#' @param lower_bnd Single number indicating the lowest possible value for \eqn{\mu}. Most cases is \eqn{0}.
-#' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}. Most cases is \code{Inf}.
+#' @param lower_bnd Single number indicating the lower bound of the parameter space for \eqn{\mu}. Most cases is \eqn{0} (default).
+#' @param upper_bnd Single number indicating the upper bound of the parameter space for \eqn{\mu}. Most cases is \code{Inf} (default).
 #' @returns A single probability value
 #' @details
 #' The \code{likelihood_func} argument should be specified as a density function with an \dQuote{x} in the
@@ -26,6 +27,7 @@
 #' # a poisson kernel
 #'
 #' stbp_posterior_composite(data = counts,
+#'                           greater_than = TRUE,
 #'                           hypothesis = 2,
 #'                           likelihood_func = function(data, x)
 #'                                                 {dpois(data, lambda = x)},
@@ -37,6 +39,7 @@
 #' # Note that 'size' can either be a positive number or a function.
 #'
 #' stbp_posterior_composite(data = counts,
+#'                           greater_than = TRUE,
 #'                           hypothesis = 2,
 #'                           likelihood_func = function(data, x)
 #'                                                 {dnbinom(data, size = 2,
@@ -47,6 +50,7 @@
 #' @export
 
 stbp_posterior_composite <- function(data,
+                                     greater_than = TRUE,
                                      hypothesis,
                                      likelihood_func,
                                      prior,
@@ -59,14 +63,14 @@ stbp_posterior_composite <- function(data,
   H1 <- prior *
     integrate(
       Vectorize(likelihood),
-      lower = hypothesis,
-      upper = upper_bnd
+      lower = if(greater_than == TRUE) hypothesis else lower_bnd,
+      upper = if(greater_than == TRUE) upper_bnd else hypothesis
     )$value
   H0 <- (1 - prior) *
     integrate(
       Vectorize(likelihood),
-      lower = lower_bnd,
-      upper = hypothesis
+      lower = if(greater_than == TRUE) lower_bnd else hypothesis,
+      upper = if(greater_than == TRUE) hypothesis else upper_bnd
     )$value
   posterior <- H1 / (H0 + H1)
   posterior
@@ -76,23 +80,29 @@ stbp_posterior_composite <- function(data,
 #'
 #' @description
 #' Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses
-#' about population densities of the form \eqn{H:\mu > \psi}.
+#' about population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi}.
 #' Data is treated in a sequential framework.
 #'
 #'
 #' @param data Either a vector (for purely sequential designs) o a matrix
 #' (group sequential designs) with sequential count data, with sampling bouts
 #' collected over time in columns and sampling within bouts in rows.
+#' @param greater_than logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
 #' @param hypotheses Either a single value or a vector with the hypothesized values for \eqn{\mu}.
 #' If a vector, should contain at least as many values as \code{ncol(data)}
 #' @param likelihood_func Kernel probability density function for the data. See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
-#' @param lower_bnd Single number indicating the lowest possible value for \eqn{\mu}. Most cases is \eqn{0}.
-#' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}. Most cases is \code{Inf}.
+#' @param lower_bnd Single number indicating the lower bound of the parameter space for \eqn{\mu}. Most cases is \eqn{0} (default).
+#' @param upper_bnd Single number indicating the upper bound of the parameter space for \eqn{\mu}. Most cases is \code{Inf} (default).
 #' @param lower_criterion Criterion to decide against the tested hypothesis.
 #' This is the lowest credibility to the hypothesis to stop sampling and decide against.
 #' @param upper_criterion Criterion to decide in favor of the tested hypothesis.
 #' This is the greatest credibility to the hypothesis to stop sampling and decide in favor.
+#'
+#' @details
+#' The \code{likelihood_func} argument should be specified as a density function
+#' with an \dQuote{x} in the mean argument and \dQuote{data} in the vector of quantiles.
+#' For example, \code{function(data, x){dpois(data, lambda = x)}}.
 #'
 #' @returns
 #' A list with a vector of posterior \code{$probabilities} of length
@@ -111,6 +121,7 @@ stbp_posterior_composite <- function(data,
 #' counts3 <- rpois(5, lambda = 3)
 #'
 #' stbp_composite(data = counts3,
+#'                 greater_than = TRUE,
 #'                 hypothesis = 5,
 #'                 likelihood_func = function(data, x)
 #'                     {dpois(data, lambda = x)},
@@ -136,6 +147,7 @@ stbp_posterior_composite <- function(data,
 #' # Running STBP on the sample
 #'
 #' stbp_composite(data = countP,
+#'                 greater_than = TRUE,
 #'                 hypothesis = H,
 #'                 likelihood_func = function(data, x)
 #'                     {dpois(data, lambda = x)},
@@ -148,6 +160,7 @@ stbp_posterior_composite <- function(data,
 #' @export
 #'
 stbp_composite <- function(data,
+                           greater_than = TRUE,
                            hypothesis,
                            likelihood_func,
                            prior = 0.5,
@@ -176,6 +189,7 @@ stbp_composite <- function(data,
     if(posteriors[i] > 0.999) posteriors[i] <- 0.999
     bout = data[, i]
     posteriors[i + 1] = stbp_posterior_composite(bout,
+                                                 greater_than,
                                                  hypothesis[i],
                                                  likelihood_func,
                                                  prior = posteriors[i],
@@ -281,6 +295,11 @@ stbp_posterior_simple <- function(data,
 #' This is the lowest credibility to the hypothesis to stop sampling and decide against.
 #' @param upper_criterion Criterion to decide in favor of the tested hypothesis.
 #' This is the greatest credibility to the hypothesis to stop sampling and decide in favor.
+#'
+#' @details
+#' The \code{likelihood_func} argument should be specified as a density function
+#' with an \dQuote{x} in the mean argument and \dQuote{data} in the vector of quantiles.
+#' For example, \code{function(data, x){dpois(data, lambda = x)}}.
 #'
 #' @returns
 #'

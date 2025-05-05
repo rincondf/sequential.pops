@@ -6,6 +6,7 @@
 \usage{
 stbp_composite(
   data,
+  greater_than = TRUE,
   hypothesis,
   likelihood_func,
   prior = 0.5,
@@ -20,13 +21,15 @@ stbp_composite(
 (group sequential designs) with sequential count data, with sampling bouts
 collected over time in columns and sampling within bouts in rows.}
 
+\item{greater_than}{logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
+
 \item{likelihood_func}{Kernel probability density function for the data. See details.}
 
 \item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}.}
 
-\item{lower_bnd}{Single number indicating the lowest possible value for \eqn{\mu}. Most cases is \eqn{0}.}
+\item{lower_bnd}{Single number indicating the lower bound of the parameter space for \eqn{\mu}. Most cases is \eqn{0} (default).}
 
-\item{upper_bnd}{Single number indicating the greatest possible value for \eqn{\mu}. Most cases is \code{Inf}.}
+\item{upper_bnd}{Single number indicating the upper bound of the parameter space for \eqn{\mu}. Most cases is \code{Inf} (default).}
 
 \item{lower_criterion}{Criterion to decide against the tested hypothesis.
 This is the lowest credibility to the hypothesis to stop sampling and decide against.}
@@ -47,8 +50,13 @@ probability reached either of the upper or lower criteria.
 }
 \description{
 Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses
-about population densities of the form \eqn{H:\mu > \psi}.
+about population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi}.
 Data is treated in a sequential framework.
+}
+\details{
+The \code{likelihood_func} argument should be specified as a density function
+with an \dQuote{x} in the mean argument and \dQuote{data} in the vector of quantiles.
+For example, \code{function(data, x){dpois(data, lambda = x)}}.
 }
 \examples{
 # Testing the hypothesis of a population size being greater than 5 individuals
@@ -59,6 +67,7 @@ set.seed(101)
 counts3 <- rpois(5, lambda = 3)
 
 stbp_composite(data = counts3,
+                greater_than = TRUE,
                 hypothesis = 5,
                 likelihood_func = function(data, x)
                     {dpois(data, lambda = x)},
@@ -84,6 +93,7 @@ for(i in 1:10){
 # Running STBP on the sample
 
 stbp_composite(data = countP,
+                greater_than = TRUE,
                 hypothesis = H,
                 likelihood_func = function(data, x)
                     {dpois(data, lambda = x)},

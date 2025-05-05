@@ -48,6 +48,11 @@ probability reached either of the upper or lower criteria.
 Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses about population densities of the form \eqn{H:\mu = \psi}.
 Data is treated in a sequential framework.
 }
+\details{
+The \code{likelihood_func} argument should be specified as a density function
+with an \dQuote{x} in the mean argument and \dQuote{data} in the vector of quantiles.
+For example, \code{function(data, x){dpois(data, lambda = x)}}.
+}
 \examples{
 
 # Testing the absence of a species in a given area from a sequential random

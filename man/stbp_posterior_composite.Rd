@@ -6,6 +6,7 @@
 \usage{
 stbp_posterior_composite(
   data,
+  greater_than = TRUE,
   hypothesis,
   likelihood_func,
   prior,
@@ -16,21 +17,23 @@ stbp_posterior_composite(
 \arguments{
 \item{data}{Vector with count data for a single sampling bout.}
 
+\item{greater_than}{logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
+
 \item{hypothesis}{Single value with the hypothesized value of \eqn{\mu}.}
 
 \item{likelihood_func}{Kernel probability density function for the data. See details.}
 
 \item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}}
 
-\item{lower_bnd}{Single number indicating the lowest possible value for \eqn{\mu}. Most cases is \eqn{0}.}
+\item{lower_bnd}{Single number indicating the lower bound of the parameter space for \eqn{\mu}. Most cases is \eqn{0} (default).}
 
-\item{upper_bnd}{Single number indicating the greatest possible value for \eqn{\mu}. Most cases is \code{Inf}.}
+\item{upper_bnd}{Single number indicating the upper bound of the parameter space for \eqn{\mu}. Most cases is \code{Inf} (default).}
 }
 \value{
 A single probability value
 }
 \description{
-This function calculates a posterior probability for hypotheses about population densities of the form \eqn{H:\mu > \psi}, given the data at a single
+This function calculates a posterior probability for hypotheses about population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi}, given the data at a single
 iteration. This function is to be used in a sequential framework, and called on the sequential test \code{\link{stbp_composite}}.
 }
 \details{
@@ -48,6 +51,7 @@ counts <- c(1, 2, 3)
 # a poisson kernel
 
 stbp_posterior_composite(data = counts,
+                          greater_than = TRUE,
                           hypothesis = 2,
                           likelihood_func = function(data, x)
                                                 {dpois(data, lambda = x)},
@@ -59,6 +63,7 @@ stbp_posterior_composite(data = counts,
 # Note that 'size' can either be a positive number or a function.
 
 stbp_posterior_composite(data = counts,
+                          greater_than = TRUE,
                           hypothesis = 2,
                           likelihood_func = function(data, x)
                                                 {dnbinom(data, size = 2,

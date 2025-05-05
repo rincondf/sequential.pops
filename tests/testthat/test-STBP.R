@@ -2,6 +2,7 @@ test_that("Posterior calculation for composites works", {
   counts <- c(1, 2, 3)
 
   expect_equal(stbp_posterior_composite(data = counts,
+                                        greater_than = TRUE,
                                         hypothesis = 2,
                                         likelihood_func = function(data, x)
                                             {dpois(data, lambda = x)},
@@ -15,6 +16,7 @@ test_that("Posterior calculation for composites works", {
   counts <- c(1, 2, 3)
 
   expect_equal(stbp_posterior_composite(data = counts,
+                                        greater_than = TRUE,
                                         hypothesis = 2,
                                         likelihood_func = function(data, x)
                                             {dnbinom(data, size = 2, mu = x)},
@@ -29,6 +31,7 @@ test_that("STBP for composites works", {
   counts3 <- rpois(5, lambda = 3)
 
   expect_equal(stbp_composite(data = counts3,
+                              greater_than = TRUE,
                               hypothesis = 5,
                               likelihood_func = function(data, x)
                                   {dpois(data, lambda = x)},
@@ -47,6 +50,7 @@ test_that("STBP for composites works", {
   counts3 <- rpois(5, lambda = 3)
 
   expect_equal(stbp_composite(data = counts3,
+                              greater_than = TRUE,
                               hypothesis = 5,
                               likelihood_func = function(data, x)
                                   {dpois(data, lambda = x)},
@@ -73,6 +77,7 @@ test_that("STBP for composites works", {
   }
 
   expect_equal(stbp_composite(data = countP,
+                              greater_than = TRUE,
                               hypothesis = H,
                               likelihood_func = function(data, x)
                                   {dpois(data, lambda = x)},
@@ -96,6 +101,7 @@ test_that("STBP for composites works", {
   }
 
   expect_equal(stbp_composite(data = countP,
+                              greater_than = TRUE,
                               hypothesis = H,
                               likelihood_func = function(data, x)
                                   {dpois(data, lambda = x)},
