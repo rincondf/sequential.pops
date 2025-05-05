@@ -2,14 +2,10 @@ Package: sequential.pop
 Type: Package
 Title: Sequential analysis of populations
 Version: 0.1.0
-Author: c(person(given = "Diego", family = "Rincon", middle = "F",
-       email = "diego.rincon@wsu.edu", role = c("aut", "cre")), 
-       person(given = "Izzy", family = "McCabe",
-       email = "israel.mcdonald@wsu.edu", role = c("aut")))
-Maintainer: c(person(given = "Diego", family = "Rincon", middle = "F",
-       email = "diego.rincon@wsu.edu", role = c("aut", "cre")), 
-       person(given = "Izzy", family = "McCabe",
-       email = "israel.mcdonald@wsu.edu", role = c("aut")))
+Author: person(given = "Diego", family = "Rincon", middle = "F",
+       email = "diego.rincon@wsu.edu", role = c("aut", "cre"))
+Maintainer: person(given = "Izzy", family = "McCabe",
+       email = "israel.mcdonald@wsu.edu", role = c("aut"))
 Description: In population management, data come at more or less regular intervals over time in sampling batches and decisions should be made with the minimum number of samples and as quickly as possible. This package provides tools to assess and implement sequential analyses to test hypotheses about population sizes.
 License: use_gpl3_license()
 Encoding: UTF-8
