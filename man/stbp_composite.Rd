@@ -23,6 +23,9 @@ collected over time in columns and sampling within bouts in rows.}
 
 \item{greater_than}{logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
 
+\item{hypothesis}{Either a single value or a vector with the hypothesized values for \eqn{\mu}.
+If a vector, should contain at least as many values as \code{ncol(data)}}
+
 \item{likelihood_func}{Kernel probability density function for the data. See details.}
 
 \item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}.}
@@ -36,9 +39,6 @@ This is the lowest credibility to the hypothesis to stop sampling and decide aga
 
 \item{upper_criterion}{Criterion to decide in favor of the tested hypothesis.
 This is the greatest credibility to the hypothesis to stop sampling and decide in favor.}
-
-\item{hypotheses}{Either a single value or a vector with the hypothesized values for \eqn{\mu}.
-If a vector, should contain at least as many values as \code{ncol(data)}}
 }
 \value{
 A list with a vector of posterior \code{$probabilities} of length

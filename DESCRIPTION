@@ -2,15 +2,15 @@ Package: sequential.pop
 Type: Package
 Title: Sequential analysis of biological population sizes
 Version: 0.1.0
-Authors@R: c(person(given = "Diego", family = "Rincon", middle = "F",
+Authors@R: c(person(given = "Diego F", family = "Rincon",
        email = "diego.rincon@wsu.edu", role = c("aut", "cre")),
        person(given = "Izzy", family = "McCabe",
        email = "israel.mcdonald@wsu.edu", role = c("aut")))
 Description: In population management, data come at more or less regular intervals over time in sampling batches and decisions should be made with the minimum number of samples and as quickly as possible. This package provides tools to assess and implement sequential analyses to test hypotheses about population sizes.
-License: use_gpl3_license()
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+License: GPL (>= 3)

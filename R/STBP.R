@@ -88,7 +88,7 @@ stbp_posterior_composite <- function(data,
 #' (group sequential designs) with sequential count data, with sampling bouts
 #' collected over time in columns and sampling within bouts in rows.
 #' @param greater_than logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
-#' @param hypotheses Either a single value or a vector with the hypothesized values for \eqn{\mu}.
+#' @param hypothesis Either a single value or a vector with the hypothesized values for \eqn{\mu}.
 #' If a vector, should contain at least as many values as \code{ncol(data)}
 #' @param likelihood_func Kernel probability density function for the data. See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
@@ -285,12 +285,11 @@ stbp_posterior_simple <- function(data,
 #' @param data Either a vector (for purely sequential designs) o a matrix
 #' (group sequential designs) with sequential count data, with sampling bouts
 #' collected over time in columns and sampling within bouts in rows.
-#' @param hypotheses Either a single value or a vector with the hypothesized values for \eqn{\mu}.
+#' @param hypothesis Either a single value or a vector with the hypothesized values for \eqn{\mu}.
 #' If a vector, should contain at least as many values as \code{ncol(data)}
 #' @param likelihood_func Kernel probability density function for the data. See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
-#' @param lower_bnd Single number indicating the lowest possible value for \eqn{\mu}. Most cases is \eqn{0}.
-#' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}. Most cases is \code{Inf}.
+#' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}. Most cases is \code{Inf} (default).
 #' @param lower_criterion Criterion to decide against the tested hypothesis.
 #' This is the lowest credibility to the hypothesis to stop sampling and decide against.
 #' @param upper_criterion Criterion to decide in favor of the tested hypothesis.
