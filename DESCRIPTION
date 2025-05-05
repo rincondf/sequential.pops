@@ -1,6 +1,6 @@
 Package: sequential.pop
 Type: Package
-Title: Sequential analysis of populations
+Title: Sequential analysis of biological population sizes
 Version: 0.1.0
 Author: person(given = "Diego", family = "Rincon", middle = "F",
        email = "diego.rincon@wsu.edu", role = c("aut", "cre"))
