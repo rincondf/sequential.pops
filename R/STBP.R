@@ -105,12 +105,7 @@ stbp_posterior_composite <- function(data,
 #' For example, \code{function(data, x){dpois(data, lambda = x)}}.
 #'
 #' @returns
-#' A list with a vector of posterior \code{$probabilities} of length
-#' \code{ncol(data)}, \code{num_iterations} with the number of iterations
-#' required to reach a decision, and a \code{$recommendation}, either
-#' \dQuote{reject H}, \dQuote{accept H}, or \dQuote{keep sampling} for a decision in favor,
-#' against or inconclusive about the hypothesis. The test stops whenever the posterior
-#' probability reached either of the upper or lower criteria.
+#' An object of class \code{"STBP"}.
 #'
 #' @examples
 #' # Testing the hypothesis of a population size being greater than 5 individuals
@@ -120,17 +115,18 @@ stbp_posterior_composite <- function(data,
 #' set.seed(101)
 #' counts3 <- rpois(5, lambda = 3)
 #'
-#' stbp_composite(data = counts3,
-#'                 greater_than = TRUE,
-#'                 hypothesis = 5,
-#'                 likelihood_func = function(data, x)
-#'                     {dpois(data, lambda = x)},
-#'                 prior = 0.5,
-#'                 lower_bnd = 0,
-#'                 upper_bnd = Inf,
-#'                 lower_criterion = 0.001,
-#'                 upper_criterion = 0.999)$recommendation
-#' # returns "reject H" after 2 iterations.
+#' test1F <- stbp_composite(data = counts3,
+#'                           greater_than = TRUE,
+#'                           hypothesis = 5,
+#'                           likelihood_func = function(data, x)
+#'                               {dpois(data, lambda = x)},
+#'                           prior = 0.5,
+#'                           lower_bnd = 0,
+#'                           upper_bnd = Inf,
+#'                           lower_criterion = 0.001,
+#'                           upper_criterion = 0.999)
+#' test1F
+#' # returns "reject H".
 #'
 #' # Testing the hypothesis of a sampled population being greater than trajectory H
 #' H <- c(2, 5, 10, 20, 40, 40, 20, 10, 5, 2)
@@ -146,17 +142,18 @@ stbp_posterior_composite <- function(data,
 #'
 #' # Running STBP on the sample
 #'
-#' stbp_composite(data = countP,
-#'                 greater_than = TRUE,
-#'                 hypothesis = H,
-#'                 likelihood_func = function(data, x)
-#'                     {dpois(data, lambda = x)},
-#'                 prior = 0.5,
-#'                 lower_bnd = 0,
-#'                 upper_bnd = Inf,
-#'                 lower_criterion = 0.001,
-#'                 upper_criterion = 0.999)$recommendation
-#' # returns "reject H" after 8 iterations.
+#' test2F <- stbp_composite(data = countP,
+#'                           greater_than = TRUE,
+#'                           hypothesis = H,
+#'                           likelihood_func = function(data, x)
+#'                               {dpois(data, lambda = x)},
+#'                           prior = 0.5,
+#'                           lower_bnd = 0,
+#'                           upper_bnd = Inf,
+#'                           lower_criterion = 0.001,
+#'                           upper_criterion = 0.999)
+#' test2F
+#' # returns "reject H".
 #' @export
 #'
 stbp_composite <- function(data,
@@ -168,6 +165,8 @@ stbp_composite <- function(data,
                            upper_bnd = Inf,
                            lower_criterion = 0.01,
                            upper_criterion = 0.99) {
+
+  call <- match.call()
 
   # useful to treat data as a matrix to to able to process group or
   # single sequential data
@@ -211,11 +210,13 @@ stbp_composite <- function(data,
   }
   else response <- "keep sampling"
 
-  return(list(
-    probabilities = posteriors,
-    recommendation = response,
-    num_iterations = i)
-  )
+  resp <- new("STBP",
+              call = call,
+              probabilities = posteriors,
+              recommendation = response,
+              iterations = i)
+
+  resp
 }
 
 
@@ -301,13 +302,7 @@ stbp_posterior_simple <- function(data,
 #' For example, \code{function(data, x){dpois(data, lambda = x)}}.
 #'
 #' @returns
-#'
-#' A list with a vector of posterior \code{$probabilities} of length
-#' \code{ncol(data)}, \code{num_iterations} with the number of iterations
-#' required to reach a decision, and a \code{$recommendation}, either
-#' \dQuote{reject H}, \dQuote{accept H}, or \dQuote{keep sampling} for a decision in favor,
-#' against or inconclusive about the hypothesis. The test stops whenever the posterior
-#' probability reached either of the upper or lower criteria.
+#' An object of class \code{"STBP"}.
 #'
 #' @examples
 #'
@@ -317,17 +312,17 @@ stbp_posterior_simple <- function(data,
 #'
 #' counts10 <- matrix(rep(0, 30), 10, 3)
 #'
-#' stbp_simple(data = counts10,
-#'               hypothesis = 0,
-#'               likelihood_func= function(data, x)
-#'                 {dpois(data, lambda = x)},
-#'               prior = 0.5,
-#'               upper_bnd = Inf,
-#'               lower_criterion = 0,
-#'               upper_criterion = 0.9999)$recommendation
+#' test1G <- stbp_simple(data = counts10,
+#'                         hypothesis = 0,
+#'                         likelihood_func= function(data, x)
+#'                             {dpois(data, lambda = x)},
+#'                         prior = 0.5,
+#'                         upper_bnd = Inf,
+#'                         lower_criterion = 0,
+#'                         upper_criterion = 0.9999)
+#' test1G
 #'
-#' # returns a recommendation of "keep sampling" due to insufficient evidence
-#' # after processing the 3 sampling bouts.
+#' # returns a recommendation of "keep sampling" due to insufficient evidence.
 #'
 #' # Testing the same hypothesis with the same upper criterion but from a
 #' # sequential random sampling of 3 bouts made of 30 samples (counts) each
@@ -335,17 +330,18 @@ stbp_posterior_simple <- function(data,
 #'
 #' counts30 <- matrix(rep(0, 90), 30, 3)
 #'
-#' stbp_simple(data = counts30,
-#'               hypothesis = 0,
-#'               likelihood_func= function(data, x)
-#'                 {dpois(data, lambda = x)},
-#'               prior = 0.5,
-#'               upper_bnd = Inf,
-#'               lower_criterion = 0,
-#'               upper_criterion = 0.9999)$recommendation
+#' test2G <- stbp_simple(data = counts30,
+#'                         hypothesis = 0,
+#'                         likelihood_func= function(data, x)
+#'                             {dpois(data, lambda = x)},
+#'                         prior = 0.5,
+#'                         upper_bnd = Inf,
+#'                         lower_criterion = 0,
+#'                         upper_criterion = 0.9999)
+#' test2G
 #'
 #' # returns a recommendation of "accept H" of the species being absent from
-#' # that area after processing the 3 sampling bouts.
+#' # that area.
 #'
 #'
 #' @export
@@ -357,6 +353,8 @@ stbp_simple <- function(data,
                          upper_bnd = Inf,
                          lower_criterion,
                          upper_criterion) {
+
+  call <- match.call()
 
   # useful to treat data as a matrix to to able to process group or
   # single sequential data
@@ -396,9 +394,11 @@ stbp_simple <- function(data,
   }
   else response <- "keep sampling"
 
-  return(list(
-    probabilities = posteriors,
-    recommendation = response,
-    num_iterations = i)
-  )
+  resp <- new("STBP",
+              call = call,
+              probabilities = posteriors,
+              recommendation = response,
+              iterations = i)
+
+  resp
 }

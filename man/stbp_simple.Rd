@@ -35,12 +35,7 @@ This is the lowest credibility to the hypothesis to stop sampling and decide aga
 This is the greatest credibility to the hypothesis to stop sampling and decide in favor.}
 }
 \value{
-A list with a vector of posterior \code{$probabilities} of length
-\code{ncol(data)}, \code{num_iterations} with the number of iterations
-required to reach a decision, and a \code{$recommendation}, either
-\dQuote{reject H}, \dQuote{accept H}, or \dQuote{keep sampling} for a decision in favor,
-against or inconclusive about the hypothesis. The test stops whenever the posterior
-probability reached either of the upper or lower criteria.
+An object of class \code{"STBP"}.
 }
 \description{
 Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses about population densities of the form \eqn{H:\mu = \psi}.
@@ -59,17 +54,17 @@ For example, \code{function(data, x){dpois(data, lambda = x)}}.
 
 counts10 <- matrix(rep(0, 30), 10, 3)
 
-stbp_simple(data = counts10,
-              hypothesis = 0,
-              likelihood_func= function(data, x)
-                {dpois(data, lambda = x)},
-              prior = 0.5,
-              upper_bnd = Inf,
-              lower_criterion = 0,
-              upper_criterion = 0.9999)$recommendation
+test1G <- stbp_simple(data = counts10,
+                        hypothesis = 0,
+                        likelihood_func= function(data, x)
+                            {dpois(data, lambda = x)},
+                        prior = 0.5,
+                        upper_bnd = Inf,
+                        lower_criterion = 0,
+                        upper_criterion = 0.9999)
+test1G
 
-# returns a recommendation of "keep sampling" due to insufficient evidence
-# after processing the 3 sampling bouts.
+# returns a recommendation of "keep sampling" due to insufficient evidence.
 
 # Testing the same hypothesis with the same upper criterion but from a
 # sequential random sampling of 3 bouts made of 30 samples (counts) each
@@ -77,17 +72,18 @@ stbp_simple(data = counts10,
 
 counts30 <- matrix(rep(0, 90), 30, 3)
 
-stbp_simple(data = counts30,
-              hypothesis = 0,
-              likelihood_func= function(data, x)
-                {dpois(data, lambda = x)},
-              prior = 0.5,
-              upper_bnd = Inf,
-              lower_criterion = 0,
-              upper_criterion = 0.9999)$recommendation
+test2G <- stbp_simple(data = counts30,
+                        hypothesis = 0,
+                        likelihood_func= function(data, x)
+                            {dpois(data, lambda = x)},
+                        prior = 0.5,
+                        upper_bnd = Inf,
+                        lower_criterion = 0,
+                        upper_criterion = 0.9999)
+test2G
 
 # returns a recommendation of "accept H" of the species being absent from
-# that area after processing the 3 sampling bouts.
+# that area.
 
 
 }

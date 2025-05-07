@@ -9,6 +9,7 @@ Authors@R: c(person(given = "Diego F", family = "Rincon",
 Description: In population management, data come at more or less regular intervals over time in sampling batches and decisions should be made with the minimum number of samples and as quickly as possible. This package provides tools to assess and implement sequential analyses to test hypotheses about population sizes.
 Encoding: UTF-8
 LazyData: true
+Imports: methods
 RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)

@@ -1,2 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 importFrom("stats", "integrate")
+importFrom("methods", "new")
+importFrom("methods", "setMethod")
+importFrom("methods", "setClass")

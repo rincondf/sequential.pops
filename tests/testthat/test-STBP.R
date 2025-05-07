@@ -39,7 +39,7 @@ test_that("STBP for composites works", {
                               lower_bnd = 0,
                               upper_bnd = Inf,
                               lower_criterion = 0.001,
-                              upper_criterion = 0.999)$recommendation,
+                              upper_criterion = 0.999)@recommendation,
                "reject H")
 })
 
@@ -58,7 +58,7 @@ test_that("STBP for composites works", {
                               lower_bnd = 0,
                               upper_bnd = Inf,
                               lower_criterion = 0.001,
-                              upper_criterion = 0.999)$num_iterations,
+                              upper_criterion = 0.999)@iterations,
                2)
 })
 
@@ -85,7 +85,7 @@ test_that("STBP for composites works", {
                               lower_bnd = 0,
                               upper_bnd = Inf,
                               lower_criterion = 0.001,
-                              upper_criterion = 0.999)$recommendation,
+                              upper_criterion = 0.999)@recommendation,
                "reject H")
 })
 
@@ -109,7 +109,7 @@ test_that("STBP for composites works", {
                               lower_bnd = 0,
                               upper_bnd = Inf,
                               lower_criterion = 0.001,
-                              upper_criterion = 0.999)$num_iterations,
+                              upper_criterion = 0.999)@iterations,
                8)
 })
 
@@ -138,7 +138,7 @@ test_that("STBP for simples works", {
                            prior = 0.5,
                            upper_bnd = Inf,
                            lower_criterion = 0,
-                           upper_criterion = 0.9999)$recommendation,
+                           upper_criterion = 0.9999)@recommendation,
                "keep sampling")
 })
 
@@ -153,7 +153,7 @@ test_that("STBP for simples works", {
                            prior = 0.5,
                            upper_bnd = Inf,
                            lower_criterion = 0,
-                           upper_criterion = 0.9999)$num_iterations,
+                           upper_criterion = 0.9999)@iterations,
                3)
 })
 
@@ -174,7 +174,7 @@ test_that("STBP for simples works", {
                            prior = 0.5,
                            upper_bnd = Inf,
                            lower_criterion = 0,
-                           upper_criterion = 0.9999)$recommendation,
+                           upper_criterion = 0.9999)@recommendation,
                "accept H")
 })
 
@@ -190,14 +190,7 @@ test_that("STBP for simples works", {
                            prior = 0.5,
                            upper_bnd = Inf,
                            lower_criterion = 0,
-                           upper_criterion = 0.9999)$num_iterations,
+                           upper_criterion = 0.9999)@iterations,
                3)
 })
-
-
-
-
-
-
-
 

@@ -41,12 +41,7 @@ This is the lowest credibility to the hypothesis to stop sampling and decide aga
 This is the greatest credibility to the hypothesis to stop sampling and decide in favor.}
 }
 \value{
-A list with a vector of posterior \code{$probabilities} of length
-\code{ncol(data)}, \code{num_iterations} with the number of iterations
-required to reach a decision, and a \code{$recommendation}, either
-\dQuote{reject H}, \dQuote{accept H}, or \dQuote{keep sampling} for a decision in favor,
-against or inconclusive about the hypothesis. The test stops whenever the posterior
-probability reached either of the upper or lower criteria.
+An object of class \code{"STBP"}.
 }
 \description{
 Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses
@@ -66,17 +61,18 @@ For example, \code{function(data, x){dpois(data, lambda = x)}}.
 set.seed(101)
 counts3 <- rpois(5, lambda = 3)
 
-stbp_composite(data = counts3,
-                greater_than = TRUE,
-                hypothesis = 5,
-                likelihood_func = function(data, x)
-                    {dpois(data, lambda = x)},
-                prior = 0.5,
-                lower_bnd = 0,
-                upper_bnd = Inf,
-                lower_criterion = 0.001,
-                upper_criterion = 0.999)$recommendation
-# returns "reject H" after 2 iterations.
+test1F <- stbp_composite(data = counts3,
+                          greater_than = TRUE,
+                          hypothesis = 5,
+                          likelihood_func = function(data, x)
+                              {dpois(data, lambda = x)},
+                          prior = 0.5,
+                          lower_bnd = 0,
+                          upper_bnd = Inf,
+                          lower_criterion = 0.001,
+                          upper_criterion = 0.999)
+test1F
+# returns "reject H".
 
 # Testing the hypothesis of a sampled population being greater than trajectory H
 H <- c(2, 5, 10, 20, 40, 40, 20, 10, 5, 2)
@@ -92,15 +88,16 @@ for(i in 1:10){
 
 # Running STBP on the sample
 
-stbp_composite(data = countP,
-                greater_than = TRUE,
-                hypothesis = H,
-                likelihood_func = function(data, x)
-                    {dpois(data, lambda = x)},
-                prior = 0.5,
-                lower_bnd = 0,
-                upper_bnd = Inf,
-                lower_criterion = 0.001,
-                upper_criterion = 0.999)$recommendation
-# returns "reject H" after 8 iterations.
+test2F <- stbp_composite(data = countP,
+                          greater_than = TRUE,
+                          hypothesis = H,
+                          likelihood_func = function(data, x)
+                              {dpois(data, lambda = x)},
+                          prior = 0.5,
+                          lower_bnd = 0,
+                          upper_bnd = Inf,
+                          lower_criterion = 0.001,
+                          upper_criterion = 0.999)
+test2F
+# returns "reject H".
 }
