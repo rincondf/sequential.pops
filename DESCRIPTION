@@ -12,6 +12,8 @@ LazyData: true
 Imports: methods
 RoxygenNote: 7.3.2
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    emdbook
 Config/testthat/edition: 3
 License: GPL (>= 3)
+URL: https://github.com/rincondf/sequential.pops

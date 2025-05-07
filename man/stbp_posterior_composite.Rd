@@ -37,9 +37,9 @@ This function calculates a posterior probability for hypotheses about population
 iteration. This function is to be used in a sequential framework, and called on the sequential test \code{\link{stbp_composite}}.
 }
 \details{
-The \code{likelihood_func} argument should be specified as a density function with an \dQuote{x} in the
+The \code{likelihood_func} argument should be specified as a density \code{function} with an \dQuote{x} in the
  mean argument and \dQuote{data} in the vector of quantiles.
- For example, \code{function(data, x){dpois(data, lambda = x)}}.
+ For example, \code{function(data, x) dpois(data, lambda = x)}.
 }
 \examples{
 
@@ -54,7 +54,7 @@ stbp_posterior_composite(data = counts,
                           greater_than = TRUE,
                           hypothesis = 2,
                           likelihood_func = function(data, x)
-                                                {dpois(data, lambda = x)},
+                                                dpois(data, lambda = x),
                           prior = 0.5,
                           lower_bnd = 0,
                           upper_bnd = Inf) # returns 0.60630278
@@ -66,9 +66,13 @@ stbp_posterior_composite(data = counts,
                           greater_than = TRUE,
                           hypothesis = 2,
                           likelihood_func = function(data, x)
-                                                {dnbinom(data, size = 2,
-                                                         mu = x)},
+                                                dnbinom(data, size = 2,
+                                                         mu = x),
                           prior = 0.5,
                           lower_bnd = 0,
                           upper_bnd = Inf) # returns 0.72558593
+}
+\references{
+Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
+\emph{Methods in Ecology and Evolution}. In print.
 }

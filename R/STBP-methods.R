@@ -21,7 +21,7 @@
 #'                           greater_than = TRUE,
 #'                           hypothesis = 5,
 #'                           likelihood_func = function(data, x)
-#'                               {dpois(data, lambda = x)},
+#'                               dpois(data, lambda = x),
 #'                           prior = 0.5,
 #'                           lower_bnd = 0,
 #'                           upper_bnd = Inf,
@@ -35,7 +35,7 @@
 #' test1G <- stbp_simple(data = counts10,
 #'                         hypothesis = 0,
 #'                         likelihood_func= function(data, x)
-#'                             {dpois(data, lambda = x)},
+#'                             dpois(data, lambda = x),
 #'                         prior = 0.5,
 #'                         upper_bnd = Inf,
 #'                         lower_criterion = 0,
@@ -73,7 +73,7 @@ setMethod("show", "STBP", function(object){
   cat("Family:", dist1)
   cat("\nH: mu", sign, psi)
   cat("\nProbability: ")
-  cat(round(as.numeric(object@probabilities[3]), 5),"\n")
-  cat("Recommendation based on provided criteria: ")
+  cat(round(as.numeric(object@probabilities[3]), 5),"from", object@iterations, "sampling bouts")
+  cat("\nRecommendation based on provided criteria: ")
   cat(as.character(object@recommendation))
 })

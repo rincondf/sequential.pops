@@ -14,9 +14,13 @@
 #' @param upper_bnd Single number indicating the upper bound of the parameter space for \eqn{\mu}. Most cases is \code{Inf} (default).
 #' @returns A single probability value
 #' @details
-#' The \code{likelihood_func} argument should be specified as a density function with an \dQuote{x} in the
+#' The \code{likelihood_func} argument should be specified as a density \code{function} with an \dQuote{x} in the
 #'  mean argument and \dQuote{data} in the vector of quantiles.
-#'  For example, \code{function(data, x){dpois(data, lambda = x)}}.
+#'  For example, \code{function(data, x) dpois(data, lambda = x)}.
+#'
+#' @references Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
+#' \emph{Methods in Ecology and Evolution}. In print.
+#'
 #' @examples
 #'
 #' # Counts collected in a single sampling bout
@@ -30,7 +34,7 @@
 #'                           greater_than = TRUE,
 #'                           hypothesis = 2,
 #'                           likelihood_func = function(data, x)
-#'                                                 {dpois(data, lambda = x)},
+#'                                                 dpois(data, lambda = x),
 #'                           prior = 0.5,
 #'                           lower_bnd = 0,
 #'                           upper_bnd = Inf) # returns 0.60630278
@@ -42,8 +46,8 @@
 #'                           greater_than = TRUE,
 #'                           hypothesis = 2,
 #'                           likelihood_func = function(data, x)
-#'                                                 {dnbinom(data, size = 2,
-#'                                                          mu = x)},
+#'                                                 dnbinom(data, size = 2,
+#'                                                          mu = x),
 #'                           prior = 0.5,
 #'                           lower_bnd = 0,
 #'                           upper_bnd = Inf) # returns 0.72558593
@@ -100,12 +104,15 @@ stbp_posterior_composite <- function(data,
 #' This is the greatest credibility to the hypothesis to stop sampling and decide in favor.
 #'
 #' @details
-#' The \code{likelihood_func} argument should be specified as a density function
+#' The \code{likelihood_func} argument should be specified as a density \code{function}
 #' with an \dQuote{x} in the mean argument and \dQuote{data} in the vector of quantiles.
-#' For example, \code{function(data, x){dpois(data, lambda = x)}}.
+#' For example, \code{function(data, x) dpois(data, lambda = x)}.
 #'
 #' @returns
 #' An object of class \code{"STBP"}.
+#'
+#' @references Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
+#' \emph{Methods in Ecology and Evolution}. In print.
 #'
 #' @examples
 #' # Testing the hypothesis of a population size being greater than 5 individuals
@@ -119,7 +126,7 @@ stbp_posterior_composite <- function(data,
 #'                           greater_than = TRUE,
 #'                           hypothesis = 5,
 #'                           likelihood_func = function(data, x)
-#'                               {dpois(data, lambda = x)},
+#'                               dpois(data, lambda = x),
 #'                           prior = 0.5,
 #'                           lower_bnd = 0,
 #'                           upper_bnd = Inf,
@@ -146,7 +153,7 @@ stbp_posterior_composite <- function(data,
 #'                           greater_than = TRUE,
 #'                           hypothesis = H,
 #'                           likelihood_func = function(data, x)
-#'                               {dpois(data, lambda = x)},
+#'                               dpois(data, lambda = x),
 #'                           prior = 0.5,
 #'                           lower_bnd = 0,
 #'                           upper_bnd = Inf,
@@ -237,9 +244,13 @@ stbp_composite <- function(data,
 #' @return A single probability value
 #'
 #' @details
-#' The \code{likelihood_func} argument should be specified as a density function with an \dQuote{x} in the
+#' The \code{likelihood_func} argument should be specified as a density \code{function} with an \dQuote{x} in the
 #'  mean argument and \dQuote{data} in the vector of quantiles.
-#'  For example, \code{function(data, x){dpois(data, lambda = x)}}.
+#'  For example, \code{function(data, x) dpois(data, lambda = x)}.
+#'
+#' @references Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
+#' \emph{Methods in Ecology and Evolution}. In print.
+#'
 #' @examples
 #' # Counts collected in a single sampling bout
 #' counts <- c(0, 0, 0)
@@ -250,7 +261,7 @@ stbp_composite <- function(data,
 #' stbp_posterior_simple(data = counts,
 #'                        hypothesis = 0,
 #'                        likelihood_func = function(data, x)
-#'                                                 {dpois(data, lambda = x)},
+#'                                                 dpois(data, lambda = x),
 #'                        prior = 0.5,
 #'                        upper_bnd = Inf) # returns 0.75
 #' @export
@@ -297,12 +308,15 @@ stbp_posterior_simple <- function(data,
 #' This is the greatest credibility to the hypothesis to stop sampling and decide in favor.
 #'
 #' @details
-#' The \code{likelihood_func} argument should be specified as a density function
+#' The \code{likelihood_func} argument should be specified as a density \code{function}
 #' with an \dQuote{x} in the mean argument and \dQuote{data} in the vector of quantiles.
-#' For example, \code{function(data, x){dpois(data, lambda = x)}}.
+#' For example, \code{function(data, x) dpois(data, lambda = x)}.
 #'
 #' @returns
 #' An object of class \code{"STBP"}.
+#'
+#' @references Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
+#' \emph{Methods in Ecology and Evolution}. In print.
 #'
 #' @examples
 #'
@@ -315,7 +329,7 @@ stbp_posterior_simple <- function(data,
 #' test1G <- stbp_simple(data = counts10,
 #'                         hypothesis = 0,
 #'                         likelihood_func= function(data, x)
-#'                             {dpois(data, lambda = x)},
+#'                             dpois(data, lambda = x),
 #'                         prior = 0.5,
 #'                         upper_bnd = Inf,
 #'                         lower_criterion = 0,

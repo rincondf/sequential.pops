@@ -42,9 +42,9 @@ Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses about 
 Data is treated in a sequential framework.
 }
 \details{
-The \code{likelihood_func} argument should be specified as a density function
+The \code{likelihood_func} argument should be specified as a density \code{function}
 with an \dQuote{x} in the mean argument and \dQuote{data} in the vector of quantiles.
-For example, \code{function(data, x){dpois(data, lambda = x)}}.
+For example, \code{function(data, x) dpois(data, lambda = x)}.
 }
 \examples{
 
@@ -57,7 +57,7 @@ counts10 <- matrix(rep(0, 30), 10, 3)
 test1G <- stbp_simple(data = counts10,
                         hypothesis = 0,
                         likelihood_func= function(data, x)
-                            {dpois(data, lambda = x)},
+                            dpois(data, lambda = x),
                         prior = 0.5,
                         upper_bnd = Inf,
                         lower_criterion = 0,
@@ -86,4 +86,8 @@ test2G
 # that area.
 
 
+}
+\references{
+Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
+\emph{Methods in Ecology and Evolution}. In print.
 }

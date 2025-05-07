@@ -49,9 +49,9 @@ about population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi}.
 Data is treated in a sequential framework.
 }
 \details{
-The \code{likelihood_func} argument should be specified as a density function
+The \code{likelihood_func} argument should be specified as a density \code{function}
 with an \dQuote{x} in the mean argument and \dQuote{data} in the vector of quantiles.
-For example, \code{function(data, x){dpois(data, lambda = x)}}.
+For example, \code{function(data, x) dpois(data, lambda = x)}.
 }
 \examples{
 # Testing the hypothesis of a population size being greater than 5 individuals
@@ -65,7 +65,7 @@ test1F <- stbp_composite(data = counts3,
                           greater_than = TRUE,
                           hypothesis = 5,
                           likelihood_func = function(data, x)
-                              {dpois(data, lambda = x)},
+                              dpois(data, lambda = x),
                           prior = 0.5,
                           lower_bnd = 0,
                           upper_bnd = Inf,
@@ -92,7 +92,7 @@ test2F <- stbp_composite(data = countP,
                           greater_than = TRUE,
                           hypothesis = H,
                           likelihood_func = function(data, x)
-                              {dpois(data, lambda = x)},
+                              dpois(data, lambda = x),
                           prior = 0.5,
                           lower_bnd = 0,
                           upper_bnd = Inf,
@@ -100,4 +100,8 @@ test2F <- stbp_composite(data = countP,
                           upper_criterion = 0.999)
 test2F
 # returns "reject H".
+}
+\references{
+Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
+\emph{Methods in Ecology and Evolution}. In print.
 }

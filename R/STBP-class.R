@@ -19,7 +19,7 @@
 #'                           greater_than = TRUE,
 #'                           hypothesis = 5,
 #'                           likelihood_func = function(data, x)
-#'                               {dpois(data, lambda = x)},
+#'                               dpois(data, lambda = x),
 #'                           prior = 0.5,
 #'                           lower_bnd = 0,
 #'                           upper_bnd = Inf,
@@ -33,7 +33,7 @@
 #' test1G <- stbp_simple(data = counts10,
 #'                         hypothesis = 0,
 #'                         likelihood_func= function(data, x)
-#'                             {dpois(data, lambda = x)},
+#'                             dpois(data, lambda = x),
 #'                         prior = 0.5,
 #'                         upper_bnd = Inf,
 #'                         lower_criterion = 0,

@@ -5,7 +5,7 @@ test_that("Posterior calculation for composites works", {
                                         greater_than = TRUE,
                                         hypothesis = 2,
                                         likelihood_func = function(data, x)
-                                            {dpois(data, lambda = x)},
+                                          dpois(data, lambda = x),
                                         prior = 0.5,
                                         lower_bnd = 0,
                                         upper_bnd = Inf), 0.60630278)
@@ -19,7 +19,7 @@ test_that("Posterior calculation for composites works", {
                                         greater_than = TRUE,
                                         hypothesis = 2,
                                         likelihood_func = function(data, x)
-                                            {dnbinom(data, size = 2, mu = x)},
+                                          dnbinom(data, size = 2, mu = x),
                                         prior = 0.5,
                                         lower_bnd = 0,
                                         upper_bnd = Inf), 0.72558593)
@@ -34,7 +34,7 @@ test_that("STBP for composites works", {
                               greater_than = TRUE,
                               hypothesis = 5,
                               likelihood_func = function(data, x)
-                                  {dpois(data, lambda = x)},
+                                dpois(data, lambda = x),
                               prior = 0.5,
                               lower_bnd = 0,
                               upper_bnd = Inf,
@@ -53,7 +53,7 @@ test_that("STBP for composites works", {
                               greater_than = TRUE,
                               hypothesis = 5,
                               likelihood_func = function(data, x)
-                                  {dpois(data, lambda = x)},
+                                dpois(data, lambda = x),
                               prior = 0.5,
                               lower_bnd = 0,
                               upper_bnd = Inf,
@@ -80,7 +80,7 @@ test_that("STBP for composites works", {
                               greater_than = TRUE,
                               hypothesis = H,
                               likelihood_func = function(data, x)
-                                  {dpois(data, lambda = x)},
+                                dpois(data, lambda = x),
                               prior = 0.5,
                               lower_bnd = 0,
                               upper_bnd = Inf,
@@ -104,7 +104,7 @@ test_that("STBP for composites works", {
                               greater_than = TRUE,
                               hypothesis = H,
                               likelihood_func = function(data, x)
-                                  {dpois(data, lambda = x)},
+                                dpois(data, lambda = x),
                               prior = 0.5,
                               lower_bnd = 0,
                               upper_bnd = Inf,
@@ -120,7 +120,7 @@ test_that("Posterior calculation for simples works", {
   expect_equal(stbp_posterior_simple(data = counts,
                                      hypothesis = 0,
                                      likelihood_func = function(data, x)
-                                     {dpois(data, lambda = x)},
+                                       dpois(data, lambda = x),
                                      prior = 0.5,
                                      upper_bnd = Inf), 0.75)
 })
@@ -134,7 +134,7 @@ test_that("STBP for simples works", {
   expect_equal(stbp_simple(data = counts10,
                            hypothesis = 0,
                            likelihood_func= function(data, x)
-                           {dpois(data, lambda = x)},
+                             dpois(data, lambda = x),
                            prior = 0.5,
                            upper_bnd = Inf,
                            lower_criterion = 0,
@@ -149,7 +149,7 @@ test_that("STBP for simples works", {
   expect_equal(stbp_simple(data = counts10,
                            hypothesis = 0,
                            likelihood_func= function(data, x)
-                           {dpois(data, lambda = x)},
+                             dpois(data, lambda = x),
                            prior = 0.5,
                            upper_bnd = Inf,
                            lower_criterion = 0,
@@ -170,7 +170,7 @@ test_that("STBP for simples works", {
   expect_equal(stbp_simple(data = counts30,
                            hypothesis = 0,
                            likelihood_func= function(data, x)
-                           {dpois(data, lambda = x)},
+                             dpois(data, lambda = x),
                            prior = 0.5,
                            upper_bnd = Inf,
                            lower_criterion = 0,
@@ -186,7 +186,7 @@ test_that("STBP for simples works", {
   expect_equal(stbp_simple(data = counts30,
                            hypothesis = 0,
                            likelihood_func= function(data, x)
-                           {dpois(data, lambda = x)},
+                             dpois(data, lambda = x),
                            prior = 0.5,
                            upper_bnd = Inf,
                            lower_criterion = 0,
