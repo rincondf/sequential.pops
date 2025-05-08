@@ -164,7 +164,7 @@ stbp_posterior_composite <- function(data,
 #'
 #' @param data For count data, either a vector (for purely sequential designs)
 #' or a matrix (group sequential designs) with sequential count data, with
-#' sampling bouts collected over time in columns and sampling within bouts in
+#' sampling bouts collected over time in columns and samples within bouts in
 #' rows. NAs are allowed in case sample size within bouts is unbalanced.
 #' For binomial data, a list of matrices with integer values with observations in
 #' col 1 and number of samples in col 2, so that each matrix within the list
@@ -527,7 +527,7 @@ stbp_posterior_simple <- function(data,
 #'
 #' @param data For count data, either a vector (for purely sequential designs) o
 #' a matrix (group sequential designs) with sequential count data, with sampling
-#' bouts collected over time in columns and sampling within bouts in rows. NAs
+#' bouts collected over time in columns and samples within bouts in rows. NAs
 #' are allowed in case sample size within bouts is unbalanced. For binomial data,
 #' a list of matrices with integer values with observations in col 1 and number
 #' of samples in col 2, so that each matrix within the list corresponds to a

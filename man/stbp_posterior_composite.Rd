@@ -38,7 +38,7 @@ space for \eqn{\mu}. Most cases is \eqn{0} (default).}
 
 \item{upper_bnd}{Single number indicating the upper bound of the parameter
 space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it
-should be \eqn{\leq 1} for binomial data.}
+must be \eqn{\leq 1} for binomial data.}
 }
 \value{
 A single probability
