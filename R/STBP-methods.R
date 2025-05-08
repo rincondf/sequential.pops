@@ -20,8 +20,7 @@
 #' test1F <- stbp_composite(data = counts3,
 #'                           greater_than = TRUE,
 #'                           hypothesis = 5,
-#'                           likelihood_func = function(data, x)
-#'                               dpois(data, lambda = x),
+#'                           density_func = "poisson",
 #'                           prior = 0.5,
 #'                           lower_bnd = 0,
 #'                           upper_bnd = Inf,
@@ -33,47 +32,39 @@
 #' counts10 <- matrix(rep(0, 30), 10, 3)
 #'
 #' test1G <- stbp_simple(data = counts10,
-#'                         hypothesis = 0,
-#'                         likelihood_func= function(data, x)
-#'                             dpois(data, lambda = x),
+#'                         density_func= "poisson",
 #'                         prior = 0.5,
 #'                         upper_bnd = Inf,
 #'                         lower_criterion = 0,
 #'                         upper_criterion = 0.9999)
 #' show(test1G)
 #'
-#' # returns a recommendation of "keep sampling" due to insufficient evidence.
+#' # returns "keep sampling" due to insufficient evidence.
 #'
+#' ## End (Not run)
 #' @aliases show
 setMethod("show", "STBP", function(object){
 
-  dists <- c("dpois", "dnbinom", "dbinom", "dbetabinom")
+  dists <- c("poisson", "negative binominal", "binomial", "beta-binomial")
 
   if(as.character(object@call[1]) == "stbp_simple") {
     sign <- "="
-    psi <- as.numeric(as.character(object@call[3]))
-    dist1 <- names(which(sapply(dists, grepl, as.character(object@call[4])) == TRUE))
-    if(dist1 == "dpois") dist1 <- "Poisson"
-    if(dist1 == "dnbinom") dist1 <- "Negative binomial"
-    if(dist1 == "dbinom") dist1 <- "Binomial"
-    if(dist1 == "dbetabinom") dist1 <- "Beta-binomial"
+    psi <- 0
+    dist1 <- as.character(object@call[4])
   }
   else {
     psi <- as.numeric(as.character(object@call[4]))
     if(as.character(object@call[3]) == TRUE) sign <- ">"
     if(as.character(object@call[3]) == FALSE) sign <- "<"
-    dist1 <- names(which(sapply(dists, grepl, as.character(object@call[5])) == TRUE))
-    if(dist1 == "dpois") dist1 <- "Poisson"
-    if(dist1 == "dnbinom") dist1 <- "Negative binomial"
-    if(dist1 == "dbinom") dist1 <- "Binomial"
-    if(dist1 == "dbetabinom") dist1 <- "Beta-binomial"
+    dist1 <- as.character(object@call[5])
   }
 
   cat("\nSequential test of Bayesian posterior probabilities\n")
   cat("Family:", dist1)
   cat("\nH: mu", sign, psi)
   cat("\nProbability: ")
-  cat(round(as.numeric(object@probabilities[3]), 5),"from", object@iterations, "sampling bouts")
+  cat(round(as.numeric(object@probabilities[length(object@probabilities)]), 5),
+      "from", object@iterations, "sampling bouts")
   cat("\nRecommendation based on provided criteria: ")
   cat(as.character(object@recommendation))
 })

@@ -8,7 +8,8 @@ stbp_posterior_composite(
   data,
   greater_than = TRUE,
   hypothesis,
-  likelihood_func,
+  density_func,
+  overdispersion = NA,
   prior,
   lower_bnd = 0,
   upper_bnd = Inf
@@ -21,25 +22,28 @@ stbp_posterior_composite(
 
 \item{hypothesis}{Single value with the hypothesized value of \eqn{\mu}.}
 
-\item{likelihood_func}{Kernel probability density function for the data. See details.}
+\item{density_func}{Kernel probability density function for the data. See details.}
+
+\item{overdispersion}{A character string or a number specifying the overdispersion parameter. Only required when using \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities. See details.}
 
 \item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}}
 
 \item{lower_bnd}{Single number indicating the lower bound of the parameter space for \eqn{\mu}. Most cases is \eqn{0} (default).}
 
-\item{upper_bnd}{Single number indicating the upper bound of the parameter space for \eqn{\mu}. Most cases is \code{Inf} (default).}
+\item{upper_bnd}{Single number indicating the upper bound of the parameter space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it should be \eqn{\leq 1} for binomial data.}
 }
 \value{
-A single probability value
+A single probability
 }
 \description{
 This function calculates a posterior probability for hypotheses about population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi}, given the data at a single
 iteration. This function is to be used in a sequential framework, and called on the sequential test \code{\link{stbp_composite}}.
 }
 \details{
-The \code{likelihood_func} argument should be specified as a density \code{function} with an \dQuote{x} in the
- mean argument and \dQuote{data} in the vector of quantiles.
- For example, \code{function(data, x) dpois(data, lambda = x)}.
+The \code{density_func} argument should be specified as character string.
+Acceptable options are \code{"poisson"}, \code{"negative binomial"}, \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
+parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be either a constant or a function of the mean. If a function, it should be specified as a character string
+with the name of an existing function. For options of empirical functions to describe overdispersion as a function of the mean see Binns et al. (2000).
 }
 \examples{
 
@@ -53,26 +57,28 @@ counts <- c(1, 2, 3)
 stbp_posterior_composite(data = counts,
                           greater_than = TRUE,
                           hypothesis = 2,
-                          likelihood_func = function(data, x)
-                                                dpois(data, lambda = x),
+                          density_func = "poisson",
                           prior = 0.5,
                           lower_bnd = 0,
                           upper_bnd = Inf) # returns 0.60630278
 
 # Same analysis but with a negative binomial kernel.
-# Note that 'size' can either be a positive number or a function.
+# Note that 'overdispersion' can either be a positive number or a function.
 
 stbp_posterior_composite(data = counts,
                           greater_than = TRUE,
                           hypothesis = 2,
-                          likelihood_func = function(data, x)
-                                                dnbinom(data, size = 2,
-                                                         mu = x),
+                          density_func = "negative binomial",
+                          overdispersion = 2,
                           prior = 0.5,
                           lower_bnd = 0,
                           upper_bnd = Inf) # returns 0.72558593
+## End (Not run)
 }
 \references{
+Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and monitoring in crop protection: the theoretical basis for developing practical decision guides.}
+CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
+
 Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
 \emph{Methods in Ecology and Evolution}. In print.
 }

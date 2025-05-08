@@ -24,8 +24,7 @@ counts3 <- rpois(5, lambda = 3)
 test1F <- stbp_composite(data = counts3,
                           greater_than = TRUE,
                           hypothesis = 5,
-                          likelihood_func = function(data, x)
-                              {dpois(data, lambda = x)},
+                          density_func = "poisson",
                           prior = 0.5,
                           lower_bnd = 0,
                           upper_bnd = Inf,
@@ -37,15 +36,14 @@ show(test1F)
 counts10 <- matrix(rep(0, 30), 10, 3)
 
 test1G <- stbp_simple(data = counts10,
-                        hypothesis = 0,
-                        likelihood_func= function(data, x)
-                            {dpois(data, lambda = x)},
+                        density_func= "poisson",
                         prior = 0.5,
                         upper_bnd = Inf,
                         lower_criterion = 0,
                         upper_criterion = 0.9999)
 show(test1G)
 
-# returns a recommendation of "keep sampling" due to insufficient evidence.
+# returns "keep sampling" due to insufficient evidence.
 
+## End (Not run)
 }

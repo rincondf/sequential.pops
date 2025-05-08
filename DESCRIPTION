@@ -6,14 +6,15 @@ Authors@R: c(person(given = "Diego F", family = "Rincon",
        email = "diego.rincon@wsu.edu", role = c("aut", "cre")),
        person(given = "Izzy", family = "McCabe",
        email = "israel.mcdonald@wsu.edu", role = c("aut")))
-Description: In population management, data come at more or less regular intervals over time in sampling batches and decisions should be made with the minimum number of samples and as quickly as possible. This package provides tools to assess and implement sequential analyses to test hypotheses about population sizes.
+Description: In population management, data come at more or less regular intervals over time in sampling batches (bouts) and decisions should be made with the minimum number of samples and as quickly as possible. This package provides tools to assess and implement sequential analyses to test hypotheses about population sizes.
 Encoding: UTF-8
 LazyData: true
-Imports: methods
+Imports: 
+    methods,
+    emdbook
 RoxygenNote: 7.3.2
 Suggests: 
-    testthat (>= 3.0.0),
-    emdbook
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
 License: GPL (>= 3)
 URL: https://github.com/rincondf/sequential.pops
