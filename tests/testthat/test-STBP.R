@@ -109,6 +109,56 @@ test_that("STBP for composites works", {
 })
 
 
+
+
+test_that("STBP for composites works (binomial data)", {
+
+  set.seed(101)
+  counts4 <- list()
+
+  for(i in 1: 7) {
+    counts4[[i]] <- matrix(c(rbinom(5, size = 10, prob = 0.25), rep(10, 5)),
+                           5, 2)
+  }
+
+  expect_equal(stbp_composite(data = counts4,
+                              greater_than = TRUE,
+                              hypothesis = 0.2,
+                              density_func = "binomial",
+                              prior = 0.5,
+                              lower_bnd = 0,
+                              upper_bnd = 1,
+                              lower_criterion = 0.001,
+                              upper_criterion = 0.999)@recommendation,
+               "accept H")
+})
+
+test_that("STBP for composites works (binomial data)", {
+
+  set.seed(101)
+  counts4 <- list()
+
+  for(i in 1: 7) {
+    counts4[[i]] <- matrix(c(rbinom(5, size = 10, prob = 0.25), rep(10, 5)),
+                           5, 2)
+  }
+
+  expect_equal(stbp_composite(data = counts4,
+                              greater_than = TRUE,
+                              hypothesis = 0.2,
+                              density_func = "binomial",
+                              prior = 0.5,
+                              lower_bnd = 0,
+                              upper_bnd = 1,
+                              lower_criterion = 0.001,
+                              upper_criterion = 0.999)@iterations,
+               3)
+})
+
+
+
+
+
 test_that("Posterior calculation for simples works", {
   counts <- c(0, 0, 0)
 

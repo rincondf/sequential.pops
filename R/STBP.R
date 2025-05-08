@@ -1,30 +1,45 @@
 #' Posterior probability calculation for composite hypotheses
 #'
 #' @description
-#' This function calculates a posterior probability for hypotheses about population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi}, given the data at a single
-#' iteration. This function is to be used in a sequential framework, and called on the sequential test \code{\link{stbp_composite}}.
+#' This function calculates a posterior probability for hypotheses about
+#' population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi},
+#' given the data at a single iteration. This function is to be used in a
+#' sequential framework, and called on the sequential test \code{\link{stbp_composite}}.
 #'
 #'
-#' @param data Vector with count data for a single sampling bout.
-#' @param greater_than logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
+#' @param data For count data, a numeric vector with for a single sampling bout
+#' (NAs allowed). For binomial data, a matrix with observations in col 1 and
+#' samples in col 2.
+#' @param greater_than logical; if TRUE (default), the tested hypothesis is of
+#' the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
 #' @param hypothesis Single value with the hypothesized value of \eqn{\mu}.
 #' @param density_func Kernel probability density function for the data. See details.
-#' @param overdispersion A character string or a number specifying the overdispersion parameter. Only required when using \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities. See details.
+#' @param overdispersion A character string or a number specifying the
+#' overdispersion parameter. Only required when using \code{"negative binomial"}
+#' or \code{"beta-binomial"} as kernel densities. See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}
-#' @param lower_bnd Single number indicating the lower bound of the parameter space for \eqn{\mu}. Most cases is \eqn{0} (default).
-#' @param upper_bnd Single number indicating the upper bound of the parameter space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it should be \eqn{\leq 1} for binomial data.
+#' @param lower_bnd Single number indicating the lower bound of the parameter
+#' space for \eqn{\mu}. Most cases is \eqn{0} (default).
+#' @param upper_bnd Single number indicating the upper bound of the parameter
+#' space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it
+#' must be \eqn{\leq 1} for binomial data.
 #' @returns A single probability
 #' @details
 #' The \code{density_func} argument should be specified as character string.
-#' Acceptable options are \code{"poisson"}, \code{"negative binomial"}, \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
-#' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be either a constant or a function of the mean. If a function, it should be specified as a character string
-#' with the name of an existing function. For options of empirical functions to describe overdispersion as a function of the mean see Binns et al. (2000).
+#' Acceptable options are \code{"poisson"}, \code{"negative binomial"}, \code{"binomial"}
+#' and \code{"beta-binomial"}. The overdispersion parameter for \code{"negative binomial"}
+#' and \code{"beta-binomial"} can be either a constant or a function of the mean.
+#' If a function, it should be specified as a character string with the name of
+#' an existing function. For options of empirical functions to describe
+#' overdispersion as a function of the mean see Binns et al. (2000).
 #'
-#' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and monitoring in crop protection: the theoretical basis for developing practical decision guides.}
-#' CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
+#' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
+#' monitoring in crop protection: the theoretical basis for developing practical
+#' decision guides}. CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
 #'
-#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
-#' \emph{Methods in Ecology and Evolution}. In print.
+#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of
+#' complementary hypotheses about population density. \emph{Methods in Ecology
+#' and Evolution}. <https://doi.org/10.1111/2041-210X.70053>
 #'
 #' @examples
 #'
@@ -147,36 +162,53 @@ stbp_posterior_composite <- function(data,
 #' Data is treated in a sequential framework.
 #'
 #'
-#' @param data For count data, either a vector (for purely sequential designs) o a matrix
-#' (group sequential designs) with sequential count data, with sampling bouts
-#' collected over time in columns and sampling within bouts in rows.
+#' @param data For count data, either a vector (for purely sequential designs)
+#' or a matrix (group sequential designs) with sequential count data, with
+#' sampling bouts collected over time in columns and sampling within bouts in
+#' rows. NAs are allowed in case sample size within bouts is unbalanced.
 #' For binomial data, a list of matrices with integer values with observations in
-#' col 1 and number of samples in col 2, so that each matrix within the list corresponds to a sampling bout.
-#' @param greater_than logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
-#' @param hypothesis Either a single value or a vector with the hypothesized values for \eqn{\mu}.
-#' If a vector, should contain at least as many values as \code{ncol(data)}
-#' @param density_func Kernel probability density function for the data. See details.
-#' @param overdispersion A character string or a number specifying the overdispersion parameter.
-#' Only required when using \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities. See details.
+#' col 1 and number of samples in col 2, so that each matrix within the list
+#' corresponds to a sampling bout.
+#' @param greater_than logical; if TRUE (default), the tested hypothesis is of
+#' the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
+#' @param hypothesis Either a single value or a vector with the hypothesized
+#' values for \eqn{\mu}. If a vector, should contain at least as many values
+#' as \code{ncol(data)}.
+#' @param density_func Kernel probability density function for the data. See
+#' details.
+#' @param overdispersion A character string or a number specifying the
+#' overdispersion parameter. Only required when using \code{"negative binomial"}
+#' or \code{"beta-binomial"} as kernel densities. See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
-#' @param lower_bnd Single number indicating the lower bound of the parameter space for \eqn{\mu}. Most cases is \eqn{0} (default).
-#' @param upper_bnd Single number indicating the upper bound of the parameter space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it should be \eqn{\leq 1} for binomial data.
+#' @param lower_bnd Single number indicating the lower bound of the parameter
+#' space for \eqn{\mu}. Most cases is \eqn{0} (default).
+#' @param upper_bnd Single number indicating the upper bound of the parameter
+#' space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it
+#' must be \eqn{\leq 1} for binomial data.
 #' @param lower_criterion Criterion to decide against the tested hypothesis.
-#' This is the lowest credibility to the hypothesis to stop sampling and decide against.
+#' This is the lowest credibility to the hypothesis to stop sampling and
+#' decide against.
 #' @param upper_criterion Criterion to decide in favor of the tested hypothesis.
-#' This is the greatest credibility to the hypothesis to stop sampling and decide in favor.
+#' This is the greatest credibility to the hypothesis to stop sampling and
+#' decide in favor.
 #'
 #' @details
 #' The \code{density_func} argument should be specified as character string.
-#' Acceptable options are \code{"poisson"}, \code{"negative binomial"}, \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
-#' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be either a constant or a function of the mean. If a function, it should be specified as a character string
-#' with the name of an existing function. For options of empirical functions to describe overdispersion as a function of the mean see Binns et al. (2000).
+#' Acceptable options are \code{"poisson"}, \code{"negative binomial"},
+#' \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
+#' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be
+#' either a constant or a function of the mean. If a function, it should be
+#' specified as a character string with the name of an existing function.
+#' For options of empirical functions to describe overdispersion as a function
+#' of the mean see Binns et al. (2000).
 #'
-#' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and monitoring in crop protection: the theoretical basis for developing practical decision guides.}
-#' CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
+#' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
+#' monitoring in crop protection: the theoretical basis for developing practical
+#' decision guides}. CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
 #'
-#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
-#' \emph{Methods in Ecology and Evolution}. In print.
+#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of
+#' complementary hypotheses about population density. \emph{Methods in Ecology
+#' and Evolution}. <https://doi.org/10.1111/2041-210X.70053>
 #'
 #' @returns
 #' An object of class \code{"STBP"}.
@@ -228,6 +260,37 @@ stbp_posterior_composite <- function(data,
 #' test2F
 #'
 #' # returns "reject H".
+#'
+#' # Testing the hypothesis of a proportion of infested units being greater than
+#' # 20% per sampling unit (H: mu > 0.2). The sequential sampling is made of 7
+#' # sampling bouts each with 5 clusters of 10 samples from which binomial
+#' # observations are recorded.
+#'
+#' set.seed(101)
+#'
+#' # binomial data generated with mu (prob) 0.05 over the hypothesized
+#' # value (0.2)
+#'
+#' counts4 <- list()
+#' for(i in 1: 7) {
+#'   counts4[[i]] <- matrix(c(rbinom(5, size = 10, prob = 0.25), rep(10, 5)),
+#'                         5, 2)
+#' }
+#'
+#' # Run the test. Notice that upper_bnd = 1!
+#'
+#' test3F <- stbp_composite(data = counts4,
+#'                           greater_than = TRUE,
+#'                           hypothesis = 0.2,
+#'                           density_func = "binomial",
+#'                           prior = 0.5,
+#'                           lower_bnd = 0,
+#'                           upper_bnd = 1,
+#'                           lower_criterion = 0.001,
+#'                           upper_criterion = 0.999)
+#'
+#' test3F # returns accept H after 3 sampling bouts
+#'
 #' ## End (Not run)
 #' @export
 #'
@@ -331,27 +394,37 @@ stbp_composite <- function(data,
 #' iteration. This function is to be used in a sequential framework, and called
 #' on the sequential test \code{\link{stbp_simple}}.
 #'
-#' @param data Vector with count data for a single sampling bout.
+#' @param data For count data, a numeric vector with for a single sampling bout
+#' (NAs allowed). For binomial data, a matrix with observations in col 1 and
+#' samples in col 2.
 #' @param density_func Kernel probability density function for the data. See details.
-#' @param overdispersion A character string or a number specifying the overdispersion parameter.
-#' Only required when using \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities. See details.
+#' @param overdispersion A character string or a number specifying the
+#' overdispersion parameter. Only required when using \code{"negative binomial"}
+#' or \code{"beta-binomial"} as kernel densities. See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}
 #' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}.
-#' For count data, is often \code{Inf} (default), but it should be \eqn{\leq 1} for binomial data.
+#' For count data, is often \code{Inf} (default), but it must be \eqn{\leq 1} for
+#' binomial data.
 #'
 #' @return A single probability
 #'
 #' @details
 #' The \code{density_func} argument should be specified as character string.
-#' Acceptable options are \code{"poisson"}, \code{"negative binomial"}, \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
-#' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be either a constant or a function of the mean. If a function, it should be specified as a character string
-#' with the name of an existing function. For options of empirical functions to describe overdispersion as a function of the mean see Binns et al. (2000).
+#' Acceptable options are \code{"poisson"}, \code{"negative binomial"},
+#' \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
+#' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be
+#' either a constant or a function of the mean. If a function, it should be
+#' specified as a character string with the name of an existing function. For
+#' options of empirical functions to describe overdispersion as a function of
+#' the mean see Binns et al. (2000).
 #'
-#' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and monitoring in crop protection: the theoretical basis for developing practical decision guides.}
-#' CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
+#' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
+#' monitoring in crop protection: the theoretical basis for developing practical
+#' decision guides}. CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
 #'
-#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
-#' \emph{Methods in Ecology and Evolution}. In print.
+#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of
+#' complementary hypotheses about population density. \emph{Methods in Ecology
+#' and Evolution}. <https://doi.org/10.1111/2041-210X.70053>
 #'
 #' @examples
 #' # Counts collected in a single sampling bout
@@ -443,40 +516,54 @@ stbp_posterior_simple <- function(data,
   posterior
 }
 
-#' Sequential test of Bayesian posterior probabilities for simple hypotheses about species absence
+#' Sequential test of Bayesian posterior probabilities for simple hypotheses
+#' about species absence
 #'
 #' @description
-#' Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses about species absence of the form \eqn{H:\mu = 0}.
-#' Data is treated in a sequential framework.
+#' Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses
+#' about species absence of the form \eqn{H:\mu = 0}. Data is treated in a
+#' sequential framework.
 #'
 #'
-#' @param data For count data, either a vector (for purely sequential designs) o a matrix
-#' (group sequential designs) with sequential count data, with sampling bouts
-#' collected over time in columns and sampling within bouts in rows. For binomial data,
-#' a list of matrices with integer values with observations in col 1 and number of samples in col 2,
-#' so that each matrix within the list corresponds to a sampling bout.
+#' @param data For count data, either a vector (for purely sequential designs) o
+#' a matrix (group sequential designs) with sequential count data, with sampling
+#' bouts collected over time in columns and sampling within bouts in rows. NAs
+#' are allowed in case sample size within bouts is unbalanced. For binomial data,
+#' a list of matrices with integer values with observations in col 1 and number
+#' of samples in col 2, so that each matrix within the list corresponds to a
+#' sampling bout.
 #' @param density_func Kernel probability density function for the data. See details.
-#' @param overdispersion A character string or a number specifying the overdispersion parameter.
-#' Only required when using \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities. See details.
+#' @param overdispersion A character string or a number specifying the
+#' overdispersion parameter. Only required when using \code{"negative binomial"}
+#' or \code{"beta-binomial"} as kernel densities. See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
 #' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}.
-#' For count data, is often \code{Inf} (default), but it should be \eqn{\leq 1} for binomial data.
+#' For count data, is often \code{Inf} (default), but it must be \eqn{\leq 1}
+#' for binomial data.
 #' @param lower_criterion Criterion to decide against the tested hypothesis.
-#' This is the lowest credibility to the hypothesis to stop sampling and decide against.
+#' This is the lowest credibility to the hypothesis to stop sampling and decide
+#' against.
 #' @param upper_criterion Criterion to decide in favor of the tested hypothesis.
-#' This is the greatest credibility to the hypothesis to stop sampling and decide in favor.
+#' This is the greatest credibility to the hypothesis to stop sampling and decide
+#' in favor.
 #'
 #' @details
 #' The \code{density_func} argument should be specified as character string.
-#' Acceptable options are \code{"poisson"}, \code{"negative binomial"}, \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
-#' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be either a constant or a function of the mean. If a function, it should be specified as a character string
-#' with the name of an existing function. For options of empirical functions to describe overdispersion as a function of the mean see Binns et al. (2000).
+#' Acceptable options are \code{"poisson"}, \code{"negative binomial"},
+#' \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
+#' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be
+#' either a constant or a function of the mean. If a function, it should be
+#' specified as a character string with the name of an existing function. For
+#' options of empirical functions to describe overdispersion as a function of
+#' the mean see Binns et al. (2000).
 #'
-#' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and monitoring in crop protection: the theoretical basis for developing practical decision guides.}
-#' CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
+#' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
+#' monitoring in crop protection: the theoretical basis for developing practical
+#' decision guides}. CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
 #'
-#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
-#' \emph{Methods in Ecology and Evolution}. In print.
+#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of
+#' complementary hypotheses about population density. \emph{Methods in Ecology
+#' and Evolution}. <https://doi.org/10.1111/2041-210X.70053>
 #'
 #' @returns
 #' An object of class \code{"STBP"}.

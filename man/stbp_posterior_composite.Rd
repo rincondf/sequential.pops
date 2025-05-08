@@ -16,34 +16,47 @@ stbp_posterior_composite(
 )
 }
 \arguments{
-\item{data}{Vector with count data for a single sampling bout.}
+\item{data}{For count data, a numeric vector with for a single sampling bout
+(NAs allowed). For binomial data, a matrix with observations in col 1 and
+samples in col 2.}
 
-\item{greater_than}{logical; if TRUE (default), the tested hypothesis is of the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
+\item{greater_than}{logical; if TRUE (default), the tested hypothesis is of
+the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
 
 \item{hypothesis}{Single value with the hypothesized value of \eqn{\mu}.}
 
 \item{density_func}{Kernel probability density function for the data. See details.}
 
-\item{overdispersion}{A character string or a number specifying the overdispersion parameter. Only required when using \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities. See details.}
+\item{overdispersion}{A character string or a number specifying the
+overdispersion parameter. Only required when using \code{"negative binomial"}
+or \code{"beta-binomial"} as kernel densities. See details.}
 
 \item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}}
 
-\item{lower_bnd}{Single number indicating the lower bound of the parameter space for \eqn{\mu}. Most cases is \eqn{0} (default).}
+\item{lower_bnd}{Single number indicating the lower bound of the parameter
+space for \eqn{\mu}. Most cases is \eqn{0} (default).}
 
-\item{upper_bnd}{Single number indicating the upper bound of the parameter space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it should be \eqn{\leq 1} for binomial data.}
+\item{upper_bnd}{Single number indicating the upper bound of the parameter
+space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it
+should be \eqn{\leq 1} for binomial data.}
 }
 \value{
 A single probability
 }
 \description{
-This function calculates a posterior probability for hypotheses about population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi}, given the data at a single
-iteration. This function is to be used in a sequential framework, and called on the sequential test \code{\link{stbp_composite}}.
+This function calculates a posterior probability for hypotheses about
+population densities of the form \eqn{H:\mu > \psi} or \eqn{H:\mu < \psi},
+given the data at a single iteration. This function is to be used in a
+sequential framework, and called on the sequential test \code{\link{stbp_composite}}.
 }
 \details{
 The \code{density_func} argument should be specified as character string.
-Acceptable options are \code{"poisson"}, \code{"negative binomial"}, \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
-parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be either a constant or a function of the mean. If a function, it should be specified as a character string
-with the name of an existing function. For options of empirical functions to describe overdispersion as a function of the mean see Binns et al. (2000).
+Acceptable options are \code{"poisson"}, \code{"negative binomial"}, \code{"binomial"}
+and \code{"beta-binomial"}. The overdispersion parameter for \code{"negative binomial"}
+and \code{"beta-binomial"} can be either a constant or a function of the mean.
+If a function, it should be specified as a character string with the name of
+an existing function. For options of empirical functions to describe
+overdispersion as a function of the mean see Binns et al. (2000).
 }
 \examples{
 
@@ -76,9 +89,11 @@ stbp_posterior_composite(data = counts,
 ## End (Not run)
 }
 \references{
-Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and monitoring in crop protection: the theoretical basis for developing practical decision guides.}
-CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
+Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
+monitoring in crop protection: the theoretical basis for developing practical
+decision guides}. CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
 
-Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary hypotheses about population density.
-\emph{Methods in Ecology and Evolution}. In print.
+Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of
+complementary hypotheses about population density. \emph{Methods in Ecology
+and Evolution}. <https://doi.org/10.1111/2041-210X.70053>
 }
