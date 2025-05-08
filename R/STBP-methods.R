@@ -53,7 +53,9 @@ setMethod("show", "STBP", function(object){
     dist1 <- as.character(object@call[4])
   }
   else {
-    psi <- as.numeric(as.character(object@call[4]))
+    if(suppressWarnings(is.na(as.numeric(as.character(object@call[4])))))
+      psi <- paste("Trajectory = ", object@call[4]) else
+        psi <- as.numeric(as.character(object@call[4]))
     if(as.character(object@call[3]) == TRUE) sign <- ">"
     if(as.character(object@call[3]) == FALSE) sign <- "<"
     dist1 <- as.character(object@call[5])
