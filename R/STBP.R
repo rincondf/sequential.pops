@@ -443,7 +443,7 @@ stbp_posterior_simple <- function(data,
   posterior
 }
 
-#' Sequential test of Bayesian posterior probabilities for simple hypotheses
+#' Sequential test of Bayesian posterior probabilities for simple hypotheses about species absence
 #'
 #' @description
 #' Runs a Sequential test of Bayesian Posterior Probabilities for hypotheses about species absence of the form \eqn{H:\mu = 0}.

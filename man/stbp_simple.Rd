@@ -2,7 +2,7 @@
 % Please edit documentation in R/STBP.R
 \name{stbp_simple}
 \alias{stbp_simple}
-\title{Sequential test of Bayesian posterior probabilities for simple hypotheses}
+\title{Sequential test of Bayesian posterior probabilities for simple hypotheses about species absence}
 \usage{
 stbp_simple(
   data,
