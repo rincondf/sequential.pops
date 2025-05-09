@@ -5,7 +5,9 @@ Version: 0.1.0
 Authors@R: c(person(given = "Diego F", family = "Rincon",
        email = "diego.rincon@wsu.edu", role = c("aut", "cre")),
        person(given = "Izzy", family = "McCabe",
-       email = "israel.mcdonald@wsu.edu", role = c("aut")))
+       email = "israel.mcdonald@wsu.edu", role = c("aut")), 
+       person(given = "David W", family = "Crowder",
+       email = "dcrowder@wsu.edu", role = c("aut")))
 Description: In population management, data come at more or less regular intervals over time in sampling batches (bouts) and decisions should be made with the minimum number of samples and as quickly as possible. This package provides tools to assess and implement sequential analyses to test hypotheses about population sizes.
 Encoding: UTF-8
 LazyData: true

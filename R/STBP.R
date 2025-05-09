@@ -9,15 +9,17 @@
 #'
 #' @param data For count data, a numeric vector with for a single sampling bout
 #' (NAs allowed). For binomial data, a matrix with observations in col 1 and
-#' samples in col 2.
+#' samples in col 2 (NAs \emph{not} allowed).
 #' @param greater_than logical; if TRUE (default), the tested hypothesis is of
 #' the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
-#' @param hypothesis Single value with the hypothesized value of \eqn{\mu}.
+#' @param hypothesis Single non-negative value with the hypothesized value
+#' of \eqn{\mu}.
 #' @param density_func Kernel probability density function for the data. See details.
-#' @param overdispersion A character string or a number specifying the
-#' overdispersion parameter. Only required when using \code{"negative binomial"}
-#' or \code{"beta-binomial"} as kernel densities. See details.
-#' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}
+#' @param overdispersion A character string (if a function) or a number
+#' specifying the overdispersion parameter. Only required when using
+#' \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
+#' See details.
+#' @param prior Single number with initial prior. Must be on the interval \eqn{[0,1]}.
 #' @param lower_bnd Single number indicating the lower bound of the parameter
 #' space for \eqn{\mu}. Most cases is \eqn{0} (default).
 #' @param upper_bnd Single number indicating the upper bound of the parameter
@@ -80,6 +82,56 @@ stbp_posterior_composite <- function(data,
                                      prior,
                                      lower_bnd = 0,
                                      upper_bnd = Inf) {
+  if(is.na(hypothesis) | hypothesis < 0)
+    stop("ERROR: hypothesized values for mu should be non-negative and
+         can't be NA.")
+
+  if(is.na(match(density_func, c("poisson", "negative binomial", "binomial",
+                                 "beta-binomial"))))
+    stop("ERROR: only distributions poisson, negative binomial, binomial and
+         beta-binomial are supported.")
+
+  if(density_func == "negative binomial" | density_func == "beta-binomial") {
+    if(is.na(overdispersion) | overdispersion < 0)
+      stop("ERROR: a non-negative overdipersion parameter value must be
+           provided.")
+  }
+
+
+  # data check
+
+  is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) {
+    abs(x - round(x)) < tol
+  }
+
+  if(density_func == "binomial" | density_func == "beta-binomial") {
+
+    if(!is.matrix(data) | ncol(data) != 2)
+      stop("ERROR: binomial data should be presented as a two-column matrix,
+           with observations in col 1 and samples in col 2.")
+
+    if(any(is.na(data) | !is.wholenumber(data) | data < 0))
+      stop("ERROR: binomial data must be non-negative integers and
+           can't contain NAs.")
+
+    if(hypothesis > 1)
+      stop("ERROR: hypothesized values for binomial variables must be
+           proportions.")
+
+    if(upper_bnd > 1)
+      stop("ERROR: possible values for mu should be within the interval [0,1].")
+  }
+
+  if(density_func == "poisson" | density_func == "negative binomial") {
+    if(all(is.na(data)))
+      stop("ERROR: sampling bouts should contain at least one datum.")
+
+    if(any(!is.wholenumber(na.omit(data)) | na.omit(data) < 0))
+      stop("ERROR: count data must be non-negative integers.")
+  }
+
+  # construction of likelihood function
+
   if(density_func == "poisson")
     likelihood_func <- function(data, x) dpois(data, lambda = x)
 
@@ -163,23 +215,27 @@ stbp_posterior_composite <- function(data,
 #'
 #'
 #' @param data For count data, either a vector (for purely sequential designs)
-#' or a matrix (group sequential designs) with sequential count data, with
-#' sampling bouts collected over time in columns and samples within bouts in
-#' rows. NAs are allowed in case sample size within bouts is unbalanced.
-#' For binomial data, a list of matrices with integer values with observations in
-#' col 1 and number of samples in col 2, so that each matrix within the list
-#' corresponds to a sampling bout.
+#' or a matrix (group sequential designs) with sequential (non-negative) count
+#' data, with sampling bouts collected over time in columns and samples within
+#' bouts in rows. NAs are allowed in case sample size within bouts is unbalanced.
+#' For binomial data, a list of matrices with integer non-negative values of
+#' observations in col 1 and number of samples in col 2, so that each matrix
+#' within the list corresponds to a sampling bout. NAs are \emph{not} allowed for
+#' binomial data.
 #' @param greater_than logical; if TRUE (default), the tested hypothesis is of
 #' the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
-#' @param hypothesis Either a single value or a vector with the hypothesized
-#' values for \eqn{\mu}. If a vector, should contain at least as many values
-#' as \code{ncol(data)}.
+#' @param hypothesis Either a single non-negative value or a vector of
+#' non-negative values with the hypothesized population densities, \eqn{\mu}.
+#' If a vector, it should contain at least as many values as \code{ncol(data)}
+#' for count data or as \code{length(data)} for binomial data.
 #' @param density_func Kernel probability density function for the data. See
 #' details.
-#' @param overdispersion A character string or a number specifying the
-#' overdispersion parameter. Only required when using \code{"negative binomial"}
-#' or \code{"beta-binomial"} as kernel densities. See details.
-#' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
+#' @param overdispersion A character string (if a function) or a number
+#' specifying the overdispersion parameter. Only required when using
+#' \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
+#' See details.
+#' @param prior Single number with initial prior. Must be on the interval
+#' \eqn{[0,1]}.
 #' @param lower_bnd Single number indicating the lower bound of the parameter
 #' space for \eqn{\mu}. Most cases is \eqn{0} (default).
 #' @param upper_bnd Single number indicating the upper bound of the parameter
@@ -307,20 +363,26 @@ stbp_composite <- function(data,
 
   call <- match.call()
 
-
-  if(is.vector(data)) data <- matrix(data, 1, length(data))
-
-  # If hypothesis is just a single repeated value,
-  # make a vector of that value repeated as many times as there are bouts.
-  # This makes it so that the user can input either a hypothesis made of
-  # a single value or a trajectory.
-
-  if(length(hypothesis) == 1) hypothesis <- rep(hypothesis, ncol(data))
-
-  # Init vector with length equal to number of sampling bouts
-  # and with initial prior as its first value
-
   if(density_func == "poisson" | density_func == "negative binomial") {
+
+    # If hypothesis is just a single repeated value,
+    # make a vector of that value repeated as many times as there are bouts.
+    # This makes it so that the user can input either a hypothesis made of
+    # a single value or a trajectory.
+
+    if(is.vector(data))
+      data <- matrix(data, 1, length(data))
+
+    # Init vector with length equal to number of sampling bouts
+    # and with initial prior as its first value
+
+    if(length(hypothesis) == 1)
+      hypothesis <- rep(hypothesis, ncol(data))
+
+    if(length(hypothesis) < ncol(data))
+      stop("ERROR: a hypothesized value for mu should be provided for each
+           sampling bout.")
+
     posteriors <- c(prior, rep(NA, ncol(data) - 1))
     for(i in 1: ncol(data)) {
       if(posteriors[i] < 0.001) posteriors[i] <- 0.001
@@ -344,6 +406,18 @@ stbp_composite <- function(data,
   }
 
   if(density_func == "binomial" | density_func == "beta-binomial") {
+
+    if(!is.list(data))
+      stop("ERROR: binomial sequential data should be provided as a list of
+           matrices. See ?stbp_composite.")
+
+    if(length(hypothesis) == 1)
+      hypothesis <- rep(hypothesis, length(data))
+
+    if(length(hypothesis) < length(data))
+      stop("ERROR: a hypothesized value for mu should be provided for each
+           sampling bout.")
+
     posteriors <- c(prior, rep(NA, length(data) - 1))
     for(i in 1: length(data)) {
       if(posteriors[i] < 0.001) posteriors[i] <- 0.001
@@ -396,12 +470,13 @@ stbp_composite <- function(data,
 #'
 #' @param data For count data, a numeric vector with for a single sampling bout
 #' (NAs allowed). For binomial data, a matrix with observations in col 1 and
-#' samples in col 2.
+#' samples in col 2 (NAs \emph{not} allowed).
 #' @param density_func Kernel probability density function for the data. See details.
-#' @param overdispersion A character string or a number specifying the
-#' overdispersion parameter. Only required when using \code{"negative binomial"}
-#' or \code{"beta-binomial"} as kernel densities. See details.
-#' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}
+#' @param overdispersion A character string (if a function) or a number
+#' specifying the overdispersion parameter. Only required when using
+#' \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
+#' See details.
+#' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
 #' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}.
 #' For count data, is often \code{Inf} (default), but it must be \eqn{\leq 1} for
 #' binomial data.
@@ -445,6 +520,48 @@ stbp_posterior_simple <- function(data,
                                   overdispersion = NA,
                                   prior,
                                   upper_bnd = Inf) {
+
+  if(is.na(match(density_func, c("poisson", "negative binomial", "binomial",
+                                 "beta-binomial"))))
+    stop("ERROR: only distributions poisson, negative binomial, binomial and
+         beta-binomial are supported.")
+
+  if(density_func == "negative binomial" | density_func == "beta-binomial") {
+    if(is.na(overdispersion) | overdispersion < 0)
+      stop("ERROR: a non-negative overdipersion parameter value must be
+           provided.")
+  }
+
+
+  # data check
+
+  is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) {
+    abs(x - round(x)) < tol
+  }
+
+  if(density_func == "binomial" | density_func == "beta-binomial") {
+
+    if(!is.matrix(data) | ncol(data) != 2)
+      stop("ERROR: binomial data should be presented as a two-column matrix,
+           with observations in col 1 and samples in col 2.")
+
+    if(any(is.na(data) | !is.wholenumber(data) | data < 0))
+      stop("ERROR: binomial data must be non-negative integers and
+           can't contain NAs.")
+
+    if(upper_bnd > 1)
+      stop("ERROR: possible values for mu should be within the interval [0,1].")
+  }
+
+  if(density_func == "poisson" | density_func == "negative binomial") {
+    if(all(is.na(data)))
+      stop("ERROR: sampling bouts should contain at least one datum.")
+
+    if(any(!is.wholenumber(na.omit(data)) | na.omit(data) < 0))
+      stop("ERROR: count data must be non-negative integers.")
+  }
+
+  # construction of likelihood functions
 
   if(density_func == "poisson")
     likelihood_func <- function(data, x) dpois(data, lambda = x)
@@ -528,14 +645,15 @@ stbp_posterior_simple <- function(data,
 #' @param data For count data, either a vector (for purely sequential designs) o
 #' a matrix (group sequential designs) with sequential count data, with sampling
 #' bouts collected over time in columns and samples within bouts in rows. NAs
-#' are allowed in case sample size within bouts is unbalanced. For binomial data,
-#' a list of matrices with integer values with observations in col 1 and number
-#' of samples in col 2, so that each matrix within the list corresponds to a
-#' sampling bout.
+#' are allowed in case sample size within bouts is unbalanced. For binomial
+#' data, a list of matrices with integer non-negative values of observations
+#' in col 1 and number of samples in col 2, so that each matrix within the list
+#' corresponds to a sampling bout. NAs are \emph{not} allowed for binomial data.
 #' @param density_func Kernel probability density function for the data. See details.
-#' @param overdispersion A character string or a number specifying the
-#' overdispersion parameter. Only required when using \code{"negative binomial"}
-#' or \code{"beta-binomial"} as kernel densities. See details.
+#' @param overdispersion A character string (if a function) or a number
+#' specifying the overdispersion parameter. Only required when using
+#' \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
+#' See details.
 #' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
 #' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}.
 #' For count data, is often \code{Inf} (default), but it must be \eqn{\leq 1}
@@ -614,17 +732,12 @@ stbp_simple <- function(data,
 
   call <- match.call()
 
-  if(is.vector(data)) data <- matrix(data, 1, length(data))
-
-  # If hypothesis is just a single repeated value,
-  # make a vector of that value repeated as many times as there are bouts.
-  # This makes it so that the user can input either a hypothesis made of a
-  # single value or a trajectory.
-
-  # Init vector with length equal to number of sampling bouts
-  # and with initial prior as its first value
-
   if(density_func == "poisson" | density_func == "negative binomial") {
+
+    if(is.vector(data))
+      data <- matrix(data, 1, length(data))
+
+
     posteriors <- c(prior, rep(NA, ncol(data) - 1))
     for(i in 1: ncol(data)) {
       bout = data[, i]
@@ -643,6 +756,11 @@ stbp_simple <- function(data,
   }
 
   if(density_func == "binomial" | density_func == "beta-binomial") {
+
+    if(!is.list(data))
+      stop("ERROR: binomial sequential data should be provided as a list of
+           matrices. See ?stbp_simple.")
+
     posteriors <- c(prior, rep(NA, length(data) - 1))
     for(i in 1: length(data)) {
       bout = data[[i]]

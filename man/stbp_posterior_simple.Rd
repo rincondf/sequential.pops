@@ -15,15 +15,16 @@ stbp_posterior_simple(
 \arguments{
 \item{data}{For count data, a numeric vector with for a single sampling bout
 (NAs allowed). For binomial data, a matrix with observations in col 1 and
-samples in col 2.}
+samples in col 2 (NAs \emph{not} allowed).}
 
 \item{density_func}{Kernel probability density function for the data. See details.}
 
-\item{overdispersion}{A character string or a number specifying the
-overdispersion parameter. Only required when using \code{"negative binomial"}
-or \code{"beta-binomial"} as kernel densities. See details.}
+\item{overdispersion}{A character string (if a function) or a number
+specifying the overdispersion parameter. Only required when using
+\code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
+See details.}
 
-\item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}}
+\item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}.}
 
 \item{upper_bnd}{Single number indicating the greatest possible value for \eqn{\mu}.
 For count data, is often \code{Inf} (default), but it must be \eqn{\leq 1} for

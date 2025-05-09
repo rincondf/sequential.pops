@@ -19,28 +19,32 @@ stbp_composite(
 }
 \arguments{
 \item{data}{For count data, either a vector (for purely sequential designs)
-or a matrix (group sequential designs) with sequential count data, with
-sampling bouts collected over time in columns and samples within bouts in
-rows. NAs are allowed in case sample size within bouts is unbalanced.
-For binomial data, a list of matrices with integer values with observations in
-col 1 and number of samples in col 2, so that each matrix within the list
-corresponds to a sampling bout.}
+or a matrix (group sequential designs) with sequential (non-negative) count
+data, with sampling bouts collected over time in columns and samples within
+bouts in rows. NAs are allowed in case sample size within bouts is unbalanced.
+For binomial data, a list of matrices with integer non-negative values of
+observations in col 1 and number of samples in col 2, so that each matrix
+within the list corresponds to a sampling bout. NAs are \emph{not} allowed for
+binomial data.}
 
 \item{greater_than}{logical; if TRUE (default), the tested hypothesis is of
 the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
 
-\item{hypothesis}{Either a single value or a vector with the hypothesized
-values for \eqn{\mu}. If a vector, should contain at least as many values
-as \code{ncol(data)}.}
+\item{hypothesis}{Either a single non-negative value or a vector of
+non-negative values with the hypothesized population densities, \eqn{\mu}.
+If a vector, it should contain at least as many values as \code{ncol(data)}
+for count data or as \code{length(data)} for binomial data.}
 
 \item{density_func}{Kernel probability density function for the data. See
 details.}
 
-\item{overdispersion}{A character string or a number specifying the
-overdispersion parameter. Only required when using \code{"negative binomial"}
-or \code{"beta-binomial"} as kernel densities. See details.}
+\item{overdispersion}{A character string (if a function) or a number
+specifying the overdispersion parameter. Only required when using
+\code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
+See details.}
 
-\item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}.}
+\item{prior}{Single number with initial prior. Must be on the interval
+\eqn{[0,1]}.}
 
 \item{lower_bnd}{Single number indicating the lower bound of the parameter
 space for \eqn{\mu}. Most cases is \eqn{0} (default).}

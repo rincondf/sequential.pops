@@ -19,16 +19,17 @@ stbp_simple(
 \item{data}{For count data, either a vector (for purely sequential designs) o
 a matrix (group sequential designs) with sequential count data, with sampling
 bouts collected over time in columns and samples within bouts in rows. NAs
-are allowed in case sample size within bouts is unbalanced. For binomial data,
-a list of matrices with integer values with observations in col 1 and number
-of samples in col 2, so that each matrix within the list corresponds to a
-sampling bout.}
+are allowed in case sample size within bouts is unbalanced. For binomial
+data, a list of matrices with integer non-negative values of observations
+in col 1 and number of samples in col 2, so that each matrix within the list
+corresponds to a sampling bout. NAs are \emph{not} allowed for binomial data.}
 
 \item{density_func}{Kernel probability density function for the data. See details.}
 
-\item{overdispersion}{A character string or a number specifying the
-overdispersion parameter. Only required when using \code{"negative binomial"}
-or \code{"beta-binomial"} as kernel densities. See details.}
+\item{overdispersion}{A character string (if a function) or a number
+specifying the overdispersion parameter. Only required when using
+\code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
+See details.}
 
 \item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}.}
 

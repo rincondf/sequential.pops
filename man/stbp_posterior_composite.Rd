@@ -18,20 +18,22 @@ stbp_posterior_composite(
 \arguments{
 \item{data}{For count data, a numeric vector with for a single sampling bout
 (NAs allowed). For binomial data, a matrix with observations in col 1 and
-samples in col 2.}
+samples in col 2 (NAs \emph{not} allowed).}
 
 \item{greater_than}{logical; if TRUE (default), the tested hypothesis is of
 the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
 
-\item{hypothesis}{Single value with the hypothesized value of \eqn{\mu}.}
+\item{hypothesis}{Single non-negative value with the hypothesized value
+of \eqn{\mu}.}
 
 \item{density_func}{Kernel probability density function for the data. See details.}
 
-\item{overdispersion}{A character string or a number specifying the
-overdispersion parameter. Only required when using \code{"negative binomial"}
-or \code{"beta-binomial"} as kernel densities. See details.}
+\item{overdispersion}{A character string (if a function) or a number
+specifying the overdispersion parameter. Only required when using
+\code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
+See details.}
 
-\item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}}
+\item{prior}{Single number with initial prior. Must be on the interval \eqn{[0,1]}.}
 
 \item{lower_bnd}{Single number indicating the lower bound of the parameter
 space for \eqn{\mu}. Most cases is \eqn{0} (default).}
