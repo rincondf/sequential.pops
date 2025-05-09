@@ -117,17 +117,27 @@ setMethod("show", "STBP", function(object){
 #'
 #' ## End (Not run)
 #' @aliases plot
-setMethod("plot", signature = c(x = "STBP", y = "missing"), function(x, y = NULL) {
+setMethod("plot", signature = c(x = "STBP", y = "missing"), function(x, y) {
   opar <- par(no.readonly = TRUE)
   on.exit(par(opar), add = TRUE)
 
   par(mar = c(5, 7, 2, 2))
-  plot(x@probabilities, ylim = c(0, 1), type = "o", cex.lab = 2, yaxt = "n",
-       xaxt = "n", xlab = "Sampling bout", ylab = "", cex.axis = 2, lwd = 2)
+  plot(seq(1, (x@iterations + 1)), x@probabilities, ylim = c(0, 1),
+       type = "o", cex.lab = 2, yaxt = "n", xaxt = "n", xlab = "Sampling bout",
+       ylab = "", cex.axis = 2, lwd = 2)
   axis(2, at = seq(0, 1, 0.2), cex.axis = 2, las = 2)
   axis(1, at = seq(1, (x@iterations + 1)), labels = seq(0, x@iterations),
        cex.axis = 2)
-  abline(h = as.numeric(as.character(x@call[9])), lty = 2)
-  abline(h = as.numeric(as.character(x@call[10])), lty = 2)
+
+  if(as.character(x@call[1]) == "stbp_simple") {
+    abline(h = as.numeric(as.character(x@call[6])), lty = 2)
+    abline(h = as.numeric(as.character(x@call[7])), lty = 2)
+  }
+
+  if(as.character(x@call[1]) == "stbp_composite") {
+    abline(h = as.numeric(as.character(x@call[9])), lty = 2)
+    abline(h = as.numeric(as.character(x@call[10])), lty = 2)
+  }
+
   title(ylab = "Posterior probability", cex.lab = 2, line = 4.5)
 })

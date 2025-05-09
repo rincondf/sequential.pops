@@ -7,7 +7,7 @@
 \title{Draws a plot with the sequence of posterior probabilities from a sequential
 test of Bayesian posterior probabilities}
 \usage{
-\S4method{plot}{STBP,missing}(x, y = NULL)
+\S4method{plot}{STBP,missing}(x, y)
 }
 \arguments{
 \item{x}{Created as a result of a call to \code{\link{stbp_simple}} or
