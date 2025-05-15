@@ -26,8 +26,8 @@
 #' The \code{density_func} argument should be specified as character string.
 #' Acceptable options are \code{"poisson"}, \code{"negative binomial"}, and
 #' \code{"binomial"}. As far as we know, no one has ever calculated and published stop
-#' lines for the beta-binomial family. The overdispersion parameter for
-#' \code{"negative binomial"} is a constant.
+#' lines for the beta-binomial family. The overdispersion parameter may only be
+#' specified as a constant. Use that obtained for the threshold population density.
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical

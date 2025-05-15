@@ -33,7 +33,8 @@
 #' and \code{"beta-binomial"} can be either a constant or a function of the mean.
 #' If a function, it should be specified as a character string with the name of
 #' an existing function. For options of empirical functions to describe
-#' overdispersion as a function of the mean see Binns et al. (2000).
+#' overdispersion as a function of the mean see Binns et al. (2000). The most
+#' common approach for the negative binomial family is Taylor's Power Law.
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical
@@ -256,7 +257,8 @@ stbp_posterior_composite <- function(data,
 #' either a constant or a function of the mean. If a function, it should be
 #' specified as a character string with the name of an existing function.
 #' For options of empirical functions to describe overdispersion as a function
-#' of the mean see Binns et al. (2000).
+#' of the mean see Binns et al. (2000). The most common approach for the negative
+#' binomial family is Taylor's Power Law.
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical
@@ -491,7 +493,8 @@ stbp_composite <- function(data,
 #' either a constant or a function of the mean. If a function, it should be
 #' specified as a character string with the name of an existing function. For
 #' options of empirical functions to describe overdispersion as a function of
-#' the mean see Binns et al. (2000).
+#' the mean see Binns et al. (2000). The most common approach for the negative
+#' binomial family is Taylor's Power Law.
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical
@@ -673,7 +676,8 @@ stbp_posterior_simple <- function(data,
 #' either a constant or a function of the mean. If a function, it should be
 #' specified as a character string with the name of an existing function. For
 #' options of empirical functions to describe overdispersion as a function of
-#' the mean see Binns et al. (2000).
+#' the mean see Binns et al. (2000). The most common approach for the negative
+#' binomial family is Taylor's Power Law.
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical
