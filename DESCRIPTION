@@ -8,7 +8,7 @@ Authors@R: c(person(given = "Diego F", family = "Rincon",
        email = "israel.mcdonald@wsu.edu", role = c("aut")), 
        person(given = "David W", family = "Crowder",
        email = "dcrowder@wsu.edu", role = c("aut")))
-Description: In population management, data come at more or less regular intervals over time in sampling batches (bouts) and decisions should be made with the minimum number of samples and as quickly as possible. This package provides tools to assess and implement sequential analyses to test hypotheses about population sizes.
+Description: In population management, data come at more or less regular intervals over time in sampling batches (bouts) and decisions should be made with the minimum number of samples and as quickly as possible. This package provides tools to assess and implement sequential analyses to test hypotheses about population sizes. Two approaches are included: the sequential test of Bayesian psterior probabilities (Rincon, D.F., McCabe, I. & Crowder, D.W. 2025), and the sequential probability ratio test (Wald, A. 1945).
 Encoding: UTF-8
 LazyData: true
 Imports: 
