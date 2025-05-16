@@ -110,7 +110,7 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #' @param n Sample size within bouts.
 #' @param prior Single number with initial prior. Must be on the interval
 #' \eqn{[0,1]}.
-#' @param overdispersion.sim A character string (if a function) or a number
+#' @param overdispersion.sim A character string (if a function) or a a non-negative number
 #' specifying the overdispersion parameter used to generate simulated counts.
 #' Only required when using \code{"negative binomial"} or \code{"beta-binomial"}
 #' as kernel densities. See details.
@@ -131,11 +131,15 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #' parameter of the negative binomial distribution, \eqn{a} and \eqn{b} are parameters
 #' of the Taylor's Power Law and \eqn{z} is a normally distributed variable with mean \eqn{0}
 #' and standard deviation \eqn{\sigma_{e}}, which is the root of the mean square error
-#' for the regression used to estimate \eqn{a} and \eqn{b}.
+#' for the regression used to estimate \eqn{a} and \eqn{b}. See examples.
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical
 #' decision guides}. CABI Pub., Wallingford, Oxon, UK; New York, N.Y.
+#'
+#' Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of
+#' complementary hypotheses about population density. \emph{Methods in Ecology
+#' and Evolution}. <https://doi.org/10.1111/2041-210X.70053>
 #'
 #' @returns
 #' A list with the average number of sampling bouts required to reach a
@@ -195,9 +199,11 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #'                                    }
 #'
 #' # where sd here is the the root of the mean square error for the regression
-#' # used to estimate a and b
+#' # used to estimate a and b. Note that this is a stochastic version
+#' # of 'estimate_k'.
 #'
-#' # Run model evaluation for testF1
+#' # Run model evaluation for testF1 with varying overdispersion and
+#' # added stochasticity.
 #'
 #' eval1 <- STBP.eval(test1F,
 #'                     eval.range = seq(2, 11),
@@ -254,7 +260,8 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #' plot(seq(1, 8), eval3$AcceptRate, type = "o", xlab = "True population size",
 #'       ylab = "Acceptance rate of H")
 #'
-#' # Variations if n, the sample size within each bout, can also be changed!
+#' # Variations if n, the sample size within each bout, can also be changed
+#' # (not possible in SPRT)!
 #'
 #' ## End (Not run)
 STBP.eval <- function(obj,

@@ -18,3 +18,21 @@ test_that("Evaluation of STBP works", {
                           prior = 0.5,
                           N = 30)$AvgSamples, length(range))
 })
+
+test_that("Evaluation of SPRT works", {
+  counts3 <- rpois(20, lambda = 7)
+
+  test11 <- sprt(data = counts3,
+                 mu0 = 8,
+                 mu1 = 10,
+                 density_func = "negative binomial",
+                 overdispersion = 4.5,
+                 alpha = 0.1,
+                 beta = 0.1)
+
+  range <- seq(3, 12)
+
+  expect_length(SPRT.eval(test11,
+                          eval.range = range,
+                          N = 30)$AvgSamples, length(range))
+})

@@ -58,11 +58,14 @@ The \code{density_func} argument should be specified as character string.
 Acceptable options are \code{"poisson"}, \code{"negative binomial"},
 \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
 parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be
-either a constant or a function of the mean. If a function, it should be
-specified as a character string with the name of an existing function. For
-options of empirical functions to describe overdispersion as a function of
-the mean see Binns et al. (2000). The most common approach for the negative
-binomial family is Taylor's Power Law.
+either a constant or a function of the mean.
+
+If a function, it should be specified as a character string with the name of
+an existing function. For options of empirical functions to describe
+overdispersion as a function of the mean see Binns et al. (2000). The most
+common approach for the negative binomial family is Taylor's Power Law, which
+describes the variance as a function of the mean with two parameters, \eqn{a}
+and \eqn{b}. Overdispersion, \eqn{k}, can then be specified as: \deqn{k = \frac{\mu^2}{a \mu^b - \mu}}
 }
 \examples{
 # Testing the absence of a species in a given area from a sequential random

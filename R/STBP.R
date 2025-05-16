@@ -254,11 +254,14 @@ stbp_posterior_composite <- function(data,
 #' Acceptable options are \code{"poisson"}, \code{"negative binomial"},
 #' \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
 #' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be
-#' either a constant or a function of the mean. If a function, it should be
-#' specified as a character string with the name of an existing function.
-#' For options of empirical functions to describe overdispersion as a function
-#' of the mean see Binns et al. (2000). The most common approach for the negative
-#' binomial family is Taylor's Power Law.
+#' either a constant or a function of the mean.
+#'
+#' If a function, it should be specified as a character string with the name of
+#' an existing function. For options of empirical functions to describe
+#' overdispersion as a function of the mean see Binns et al. (2000). The most
+#' common approach for the negative binomial family is Taylor's Power Law, which
+#' describes the variance as a function of the mean with two parameters, \eqn{a}
+#' and \eqn{b}. Overdispersion, \eqn{k}, can then be specified as: \deqn{k = \frac{\mu^2}{a \mu^b - \mu}}
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical
@@ -348,6 +351,35 @@ stbp_posterior_composite <- function(data,
 #'                           upper_criterion = 0.999)
 #'
 #' test3F # returns accept H after 3 sampling bouts
+#'
+#' # Assuming a negative binomial count variable whose overdispersion parameter,
+#' # k, varies as a function of the mean, and that the variance-mean relationship
+#' # is well described with Taylor's Power Law, a function to obtain k can be:
+#'
+#' estimate_k <- function(mean) {
+#'                         a = 1.830012
+#'                         b = 1.218041 # a and b are Taylor's Power Law parameters
+#'                         (mean^2) / ((a * mean^(b)) - mean)
+#'                         }
+#'
+#' # Generate some counts to create an STBP object with the model specifications
+#'
+#' counts3 <- rnbinom(20, mu = 5, size = estimate_k(5))
+#'
+#' # Run the test to create the STBP object
+#'
+#' test1F <- stbp_composite(data = counts3,
+#'                           greater_than = TRUE,
+#'                           hypothesis = 9,
+#'                           density_func = "negative binomial",
+#'                           overdispersion = "estimate_k",
+#'                           prior = 0.5,
+#'                           lower_bnd = 0,
+#'                           upper_bnd = Inf,
+#'                           lower_criterion = 0.01,
+#'                           upper_criterion = 0.99)
+#'
+#' test1F
 #'
 #' ## End (Not run)
 #' @export
@@ -673,11 +705,14 @@ stbp_posterior_simple <- function(data,
 #' Acceptable options are \code{"poisson"}, \code{"negative binomial"},
 #' \code{"binomial"} and \code{"beta-binomial"}. The overdispersion
 #' parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be
-#' either a constant or a function of the mean. If a function, it should be
-#' specified as a character string with the name of an existing function. For
-#' options of empirical functions to describe overdispersion as a function of
-#' the mean see Binns et al. (2000). The most common approach for the negative
-#' binomial family is Taylor's Power Law.
+#' either a constant or a function of the mean.
+#'
+#' If a function, it should be specified as a character string with the name of
+#' an existing function. For options of empirical functions to describe
+#' overdispersion as a function of the mean see Binns et al. (2000). The most
+#' common approach for the negative binomial family is Taylor's Power Law, which
+#' describes the variance as a function of the mean with two parameters, \eqn{a}
+#' and \eqn{b}. Overdispersion, \eqn{k}, can then be specified as: \deqn{k = \frac{\mu^2}{a \mu^b - \mu}}
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical
