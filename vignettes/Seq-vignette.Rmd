@@ -1,0 +1,29 @@
+---
+title: "Sequential testing of hypotheses about population density with the `sequential.pops` package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Seq-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+The `sequential.pops` package is designed to simplify the development, evaluation 
+and implementation of sequential designs for testing hypotheses about population
+density. Sequential analyses are particularly useful for decision-making in situations 
+where estimation is not the goal, but critical actions should be triggered when
+population sizes reach or are above or below predefined levels. This situations include
+pest mana
+
+
+```{r setup}
+library(sequential.pops)
+```

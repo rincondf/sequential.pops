@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(sequential.pop)
+library(sequential.pops)
 
-test_check("sequential.pop")
+test_check("sequential.pops")

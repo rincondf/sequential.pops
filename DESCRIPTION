@@ -1,4 +1,4 @@
-Package: sequential.pop
+Package: sequential.pops
 Type: Package
 Title: Sequential analysis of biological population sizes
 Version: 0.1.0
@@ -17,7 +17,10 @@ Imports:
     truncdist
 RoxygenNote: 7.3.2
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 License: GPL (>= 3)
 URL: https://github.com/rincondf/sequential.pops
+VignetteBuilder: knitr
