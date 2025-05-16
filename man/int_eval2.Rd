@@ -20,5 +20,6 @@ A list with average number of bouts required to reach a decision and
 recommendation for H1
 }
 \description{
-Simulation of an SPRT
+This function is called on Evaluation of Sequential probability ratio test,
+\code{\link{SPRT.eval}}.
 }

@@ -23,5 +23,6 @@ int_eval(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NULL)
 A list with average number of bouts required to reach a decision and recommendation for H
 }
 \description{
-Simulation of an STBP
+This function is called on Evaluation of Sequential tests of
+Bayesian posterior probabilities, \code{\link{STBP.eval}}.
 }

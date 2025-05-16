@@ -1,5 +1,9 @@
 #' Simulation of an SPRT
 #'
+#' @description
+#' This function is called on Evaluation of Sequential probability ratio test,
+#' \code{\link{SPRT.eval}}.
+#'
 #' @param pop_mean True population density.
 #' @param obj A SPRT object
 #' @param overdispersion.sim Overdispersion parameter or function for simulations.

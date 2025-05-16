@@ -1,5 +1,9 @@
 #' Simulation of an STBP
 #'
+#' @description
+#' This function is called on Evaluation of Sequential tests of
+#' Bayesian posterior probabilities, \code{\link{STBP.eval}}.
+#'
 #' @param pop_mean True population density.
 #' @param prior Initial prior.
 #' @param n Sample size within bouts.
