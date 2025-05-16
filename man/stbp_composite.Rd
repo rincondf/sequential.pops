@@ -77,7 +77,8 @@ parameter for \code{"negative binomial"} and \code{"beta-binomial"} can be
 either a constant or a function of the mean. If a function, it should be
 specified as a character string with the name of an existing function.
 For options of empirical functions to describe overdispersion as a function
-of the mean see Binns et al. (2000).
+of the mean see Binns et al. (2000). The most common approach for the negative
+binomial family is Taylor's Power Law.
 }
 \examples{
 # Testing the hypothesis of a population size being greater than 5 individuals
