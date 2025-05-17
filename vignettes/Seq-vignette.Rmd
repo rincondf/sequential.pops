@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 The `sequential.pops` package is designed to simplify the development, evaluation 
 and implementation of sequential designs for testing hypotheses about population
 density. Sequential analyses are particularly useful for decision-making in situations 
-where estimation is not the goal, but when critical actions should be triggered if
+where estimation is not the goal, but where critical actions should be triggered if
 population sizes reach or are above or below predefined levels. This situations include
 deciding whether a pest control action should be applied, whether an area should be
 declared free from an invasive species, or whether early capture numbers of a pest
@@ -27,6 +27,36 @@ are consistent with an outbreak. Sequential analyses can also be useful in field
 outside ecology and pest management, such as quality control, and adaptive clinical 
 trials, but those applications are out of the scope of this package.
 
+Sequential data come in sampling bouts over time that should be processed as they come 
+to evaluate one or several hypotheses and stop collecting data (sampling) when there
+is enough evidence to make a decision. Sequential designs are typically more cost-efficient
+than conventional fixed-sample-size approaches, and can be purely sequential (one-at-a-time)
+or group sequential (`n > 1` per sampling bout). The analysis of biological population
+densities is often carried out by collecting count data from traps or field observations
+or binomial records from structured clusters of sampling units. The `sequential.pops`
+package focuses on count and binomial data with or without overdispersion to test hypotheses
+about non-negative population sizes.
+
+There are other R packages that deal with sequential designs. Most existing
+packages, such as `GroupSeq`, `Grpseq`, `gsbDesign` and `seqmon`, focus on adaptive clinical 
+trials for normally distributed variables. Others, such as `gscounts`, `gsDesign`, `ASSISTant`,
+`Sequential` and `BayesOrdDesign` can take non-normal variables but are also focused 
+on clinical trials and can hardly be adapted to process count or binomial data from 
+ecological or agricultural settings and evaluate hypotheses about population densities. 
+Other packages with a more general scope, such as `MSPRT` and `sprtt`, include a limited 
+selection of probability distributions and lack functions to evaluate test from operating
+characteristics.
+
+The `sequential.pops` is the first R package devoted to test hypotheses on biological 
+population densities. Two approaches are included: the Sequential Test of Bayesian
+Posterior Probabilities (STBP) (Rincon et al. 2025), and the Sequential Probability
+Ratio Test (SPRT) (Wald 1945). Both the STBP and the SPRT have their own pros and cons 
+but are the most popular and state-of-the-art approaches for sequential analyses in 
+ecology and pest management. This tutorial walks you through the development, evaluation
+and implementation of sequential designs with STBP and SPRT using the `sequential.pops`
+package.
+
+## The Sequential Test of Bayesian Posterior Probabilities
 
 
 
