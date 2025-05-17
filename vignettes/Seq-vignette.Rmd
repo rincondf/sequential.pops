@@ -28,6 +28,8 @@ outside ecology and pest management, such as quality control, and adaptive clini
 trials, but those applications are out of the scope of this package.
 
 
+
+
 ```{r setup}
 library(sequential.pops)
 ```
