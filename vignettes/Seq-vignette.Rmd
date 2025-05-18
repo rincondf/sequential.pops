@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ## Introduction
 
 The `sequential.pops` package is designed to simplify the development, evaluation 
-and implementation of sequential designs for testing hypotheses about population
+and analysis of sequential designs for testing hypotheses about population
 density. Sequential analyses are particularly useful for decision-making in situations 
 where estimation is not the goal, but where critical actions should be triggered if
 population sizes reach or are above or below predefined levels. This situations include
@@ -44,7 +44,7 @@ trials for normally distributed variables. Others, such as `gscounts`, `gsDesign
 on clinical trials and can hardly be adapted to process count or binomial data from 
 ecological or agricultural settings and evaluate hypotheses about population densities. 
 Other packages with a more general scope, such as `MSPRT` and `sprtt`, include a limited 
-selection of probability distributions and lack functions to evaluate test from operating
+selection of probability distributions and lack functions to evaluate tests' operating
 characteristics.
 
 The `sequential.pops` is the first R package devoted to test hypotheses on biological 
@@ -52,13 +52,32 @@ population densities. Two approaches are included: the Sequential Test of Bayesi
 Posterior Probabilities (STBP) (Rincon et al. 2025), and the Sequential Probability
 Ratio Test (SPRT) (Wald 1945). Both the STBP and the SPRT have their own pros and cons 
 but are the most popular and state-of-the-art approaches for sequential analyses in 
-ecology and pest management. This tutorial walks you through the development, evaluation
-and implementation of sequential designs with STBP and SPRT using the `sequential.pops`
+ecology and pest management. This tutorial walks you through the development, evaluation 
+and analysis of sequential designs with STBP and SPRT using the `sequential.pops`
 package.
 
-## The Sequential Test of Bayesian Posterior Probabilities
+## 1. The Sequential Test of Bayesian Posterior Probabilities
 
+This test is specifically designed to test hypotheses about population densities,
+although it may have applications in other fields. It works by sequentially updating 
+the conditional probability of the tested hypothesis as new data is processed. The
+two main benefits of using STBP is that is distribution-agnostic (works with virtually
+any probability distribution), and that is one of the few sequential analyses that
+is "likelihood ratio-free" meaning that it can test single hypotheses without having 
+to specify a non-complementary alternative. As we'll see later, most sequential tests, 
+such as the SPRT (section 2), require two hypotheses, rather than one, because they are based on 
+likelihood ratios. Another advantage of the STBP is that it can process purely 
+sequential (one-at-a-time) or group sequential (in batches of samples), balanced or 
+unbalanced, and static (single-value) or dynamic (population models) hypotheses without 
+major modifications. 
 
+The main disadvantage of the STBP is that it is so new that has not been tested as its
+counterparts in the rough streets of real datasets. The STBP is also pretty sensitive to
+sample sizes within sampling bouts. In theory, it outperforms other sequential analysis
+as long as several samples are collected within each sampling bout, but type I error rate
+(accepting H when is false) gets ugly in purely sequential designs.
+
+Let's start with a simple case in which 
 
 ```{r setup}
 library(sequential.pops)

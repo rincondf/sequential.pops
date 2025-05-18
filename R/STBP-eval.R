@@ -15,6 +15,10 @@
 #' A list with average number of bouts required to reach a decision and recommendation for H
 int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NULL){
 
+  if(length(eval(parse(text = as.character(obj@call[4])))) > 1)
+    pop_mean <- eval(parse(text = as.character(obj@call[4]))) * pop_mean
+
+
   if (!is.null(seed)) set.seed(seed)
   samples <- matrix(NA, n, 100)
 
@@ -29,62 +33,96 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
     }
   }
 
+  pool <- matrix(NA, 6000, length(pop_mean))
+
   if(as.character(obj@call[5]) == "negative binomial") {
 
-    if(is.character(overdispersion.sim)) {
-      pool <- rnbinom(n = 6000, mu = pop_mean,
-                      size = if(eval(parse(text =
-                                           paste0(overdispersion.sim, "(pop_mean)"))) < 0 |
-                                is.nan(eval(parse(text = paste0(overdispersion.sim, "(pop_mean)")))) |
-                                is.na(eval(parse(text = paste0(overdispersion.sim, "(pop_mean)"))))) 0
-                      else eval(parse(text =
-                                        paste0(overdispersion.sim, "(pop_mean)"))))
-    }
+    for(i in 1:length(pop_mean)) {
+      if(is.character(overdispersion.sim)) {
+        pool[, i] <- rnbinom(n = 6000, mu = pop_mean[i],
+                             size = if(eval(parse(text =
+                                                  paste0(overdispersion.sim, "(pop_mean[i])"))) < 0 |
+                                       is.nan(eval(parse(text = paste0(overdispersion.sim, "(pop_mean[i])")))) |
+                                       is.na(eval(parse(text = paste0(overdispersion.sim, "(pop_mean[i])"))))) 0
+                             else eval(parse(text =
+                                               paste0(overdispersion.sim, "(pop_mean[i])"))))
+      }
 
-    if(is.numeric(overdispersion.sim)) {
-      pool <- rnbinom(mu = pop_mean, size = overdispersion.sim, n = 6000)
+      if(is.numeric(overdispersion.sim)) {
+        pool[, i] <- rnbinom(mu = pop_mean[i], size = overdispersion.sim, n = 6000)
+      }
     }
   }
 
   if(as.character(obj@call[5]) == "beta-binomial"){
 
-    if(is.character(overdispersion.sim)) {
-      pool <- rbetabinom(n = 6000, prob = pop_mean, size = 1,
-                         theta = if(eval(parse(text =
-                                               paste0(overdispersion.sim, "(pop_mean)"))) < 0 |
-                                    is.nan(eval(parse(text = paste0(overdispersion.sim, "(pop_mean)")))) |
-                                    is.na(eval(parse(text = paste0(overdispersion.sim, "(pop_mean)"))))) 0
-                         else eval(parse(text =
-                                           paste0(overdispersion.sim, "(pop_mean)"))))
-    }
+    for(i in 1:length(pop_mean)) {
+      if(is.character(overdispersion.sim)) {
+        pool[, i] <- rbetabinom(n = 6000, prob = pop_mean[i], size = 1,
+                                theta = if(eval(parse(text =
+                                                      paste0(overdispersion.sim, "(pop_mean[i])"))) < 0 |
+                                           is.nan(eval(parse(text = paste0(overdispersion.sim, "(pop_mean[i])")))) |
+                                           is.na(eval(parse(text = paste0(overdispersion.sim, "(pop_mean[i])"))))) 0
+                                else eval(parse(text =
+                                                  paste0(overdispersion.sim, "(pop_mean[i])"))))
+      }
 
-    if(is.numeric(overdispersion.sim)) {
-      pool <- rbetabinom(prob = pop_mean, size = 1, theta = overdispersion.sim, n = 6000)
+      if(is.numeric(overdispersion.sim)) {
+        pool[, i] <- rbetabinom(prob = pop_mean[i], size = 1, theta = overdispersion.sim, n = 6000)
+      }
     }
   }
 
   if(as.character(obj@call[5]) == "poisson"){
-    pool <- rpois(lambda = pop_mean, n = 6000)
+
+    for(i in 1:length(pop_mean)){
+      pool[, i] <- rpois(lambda = pop_mean[i], n = 6000)
+    }
   }
 
   if(as.character(obj@call[5]) == "binomial"){
-    pool <- rbinom(prob = pop_mean, size = 1, n = 6000)
-  }
 
-
-  if(as.character(obj@call[5]) == "poisson" | as.character(obj@call[5]) == "negative binomial") {
-    for(i in 1:100){
-      samples[, i] <- sample(pool, size = n, replace = FALSE)
-      pool <- pool[-match(samples[, i], pool)]
+    for(i in 1:length(pop_mean)){
+      pool[, i] <- rbinom(prob = pop_mean[i], size = 1, n = 6000)
     }
   }
 
 
-  if(as.character(obj@call[5]) == "binomial" | as.character(obj@call[5]) == "beta-binomial") {
-    samples <- list()
-    for(i in 1:100){
-      samples[[i]] <- matrix(c(sample(pool, size = n, replace = FALSE), rep(1, n)), n, 2)
-      pool <- pool[-match(samples[[i]][, 1], pool)]
+  if(length(pop_mean) == 1) {
+    if(as.character(obj@call[5]) == "poisson" | as.character(obj@call[5]) == "negative binomial") {
+      samples <- matrix(NA, n, 100)
+      for(i in 1:100){
+        samples[, i] <- sample(pool[!is.na(pool[, 1]), 1], size = n, replace = FALSE)
+        pool[match(samples[, i], pool[, 1]), 1] <- NA
+      }
+    }
+
+
+    if(as.character(obj@call[5]) == "binomial" | as.character(obj@call[5]) == "beta-binomial") {
+      samples <- list()
+      for(i in 1:100){
+        samples[[i]] <- matrix(c(sample(pool[!is.na(pool[, 1]), 1], size = n, replace = FALSE), rep(1, n)), n, 2)
+        pool[match(samples[[i]][, 1], pool[, 1]), 1] <- NA
+      }
+    }
+  }
+
+  if(length(pop_mean) > 1) {
+
+    if(as.character(obj@call[5]) == "poisson" | as.character(obj@call[5]) == "negative binomial") {
+
+      samples <- matrix(NA, n, length(pop_mean))
+      for(i in 1:length(pop_mean)){
+        samples[, i] <- sample(pool[, i], size = n, replace = FALSE)
+      }
+    }
+
+
+    if(as.character(obj@call[5]) == "binomial" | as.character(obj@call[5]) == "beta-binomial") {
+      samples <- list()
+      for(i in 1:length(pop_mean)){
+        samples[[i]] <- matrix(c(sample(pool[, i], size = n, replace = FALSE), rep(1, n)), n, 2)
+      }
     }
   }
 
@@ -109,8 +147,10 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #' densities, based on simulations. Sometimes called "operating characteristics".
 #'
 #' @param obj An object of class \code{"STBP"}.
-#' @param eval.range A vector with a sequence of true population densities to
-#' evaluate.
+#' @param eval.range The evaluation range. A vector with a sequence of true population
+#' densities to evaluate. If the \code{hypothesis} argument in the test is a trajectory
+#' (i.e., a vector), the evaluation range is a factor of the hypothesized trajectory.
+#' See details.
 #' @param n Sample size within bouts.
 #' @param prior Single number with initial prior. Must be on the interval
 #' \eqn{[0,1]}.
@@ -118,7 +158,7 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #' specifying the overdispersion parameter used to generate simulated counts.
 #' Only required when using \code{"negative binomial"} or \code{"beta-binomial"}
 #' as kernel densities. See details.
-#' @param N Number of simulations per true population density being evaluated.
+#' @param N Number of simulations per true population density or trajectory being evaluated.
 #' @param seed Optional seed for random count generation.
 #'
 #' @details
@@ -136,6 +176,14 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #' of the Taylor's Power Law and \eqn{z} is a normally distributed variable with mean \eqn{0}
 #' and standard deviation \eqn{\sigma_{e}}, which is the root of the mean square error
 #' for the regression used to estimate \eqn{a} and \eqn{b}. See examples.
+#'
+#' The evaluation range in the \code{eval.range} argument should cover relevant population
+#' densities for which the test will be applied. These densities are often around the
+#' threshold to check sampling sizes and error rates at those critical levels. In the case
+#' of dynamic hypotheses (vectors), the range should be given as factors of the hypothesized
+#' trajectory. For example, to evaluate this test for a hypothesis trajectory the
+#' \code{eval.range} argument could be \code{seq(0.1, 2, 0.1)}, so the evaluation runs from
+#' \eqn{10} percent of the trajectory to twice the trajectory in \eqn{10} percent increments.
 #'
 #' @references Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) \emph{Sampling and
 #' monitoring in crop protection: the theoretical basis for developing practical

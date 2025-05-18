@@ -9,8 +9,10 @@ STBP.eval(obj, eval.range, n, prior, overdispersion.sim = NA, N, seed = NULL)
 \arguments{
 \item{obj}{An object of class \code{"STBP"}.}
 
-\item{eval.range}{A vector with a sequence of true population densities to
-evaluate.}
+\item{eval.range}{The evaluation range. A vector with a sequence of true population
+densities to evaluate. If the \code{hypothesis} argument in the test is a trajectory
+(i.e., a vector), the evaluation range is a factor of the hypothesized trajectory.
+See details.}
 
 \item{n}{Sample size within bouts.}
 
@@ -22,7 +24,7 @@ specifying the overdispersion parameter used to generate simulated counts.
 Only required when using \code{"negative binomial"} or \code{"beta-binomial"}
 as kernel densities. See details.}
 
-\item{N}{Number of simulations per true population density being evaluated.}
+\item{N}{Number of simulations per true population density or trajectory being evaluated.}
 
 \item{seed}{Optional seed for random count generation.}
 }
@@ -51,6 +53,14 @@ parameter of the negative binomial distribution, \eqn{a} and \eqn{b} are paramet
 of the Taylor's Power Law and \eqn{z} is a normally distributed variable with mean \eqn{0}
 and standard deviation \eqn{\sigma_{e}}, which is the root of the mean square error
 for the regression used to estimate \eqn{a} and \eqn{b}. See examples.
+
+The evaluation range in the \code{eval.range} argument should cover relevant population
+densities for which the test will be applied. These densities are often around the
+threshold to check sampling sizes and error rates at those critical levels. In the case
+of dynamic hypotheses (vectors), the range should be given as factors of the hypothesized
+trajectory. For example, to evaluate this test for a hypothesis trajectory the
+\code{eval.range} argument could be \code{seq(0.1, 2, 0.1)}, so the evaluation runs from
+\eqn{10} percent of the trajectory to twice the trajectory in \eqn{10} percent increments.
 }
 \examples{
 
