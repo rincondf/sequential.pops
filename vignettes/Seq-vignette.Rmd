@@ -85,7 +85,73 @@ evidence of absence". In other words, we can never be sure about the absence of 
 in an area, but we can calculate the *probability* of the species being absent *given* 
 the collected data.
 
+Most small population sizes, like those of recently introduced species, are well
+described by Poisson distributions. So, in this case, we want to test if H: mu = 0
+assuming random sampling and counts following a Poisson distribution. If we are lucky
+and can collect say 30 random samples each time, and they all result in absences (zeros),
+we should be able to track the (posterior) probability of H being true after each sampling bout
+of 30.
 
+Data structure in `sequential.pops` for counts is based on matrices, where columns
+represent time (sampling bouts) and rows samples within bouts. So, for example, if we
+have collected 4 sampling bouts each with 30 samples, data should be arranged in a 
+`30 x 4` matrix. In this case, we have all zeros:
 ```{r setup}
-library(sequential.pops)
+a30 <- matrix(rep(0, 120), 30, 4)
 ```
+To run the test, we use `stbp_simple`, which is specially designed to test hypotheses
+about species absence, so we do not need to specify the hypothesis. We do need to 
+provide the matrix with the `data`, the distribution family (as a character string)
+in `density_func`, the initial `prior` probability (often 0.5), and `upper_criterion`
+and `lower_criterion`, the upper and lower criteria to stop sampling and make a decision. 
+The argument `upper_bnd` is almost always `Inf`, since it represents the upper 
+limit of the parameter space for mu.
+```{r}
+library(sequential.pops)
+
+test30 <- stbp_simple(data = a30,
+                     density_func = "poisson",
+                     prior = 0.5,
+                     upper_bnd = Inf,
+                     lower_criterion = 0,
+                     upper_criterion = 0.9999)
+test30
+```
+Given that all samples are zero and assuming a completely efficient detection rate,
+we can say that after 3 sampling bouts of 30 samples there is a pretty high change that
+H: mu = 0 is true. How spaced in time sampling bouts should be depends on the species
+being sampled and on what we consider a *different* sampling time. Notice that `upper_criterion` 
+and `lower_criterion` are set close to 1 and 0, respectively. In reality, to test species 
+absence, only `upper_criterion` is important to minimize type II error, since the 
+posterior probability of H will become 0 as soon as we get the first detection (`data > 0`).
+
+If sample size within sampling bouts is reduced, we should expect to loose power and
+require more bouts to collect enough evidence to achieve similar levels of certainty
+that the species is absent (in case we keep getting zeros, of course). So, if we can
+only collect 3 samples per sampling bout, and we get all zeros the matrix with the data
+should be specified as:
+```{r}
+a3 <- matrix(rep(0, 30), 3, 10)
+```
+for 10 sampling bouts. After running the test by:
+```{r}
+test3 <- stbp_simple(data = a3,
+                     density_func = "poisson",
+                     prior = 0.5,
+                     upper_bnd = Inf,
+                     lower_criterion = 0,
+                     upper_criterion = 0.9999)
+test3
+```
+we can see that we now require 9 sampling bouts to achieve similar levels of confidence
+to declare that our species is absent from the sampled area. The number of bouts with 
+all zeros required to accept H keeps increasing as sampling size within bouts is reduced.
+In fact, when sample size is one (purely sequential), the test looses power and the posterior 
+remains unchanged regardless the number of bouts. You can check the progression of
+the posterior probabilities for different sample sizes by calling `plot`:
+```{r}
+plot(test30)
+plot(test3)
+```
+
+## Example 2: Testing if a population density is above a static threshold
