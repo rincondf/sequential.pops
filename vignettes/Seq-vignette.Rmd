@@ -71,13 +71,20 @@ sequential (one-at-a-time) or group sequential (in batches of samples), balanced
 unbalanced, and static (single-value) or dynamic (population models) hypotheses without 
 major modifications. 
 
-The main disadvantage of the STBP is that it is so new that has not been tested as its
+The main disadvantage of the STBP is that it is so new that has not been as tested as its
 counterparts in the rough streets of real datasets. The STBP is also pretty sensitive to
 sample sizes within sampling bouts. In theory, it outperforms other sequential analysis
 as long as several samples are collected within each sampling bout, but type I error rate
 (accepting H when is false) gets ugly in purely sequential designs.
 
-Let's start with a simple case in which 
+### Example 1: Testing species absence
+
+Let's start with a simple case in which one wants to test the hypothesis that certain
+species is absent in sampled area. As Carl Sagan said "the absence of evidence is not 
+evidence of absence". In other words, we can never be sure about the absence of an species
+in an area, but we can calculate the *probability* of the species being absent *given* 
+the collected data.
+
 
 ```{r setup}
 library(sequential.pops)

@@ -50,7 +50,7 @@ setMethod("show", "STBP", function(object){
   if(as.character(object@call[1]) == "stbp_simple") {
     sign <- "="
     psi <- 0
-    dist1 <- as.character(object@call[4])
+    dist1 <- as.character(object@call[3])
   }
   else {
     if(length(eval(parse(text = as.character(object@call[4])))) > 1)
