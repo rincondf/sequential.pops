@@ -24,8 +24,8 @@ population sizes reach or are above or below predefined levels. This situations 
 deciding whether a pest control action should be applied, whether an area should be
 declared free from an invasive species, or whether early capture numbers of a pest
 are consistent with an outbreak. Sequential analyses can also be useful in fields 
-outside ecology and pest management, such as quality control, and adaptive clinical 
-trials, but those applications are out of the scope of this package.
+outside ecology and pest management, such as quality control, fraud detection and
+adaptive clinical trials, but those applications are out of the scope of this package.
 
 Sequential data come in sampling bouts over time that should be processed as they come 
 to evaluate one or several hypotheses and stop collecting data (sampling) when there
@@ -60,7 +60,7 @@ package.
 
 This test is specifically designed to test hypotheses about population densities,
 although it may have applications in other fields. It works by sequentially updating 
-the conditional probability of the tested hypothesis as new data is processed. The
+the conditional probability of the hypothesis being tested as new data is processed. The
 two main benefits of using STBP is that is distribution-agnostic (works with virtually
 any probability distribution), and that is one of the few sequential analyses that
 is "likelihood ratio-free" meaning that it can test single hypotheses without having 
@@ -133,7 +133,7 @@ should be specified as:
 ```{r}
 a3 <- matrix(rep(0, 30), 3, 10)
 ```
-for 10 sampling bouts. After running the test by:
+for 10 sampling bouts. After running the test with:
 ```{r}
 test3 <- stbp_simple(data = a3,
                      density_func = "poisson",
@@ -148,10 +148,220 @@ to declare that our species is absent from the sampled area. The number of bouts
 all zeros required to accept H keeps increasing as sampling size within bouts is reduced.
 In fact, when sample size is one (purely sequential), the test looses power and the posterior 
 remains unchanged regardless the number of bouts. You can check the progression of
-the posterior probabilities for different sample sizes by calling `plot`:
+the posterior probabilities for different sample sizes by calling `plot`, for the
+sequential design with 30 samples:
 ```{r}
 plot(test30)
+```
+and for the sequential design with 3 samples:
+```{r}
 plot(test3)
 ```
 
-## Example 2: Testing if a population density is above a static threshold
+### Example 2: Testing if a population density is above a static threshold
+
+The STBP can also assist in situations where one wants to test if a given population
+is above or below a relevant threshold for management. This is useful to determine,
+for example, if a pest population has reached an economic threshold or if an endangered 
+species is below the Allee threshold. For the remaining of this tutorial, we will focus
+on hypotheses about populations being *above* a threshold, but the procedure is similar 
+for hypotheses with the opposite direction. In fact this is specified through a single
+argument in the function `stbp_composite`.
+
+For this example, we will use the case study of the tomato leafminer in greenhouse 
+tomatoes (Rincon et al. 2021). The tomato leafminer is a significant pest of tomatoes
+but prefers mostly to feed on leaves where damage is minimum and will only turn to
+fruits when population density increases. The economic threshold varies depending 
+on whether tomato fruits are present or not, but for now let's assume the threshold is
+static (constant) at 9 larvae per plant and we want to test through sequential sampling
+if a population has exceeded such threshold.
+
+When population densities are not so small, chances are that the Poisson distribution
+is no longer appropriate to describe counts and that a probability distribution a that 
+allow for overdispersion (or aggregation) is required. As populations increase, very 
+often they aggregate in clusters which increase the dispersion of the data to levels 
+that are not accounted for by the Poisson. This is the case for the tomato leafminer, 
+so the STBP should be defined with a negative binomial distribution and some specification 
+for the dispersion, which is obtained from studies of the counts observed in the field. 
+For more details about how to conduct these studies the reader is referred to textbooks 
+like Binns et al. (2000).
+
+Let's start by generating some negative binomial data in a purely sequential design:
+```{r}
+counts1 <- rnbinom(20, mu = 5, size = 4.5)
+```
+This is 20 random counts from a population of 5 larvae per sample unit (plant) in size 
+that follows a negative binomial distribution with an overdispersion of 4.5. We can now
+build a test for the hypothesis of H: mu > 9 larvae per plant with:
+```{r}
+test_counts1 <- stbp_composite(data = counts1,
+                          greater_than = TRUE,
+                          hypothesis = 9,
+                          density_func = "negative binomial",
+                          overdispersion = 4.5,
+                          prior = 0.5,
+                          lower_bnd = 0,
+                          upper_bnd = Inf,
+                          lower_criterion = 0.01,
+                          upper_criterion = 0.99)
+
+test_counts1
+```
+Notice that this time we use the function `stbp_composite`, which is designed to test
+threshold-style hypotheses. The direction of the hypothesis (whether is "greater than" or
+"less than") is controlled by the argument `greater_than` and the threshold is included in
+the argument `hypothesis`. `lower_bnd` and `upper_bnd` are the parameter space boundaries for
+the hypothesis, mu, and is almost always 0 and `Inf`, respectively. `lower_criterion` and
+`upper_criterion` are the posterior probabilities above or below which a decision is
+made.
+
+Many times, however, overdispersion is not this simple and should be specified as a
+function of the mean, rather than as a constant. This is the case for most animal and
+plant populations because overdispersion is highly tied to the variance, and variance
+of population counts tends to increase exponentially with the mean. There are several
+ways to empirically describe variance (and overdispersion) as a function of the mean,
+but the most popular one is Taylor's Power Law. In the `sequential.pop` package, you can
+use whatever function you want, as it just must be specified before running the test.
+For example, the Taylor's Power Law parameters that describe the variance-mean relationship
+of tomato leafminer counts are `a = 1.83` and `b = 1.21`, so overdispersion, `k`, is
+given by:
+```{r}
+estimate_k <- function(mean) {
+                        a = 1.83
+                        b = 1.21
+                        (mean^2) / ((a * mean^(b)) - mean)
+                        }
+```
+we can also incorporate more realistic values of overdispersion to the generated counts
+by including `estimate_k` in the count generation function:
+```{r}
+counts1a <- rnbinom(20, mu = 5, size = estimate_k(5))
+```
+and the test can be specified as:
+```{r}
+test_counts1a <- stbp_composite(data = counts1a,
+                          greater_than = TRUE,
+                          hypothesis = 9,
+                          density_func = "negative binomial",
+                          overdispersion = "estimate_k",
+                          prior = 0.5,
+                          lower_bnd = 0,
+                          upper_bnd = Inf,
+                          lower_criterion = 0.01,
+                          upper_criterion = 0.99)
+
+test_counts1a
+```
+the overdispersion function is specified as a character string with the function name
+which must be added to the R environment before running the test. Notice that the
+STBP gains efficiency when an appropriate the overdispersion function is included, as
+fewer samples are required to reach a decision compared with the test that assumes a
+constant. 
+
+As with `stbp_simple` you can call `plot` to visualize the change in posterior
+probabilities with sequential sampling bouts for `stbp_composite` tests. 
+For the test with a constant overdispersion:
+```{r}
+plot(test_counts1)
+```
+and with overdispersion as a function of the mean:
+```{r}
+plot(test_counts1a)
+```
+
+Sometimes data on populations do not come in counts but as binary outcomes when sampling
+units are evaluated as presence/absence or infested/uninfected, for example. For those
+cases, `stbp_composite` is equipped with `binomial` and `beta-binomial` options for
+the argument `density_func`. Like count data, the selection of one or the other depends
+on whether there is overdispersion in the data, with `beta-binomial` being the option for
+overdispersed binomial variables. For these kind of data, two pieces of information are 
+required from each sample unit: the number of successes (e.g., present or infected) 
+and the number of samples from which observations where made. For this reason, data
+for binomial variables should be structured as a `list()` of `n x 2` matrices, where
+each matrix corresponds to a sampling bout, and `n` is the number of sample units (clusters 
+of samples examined). The number of successes must be included in column 1 and the 
+number of samples in column 2 of each matrix.
+
+For example, if a sequential sampling is designed to collect 3 clusters (sampling units)
+each made of 10 samples and 7 sampling bouts have been collected data should be 
+introduced like:
+```{r}
+binom1 <- list()
+for(i in 1: 7) {
+  binom1[[i]] <- matrix(c(emdbook::rbetabinom(3, prob = 0.2, 
+                                     size = 10, 
+                                     theta = 6.5), rep(10, 3)),
+                         3, 2)
+}
+
+binom1[1:3] # only first three sampling bouts out of seven are shown.
+```
+The data generated in in `binom1` is overdispersed with a constant overdispersion
+parameter, `theta`. All the required support to work with the beta-binomial 
+distribution is in the `emdbook` package, so it must be loaded before running any
+sequential tests that involve this distribution. The STBP can be run with:
+```{r}
+library(emdbook)
+test_bin1 <- stbp_composite(data = binom1,
+                          greater_than = TRUE,
+                          hypothesis = 0.15,
+                          density_func = "beta-binomial",
+                          overdispersion = 6.5,
+                          prior = 0.5,
+                          lower_bnd = 0,
+                          upper_bnd = 1,
+                          lower_criterion = 0.001,
+                          upper_criterion = 0.999)
+
+test_bin1
+```
+Like overdispersed count data, overdispersion for binomial data can also be included
+as a function of the mean porportion (sometines called incidence). Again, the 
+overdispersion model is derived from the variance-mean (variance-incidence) relationship,
+and the most popular form is the one provided by Madden et al. (2007), although the
+`sequential.pops` package allows you to pick whatever function you want. The function
+that describes overdispersion, `theta`, as a function of the mean proportion for the
+tomato leafminer is defined as:
+```{r}
+estimate_theta <- function(mean) {
+  A <- 780.72
+  b <- 1.61
+  R <- 10
+  
+  (1 / (R - 1)) * (((A * R^(1 - b))/ ((mean * (1 - mean))^(1 - b))) - 1)
+}
+```
+where `A` and `b` are parameters from the variance-incidence model and `R` is the 
+number of samples in each sampling unit. We can generate a new binomial dataset
+that includes variable overdispersion:
+```{r}
+binom2 <- list()
+for(i in 1: 7) {
+  binom2[[i]] <- matrix(c(rbetabinom(5, prob = 0.2, 
+                                     size = 10, 
+                                     theta = estimate_theta(0.2)), 
+                          rep(10, 5)),
+                         5, 2)
+}
+```
+and then we can specify and run a STBP as:
+```{r}
+test_bin2 <- stbp_composite(data = binom2,
+                          greater_than = TRUE,
+                          hypothesis = 0.15,
+                          density_func = "beta-binomial",
+                          overdispersion = "estimate_theta",
+                          prior = 0.5,
+                          lower_bnd = 0,
+                          upper_bnd = 1,
+                          lower_criterion = 0.001,
+                          upper_criterion = 0.999)
+
+test_bin2
+```
+Notice that the argument `upper_bnd` in the tests `test_bin1` and `test_bin2` is set
+to 1, rather than `Inf` like in the tests that processed counts, `test_counts1` and 
+`test_counts1a`. This is because the parameter space of population density, mu, for
+binomial data is `[0, 1]` but it is `[0, Inf]` for count data.
+
+#### Test evaluation
