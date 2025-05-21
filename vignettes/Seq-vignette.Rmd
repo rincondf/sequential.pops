@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+set.seed(000)
 ```
 
 ## Introduction
@@ -98,6 +99,7 @@ have collected 4 sampling bouts each with 30 samples, data should be arranged in
 `30 x 4` matrix. In this case, we have all zeros:
 ```{r setup}
 a30 <- matrix(rep(0, 120), 30, 4)
+head(a30, 3) # only first three rows out of 30 are shown
 ```
 To run the test, we use `stbp_simple`, which is specially designed to test hypotheses
 about species absence, so we do not need to specify the hypothesis. We do need to 
@@ -132,6 +134,7 @@ only collect 3 samples per sampling bout, and we get all zeros the matrix with t
 should be specified as:
 ```{r}
 a3 <- matrix(rep(0, 30), 3, 10)
+a3
 ```
 for 10 sampling bouts. After running the test with:
 ```{r}
@@ -186,9 +189,11 @@ for the dispersion, which is obtained from studies of the counts observed in the
 For more details about how to conduct these studies the reader is referred to textbooks 
 like Binns et al. (2000).
 
-Let's start by generating some negative binomial data in a purely sequential design:
+Let's start by generating some negative binomial data in a purely sequential design 
+(`n = 1` per sampling bout):
 ```{r}
 counts1 <- rnbinom(20, mu = 5, size = 4.5)
+counts1
 ```
 This is 20 random counts from a population of 5 larvae per sample unit (plant) in size 
 that follows a negative binomial distribution with an overdispersion of 4.5. We can now
@@ -227,15 +232,17 @@ of tomato leafminer counts are `a = 1.83` and `b = 1.21`, so overdispersion, `k`
 given by:
 ```{r}
 estimate_k <- function(mean) {
-                        a = 1.83
-                        b = 1.21
-                        (mean^2) / ((a * mean^(b)) - mean)
-                        }
+  a = 1.83 
+  b = 1.21
+  
+  (mean^2) / ((a * mean^(b)) - mean)
+  }
 ```
 we can also incorporate more realistic values of overdispersion to the generated counts
 by including `estimate_k` in the count generation function:
 ```{r}
 counts1a <- rnbinom(20, mu = 5, size = estimate_k(5))
+counts1a
 ```
 and the test can be specified as:
 ```{r}
@@ -253,10 +260,11 @@ test_counts1a <- stbp_composite(data = counts1a,
 test_counts1a
 ```
 the overdispersion function is specified as a character string with the function name
-which must be added to the R environment before running the test. Notice that the
-STBP gains efficiency when an appropriate the overdispersion function is included, as
-fewer samples are required to reach a decision compared with the test that assumes a
-constant. 
+which must be added to the R environment before running the test. Although it is not
+the case for this instance of randomly generated numbers, there are noticeable gains
+in efficiency (fewer average number of sampling bouts to make a decision) and accuracy
+(less bad decisions) when an appropriate the overdispersion function is included 
+as part of a STBP (Rincon et al. 2025).
 
 As with `stbp_simple` you can call `plot` to visualize the change in posterior
 probabilities with sequential sampling bouts for `stbp_composite` tests. 
@@ -292,9 +300,9 @@ for(i in 1: 7) {
                                      size = 10, 
                                      theta = 6.5), rep(10, 3)),
                          3, 2)
-}
+  }
 
-binom1[1:3] # only first three sampling bouts out of seven are shown.
+head(binom1, 3) # only first three sampling bouts out of seven are shown.
 ```
 The data generated in in `binom1` is overdispersed with a constant overdispersion
 parameter, `theta`. All the required support to work with the beta-binomial 
@@ -316,33 +324,34 @@ test_bin1 <- stbp_composite(data = binom1,
 test_bin1
 ```
 Like overdispersed count data, overdispersion for binomial data can also be included
-as a function of the mean porportion (sometines called incidence). Again, the 
+as a function of mean proportion (sometines called incidence). Again, the 
 overdispersion model is derived from the variance-mean (variance-incidence) relationship,
 and the most popular form is the one provided by Madden et al. (2007), although the
 `sequential.pops` package allows you to pick whatever function you want. The function
 that describes overdispersion, `theta`, as a function of the mean proportion for the
-tomato leafminer is defined as:
+tomato leafminer is defined as (Madden et al. 2007):
 ```{r}
 estimate_theta <- function(mean) {
-  A <- 780.72
-  b <- 1.61
-  R <- 10
+  A = 780.72
+  b = 1.61
+  R = 10
   
   (1 / (R - 1)) * (((A * R^(1 - b))/ ((mean * (1 - mean))^(1 - b))) - 1)
-}
+  }
 ```
 where `A` and `b` are parameters from the variance-incidence model and `R` is the 
-number of samples in each sampling unit. We can generate a new binomial dataset
-that includes variable overdispersion:
+number of samples in each sampling unit (cluster). We can generate a new binomial 
+dataset that includes variable overdispersion:
 ```{r}
 binom2 <- list()
 for(i in 1: 7) {
-  binom2[[i]] <- matrix(c(rbetabinom(5, prob = 0.2, 
+  binom2[[i]] <- matrix(c(rbetabinom(3, prob = 0.2, 
                                      size = 10, 
                                      theta = estimate_theta(0.2)), 
-                          rep(10, 5)),
-                         5, 2)
-}
+                          rep(10, 3)),
+                         3, 2)
+  }
+head(binom2, 3) # only first three sampling bouts out of seven are shown.
 ```
 and then we can specify and run a STBP as:
 ```{r}
@@ -365,3 +374,229 @@ to 1, rather than `Inf` like in the tests that processed counts, `test_counts1` 
 binomial data is `[0, 1]` but it is `[0, Inf]` for count data.
 
 #### Test evaluation
+
+The `sequential.pops` package is equipped with tools to evaluate the accuracy and
+efficiency of specifications for the STBP. For a perfectly accurate sequential test, 
+the acceptance rates of H: mu > psi are zero when the true population is < psi and 
+1 when it is > psi, with a minimum (efficient) average number of samples. Thus, 
+the evaluation of STBP involves the analysis of the proportion of times H is accepted 
+across a range of true population densities and the corresponding number of sampling 
+bouts required to make a decision. Sometimes these analyses are called "operating 
+characteristics".
+
+All you need to run an evaluation of a STBP is a `STBP` object, which is created every
+time a test is run through `stbp_composite`, an evaluation range, which is a
+sequence of population densities over which the evaluation is to be performed, and the
+sample size within bouts. You can add additional levels of sophistication by playing with
+the initial prior probability or by adding stochasticity to the overdipersion parameter,
+in case you are using one.
+
+To demonstrate the evaluation of STBP we will use the `STBP` objects created above.
+The simplest one is `test_counts1`, which is a purely sequential design that tests
+H: mu > 9 with constant overdispersion of `k = 4.5`. For the evaluation, the only 
+relevant information that is extracted from `test_counts1` has to do with the test
+specification, and the data is not really used. To run evaluation of `test_counts1`
+we call the function `STBP.eval`:
+```{r}
+eval1 <- STBP.eval(test_counts1,
+                   eval.range = seq(3, 12),
+                   n = 1,
+                   prior = 0.5,
+                   N = 20)
+eval1
+```
+Notice that the evaluation range of true population densities (`eval.range`) includes 
+psi, the threshold (hypothesis), because we are particularly interested in examining 
+the behavior of the test when population size is close the threshold. Also, that
+the purely sequential approach was kept for this analysis (`n = 1`), but we could
+also try other samples sizes. The argument `N` is the number of simulations run for each
+true population size. In this case is 20, so a total of 200 simulations were run
+(`20 * length(seq(3, 12))`), which is pretty small for a formal analysis. You should run,
+at least, 1000 simulation per population size in more formal test.
+
+The output of `STBP.eval` is a `list()` with two vectors: `$AvgSamples` and `$AcceptRate`.
+Both have as many elements as `length(eval.range)` and the first is the mean number
+of sampling bouts required to make a decision about H and the second is the proportion
+of simulation runs that resulted in acceptance of H. Both can be visualized across
+the evaluated range of true population densities to the test performance around the
+threshold of 9:
+```{r}
+plot(seq(3, 12), eval1$AvgSamples, type = "o", xlab = "True population size",
+      ylab = "Average number of bouts")
+abline(v = 9, lty = 2)
+
+plot(seq(3, 12), eval1$AcceptRate, type = "o", xlab = "True population size",
+      ylab = "Acceptance rate of H")
+abline(v = 9, lty = 2)
+```
+
+There is an argument in the `STBP.eval` function called `overdispersion.sim` that was
+omitted in `eval1`. Through `overdispersion.sim`, you can specify overdispersion 
+functions or values different from those specified in the test. So, in `eval1`, the 
+overdispersion used to run the simulations was the same as in the test `test_counts1`.
+However, more realistic test evaluations can be performed if (1) varying overdispersion
+is included and (2) stochasticity about the variance-mean relationship is considered. The 
+first can either be specified in the model (as in `test_counts1a` or in `test_bin2`) or
+directly in `STBP.eval` through `overdispersion.sim`, in case is not in the model.
+
+To add stochasticity, however, you should declare a new overdispersion function
+with allowance for variability. This new function is similar to the one used for
+the models but includes a random normal variable with `mean = 0` and standard 
+deviation `sd` as a new factor. Conventionally, `sd` is the square root 
+of the mean square error for the regression used to fit the variance-mean model:
+Taylor's Power Law, for count data, and Madden's model for binomial data 
+(Binns et al. 2000).
+
+For example, if we want to add stochasticity to the evaluation of model `test_counts1a`,
+we should incorporate a normal random variable in function `estimate_k` by:
+```{r}
+estimate_k_stoch <- function(mean) {
+  a = 1.83
+  b = 1.21
+  RMSE = 0.32
+  
+  (mean^2) / 
+    ((a * mean^(b) * exp(truncdist::rtrunc(1, "norm", 
+                                           a = log(1 / (a * mean^(b - 1))), 
+                                           b = Inf, 
+                                           mean = 0, 
+                                           sd = RMSE))) 
+     - mean)
+  }
+```
+Notice that `estimate_k_stoch` is similar to `estimate_k` except that the former
+includes the exponential of a normal random variable as a factor in the denominator.
+Here we use a truncated normal distribution, form the `truncdist` package, to prevent
+zero denominators or negative values for `k`, but you can also use `rnorm` and a 
+different alternative to stay away from undefined or negative values for the 
+overdispersion parameter. To run the evaluation including stochasticity, we just 
+specify `estimate_stoch` as a character string in the argument `overdispersion.sim`.
+```{r}
+eval1a <- STBP.eval(test_counts1,
+                   eval.range = seq(3, 12),
+                   n = 1,
+                   prior = 0.5,
+                   overdispersion.sim = "estimate_k_stoch",
+                   N = 20)
+eval1a
+```
+Test evaluation is a useful tool to compare different sequential analysis approaches,
+but it can also be useful to calibrate sample size, decision criteria or the impact
+of (incorrect) initial priors of sequential designs. For example, you can compare 
+both accuracy and efficiency of tests with different sample sizes within bouts.
+```{r}
+eval3a <- STBP.eval(test_counts1,
+                   eval.range = seq(3, 12),
+                   n = 3,
+                   prior = 0.5,
+                   overdispersion.sim = "estimate_k_stoch",
+                   N = 20)
+
+eval6a <- STBP.eval(test_counts1,
+                   eval.range = seq(3, 12),
+                   n = 6,
+                   prior = 0.5,
+                   overdispersion.sim = "estimate_k_stoch",
+                   N = 20)
+```
+Here `eval3a` includes not 1 but 3 samples per sampling bout and `eval6a` includes
+6 samples. We can now visualize how sample size within bouts affects both accuracy
+and efficiency:
+```{r}
+plot(seq(3, 12), eval1a$AvgSamples, type = "o", xlab = "True population size",
+      ylab = "Average number of bouts")
+points(seq(3, 12), eval3a$AvgSamples, type = "o", pch = 19)
+points(seq(3, 12), eval6a$AvgSamples, type = "o", pch = 0)
+abline(v = 9, lty = 2)
+
+plot(seq(3, 12), eval1a$AcceptRate, type = "o", xlab = "True population size",
+      ylab = "Acceptance rate of H")
+points(seq(3, 12), eval3a$AcceptRate, type = "o", pch = 19)
+points(seq(3, 12), eval6a$AcceptRate, type = "o", pch = 0)
+abline(v = 9, lty = 2)
+```
+
+This very limited analysis (only 20 simulations per population density) shows that
+sample sizes of 3 (filled circles) and 6 (empty squares) outperform in accuracy and 
+efficiency a purely sequential design (empty circles). Some gains in accuracy can
+be achieved by increasing sample size from 3 to 6.
+
+Test evaluation is similar for binomial data, except that the evaluation range is
+on the `[0, 1]` interval. The analog of `estimate_k_stoch` for the binomial world
+for the tomato leafminer examples is defined as (Binns et al. 2000):
+```{r}
+estimate_theta_stoch <- function(mean) {
+  A = 780.72
+  b = 1.61
+  R = 10
+  RMSE = 0.41
+  
+  ((1 / (R - 1)) * (((A * R^(1 - b) *
+    exp(rnorm(1, mean = 0, sd = RMSE))) / ((mean * (1 - mean))^(1 - b))) - 1))
+  }
+```
+Now, we can run a similar analysis to compare sample sizes for a binomial design.
+One important difference between binomial and count sampling is that sample sizes
+for binomial designs typically require more samples, although they are quicker and 
+easier to examine. Simulations within `STBP.eval` con only consider binomial sampling 
+with sample units or clusters made of a single observation (`size = 1`). So, within
+`STBP.eval`, `n = 1` means a single presence/absence or infected/uninfected observation.
+To compensate, the argument `n` in `STBP.eval` should reflect the total number of 
+observations considering all the clusters. For example, if you plan to design a binomial
+sequential sampling with three clusters each of 10 observations (samples), sample size
+for evaluation should be set to 30, `n = 30`. Here we test 10, 20 and 30 total 
+observations.
+```{r}
+evalB10 <- STBP.eval(test_bin2,
+                   eval.range = seq(0.01, 0.25, 0.02),
+                   n = 10,
+                   prior = 0.5,
+                   overdispersion.sim = "estimate_theta_stoch",
+                   N = 20)
+
+evalB20 <- STBP.eval(test_bin2,
+                   eval.range = seq(0.01, 0.25, 0.02),
+                   n = 20,
+                   prior = 0.5,
+                   overdispersion.sim = "estimate_theta_stoch",
+                   N = 20)
+
+evalB30 <- STBP.eval(test_bin2,
+                   eval.range = seq(0.01, 0.25, 0.02),
+                   n = 30,
+                   prior = 0.5,
+                   overdispersion.sim = "estimate_theta_stoch",
+                   N = 20)
+```
+Notice that the evaluation range are proportions on `[0.01, 0.25]`, excluding 0
+to avoid `warnings`, and considering that H was set to H: mu > 0.15 in `test_bin2`.
+We can also visualize acceptance rate of H and average number of bouts across true
+incidences:
+```{r}
+plot(seq(0.01, 0.25, 0.02), evalB10$AvgSamples, type = "o", xlab = "True incidence",
+      ylab = "Average number of bouts")
+points(seq(0.01, 0.25, 0.02), evalB20$AvgSamples, type = "o", pch = 19)
+points(seq(0.01, 0.25, 0.02), evalB30$AvgSamples, type = "o", pch = 0)
+abline(v = 0.15, lty = 2)
+
+plot(seq(0.01, 0.25, 0.02), evalB10$AcceptRate, type = "o", xlab = "True incidence",
+      ylab = "Acceptance rate of H")
+points(seq(0.01, 0.25, 0.02), evalB20$AcceptRate, type = "o", pch = 19)
+points(seq(0.01, 0.25, 0.02), evalB30$AcceptRate, type = "o", pch = 0)
+abline(v = 0.15, lty = 2)
+```
+
+Again, this is a very limited analysis made of only 20 simulations per true incidence.
+However, it shows how the number of bouts required to make a decision decreases
+with sample size, with designs with 10 samples (empty circles) struggling to make quick
+decision when incidence is far from the the threshold of 0.15, compared with sample
+sizes of 20 (filled circles) and 30 (empty squares). Accuracy is also affected by
+sample size with sample sizes of 20 and 30 producing less incorrect decisions,
+particularly when the true incidence is below the threshold.
+
+### Example 3: Testing if a population density is above a dynamic threshold
+
+Sometimes hypothesis of population densities are not single numbers, but entire
+population trajectories.
+
+## 2. The Sequential Probability Ratio Test

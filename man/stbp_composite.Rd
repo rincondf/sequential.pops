@@ -31,7 +31,7 @@ binomial data.}
 the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
 
 \item{hypothesis}{Either a single non-negative value or a vector of
-non-negative values with the hypothesized population densities, \eqn{\mu}.
+non-negative values with the hypothesized population densities, \eqn{\psi}.
 If a vector, it should contain at least as many values as \code{ncol(data)}
 for count data or as \code{length(data)} for binomial data.}
 

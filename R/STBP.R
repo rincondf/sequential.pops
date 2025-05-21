@@ -226,7 +226,7 @@ stbp_posterior_composite <- function(data,
 #' @param greater_than logical; if TRUE (default), the tested hypothesis is of
 #' the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
 #' @param hypothesis Either a single non-negative value or a vector of
-#' non-negative values with the hypothesized population densities, \eqn{\mu}.
+#' non-negative values with the hypothesized population densities, \eqn{\psi}.
 #' If a vector, it should contain at least as many values as \code{ncol(data)}
 #' for count data or as \code{length(data)} for binomial data.
 #' @param density_func Kernel probability density function for the data. See
