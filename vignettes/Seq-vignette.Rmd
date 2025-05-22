@@ -161,7 +161,7 @@ and for the sequential design with 3 samples:
 plot(test3)
 ```
 
-### Example 2: Testing if a population density is above a static threshold
+### Example 2: Testing if a population is above a static threshold
 
 The STBP can also assist in situations where one wants to test if a given population
 is above or below a relevant threshold for management. This is useful to determine,
@@ -591,12 +591,90 @@ However, it shows how the number of bouts required to make a decision decreases
 with sample size, with designs with 10 samples (empty circles) struggling to make quick
 decision when incidence is far from the the threshold of 0.15, compared with sample
 sizes of 20 (filled circles) and 30 (empty squares). Accuracy is also affected by
-sample size with sample sizes of 20 and 30 producing less incorrect decisions,
+sample size with `n = 20` and `n = 30` producing less incorrect decisions,
 particularly when the true incidence is below the threshold.
 
-### Example 3: Testing if a population density is above a dynamic threshold
+### Example 3: Testing if a population is above a dynamic threshold
 
-Sometimes hypothesis of population densities are not single numbers, but entire
-population trajectories.
+Sometimes hypotheses about population densities are not single numbers, but entire
+population trajectories. This is the case when monitoring programs are designed to 
+track a target population over time and decide as early as possible whether a management
+action is necessary to prevent an outbreak. Population models often assist the prediction 
+of densities over time based on current densities and growth rates, so the profile 
+of population dynamics that result in problematic population sizes is often known.
+
+An example with real data is presented by Rincon et al. (2025). Here we use the
+logistic population growth model to make up an outbreak population trajectory that 
+results in densities that cannot be tolerated, with approximately 87 individuals
+per sample unit at `t = 20`, where `t` is given in weeks. 
+```{r}
+pop.outB <- function(t) {
+  N0 = 15
+  K = 90
+  r = 0.25
+  
+  K / (1 + (K / N0 - 1) * exp(-r * t))
+}
+round(pop.outB(seq(1, 20)), digits = 2)
+```
+The function `pop.outB` produces the outbreak population trajectory. The goal is 
+to determine with the fewest possible number of sampling bouts collected 
+over time if a sampled population is consistent with the trajectory produced by 
+`pop.outB`. One complication that the threshold is a moving target and the differences 
+between outbreak and non-outbreak population configurations early in the season/crop 
+cycle are often tiny over time. So the test should be able to detect those early 
+tiny differences and produce correct early warnings.
+
+Every cycle/season the population may behave differently but we can use the outbreak
+configuration as a reference to quantify how severe are them. For example, non-outbreaks
+are a portion of the outbreak, and very bad seasons/cycles could even take larger 
+population sizes than a full outbreak. For example, we can produce several population
+variants based on the outbreak model:
+```{r}
+plot(seq(1, 20), pop.outB(seq(1, 20)), ylim = c(0, 95), type = "o", 
+     lwd = 2, ylab = "Population size", xlab = "Time (weeks)", pch = 19)
+points(seq(1, 20), pop.outB(seq(1, 20)) * 0.9, type = "o")
+points(seq(1, 20), pop.outB(seq(1, 20)) * 0.7, type = "o", pch = 0)
+points(seq(1, 20), pop.outB(seq(1, 20)) * 0.5, type = "o", pch = 2)
+points(seq(1, 20), pop.outB(seq(1, 20)) * 1.1, type = "o", pch = 5)
+```
+
+The bold trajectory is the outbreak population configuration, and the rest are
+outbreak and non-outbreak variants. The pattern with triangles is a configuration 
+of 50% of an outbreak, the one with squares one of 70% of an outbreak, circles 90% of
+an outbreak, and diamonds one that surpasses the outbreak by 10%. Modeling variants 
+using the outbreak as a reference (with proportions) is more realistic than varying 
+single parameters in the `pop.outB` function, since there should be multiple mechanisms 
+that drive simultaneously outbreak severity. As we'll see below, the evaluation range 
+to evaluate STBP for dynamic thresholds in `STBP.eval` should be provided in proportions 
+of the threshold trajectory.
+
+
+
+
 
 ## 2. The Sequential Probability Ratio Test
+
+
+
+## Whishlist for future versions
+
+- Implement cluster sampling in eval
+- Include time-sequential probability ratio test for dynamic thresholds
+- Protocol to run eval faster with parallel computing
+
+## Cited literature
+
+Binns, M.R., Nyrop, J.P. & Werf, W.v.d. (2000) Sampling and monitoring in crop 
+protection: the theoretical basis for developing practical decision guides. CABI Pub., 
+Wallingford, Oxon, UK; New York, N.Y (USA). 284pp.
+
+Madden, L. V., Hughes, G., & Bosch, F.v.d. (2007). The study of plant disease epidemics. 
+American Phytopathological Society. St. Paul, MN (USA). 421pp.
+
+Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary 
+hypotheses about population density. Methods in Ecology and Evolution. 
+<https://doi.org/10.1111/2041-210X.70053>
+
+Wald, A. (1945) Sequential Tests of Statistical Hypotheses. 
+The Annals of Mathematical Statistics 16(2): 117-186.
