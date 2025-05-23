@@ -22,8 +22,8 @@ as kernel densities. See details.}
 \item{seed}{Optional seed for random count generation.}
 }
 \value{
-A list with the average number of sampling bouts required to reach a
-decision (\code{$AvgSamples}), and the rate of acceptance for \eqn{H} across
+A list with the average number of sampling bouts required to reach a decision
+(\code{$AvgSamples}), and the rate of acceptance for \eqn{H_{1}} across
 the provided range of population densities (\code{$AcceptRate}).
 }
 \description{

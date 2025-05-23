@@ -135,8 +135,8 @@ setMethod("plot", signature = c(x = "STBP", y = "missing"), function(x, y) {
   }
 
   if(as.character(x@call[1]) == "stbp_composite") {
-    abline(h = as.numeric(as.character(x@call[9])), lty = 2)
     abline(h = as.numeric(as.character(x@call[10])), lty = 2)
+    abline(h = as.numeric(as.character(x@call[11])), lty = 2)
   }
 
   title(ylab = "Posterior probability", cex.lab = 2, line = 4.5)
