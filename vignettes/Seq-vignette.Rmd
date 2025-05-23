@@ -87,7 +87,7 @@ in an area, but we can calculate the *probability* of the species being absent *
 the collected data.
 
 Most small population sizes, like those of recently introduced species, are well
-described by Poisson distributions. So, in this case, we want to test if H: mu = 0
+described by Poisson distributions. So, in this case, we want to test if H: `mu = 0`
 assuming random sampling and counts following a Poisson distribution. If we are lucky
 and can collect say 30 random samples each time, and they all result in absences (zeros),
 we should be able to track the (posterior) probability of H being true after each sampling bout
@@ -107,21 +107,21 @@ provide the matrix with the `data`, the distribution family (as a character stri
 in `density_func`, the initial `prior` probability (often 0.5), and `upper_criterion`
 and `lower_criterion`, the upper and lower criteria to stop sampling and make a decision. 
 The argument `upper_bnd` is almost always `Inf`, since it represents the upper 
-limit of the parameter space for mu.
+limit of the parameter space for `mu`.
 ```{r}
 library(sequential.pops)
 
 test30 <- stbp_simple(data = a30,
-                     density_func = "poisson",
-                     prior = 0.5,
-                     upper_bnd = Inf,
-                     lower_criterion = 0,
-                     upper_criterion = 0.9999)
+                      density_func = "poisson",
+                      prior = 0.5,
+                      upper_bnd = Inf,
+                      lower_criterion = 0,
+                      upper_criterion = 0.9999)
 test30
 ```
 Given that all samples are zero and assuming a completely efficient detection rate,
 we can say that after 3 sampling bouts of 30 samples there is a pretty high change that
-H: mu = 0 is true. How spaced in time sampling bouts should be depends on the species
+H: `mu = 0` is true. How spaced in time sampling bouts should be depends on the species
 being sampled and on what we consider a *different* sampling time. Notice that `upper_criterion` 
 and `lower_criterion` are set close to 1 and 0, respectively. In reality, to test species 
 absence, only `upper_criterion` is important to minimize type II error, since the 
@@ -197,26 +197,25 @@ counts1
 ```
 This is 20 random counts from a population of 5 larvae per sample unit (plant) in size 
 that follows a negative binomial distribution with an overdispersion of 4.5. We can now
-build a test for the hypothesis of H: mu > 9 larvae per plant with:
+build a test for the hypothesis of H: `mu > 9` larvae per plant with:
 ```{r}
 test_counts1 <- stbp_composite(data = counts1,
-                          greater_than = TRUE,
-                          hypothesis = 9,
-                          density_func = "negative binomial",
-                          overdispersion = 4.5,
-                          prior = 0.5,
-                          lower_bnd = 0,
-                          upper_bnd = Inf,
-                          lower_criterion = 0.01,
-                          upper_criterion = 0.99)
-
+                               greater_than = TRUE,
+                               hypothesis = 9,
+                               density_func = "negative binomial",
+                               overdispersion = 4.5,
+                               prior = 0.5,
+                               lower_bnd = 0,
+                               upper_bnd = Inf,
+                               lower_criterion = 0.01,
+                               upper_criterion = 0.99)
 test_counts1
 ```
 Notice that this time we use the function `stbp_composite`, which is designed to test
 threshold-style hypotheses. The direction of the hypothesis (whether is "greater than" or
 "less than") is controlled by the argument `greater_than` and the threshold is included in
 the argument `hypothesis`. `lower_bnd` and `upper_bnd` are the parameter space boundaries for
-the hypothesis, mu, and is almost always 0 and `Inf`, respectively. `lower_criterion` and
+the hypothesis, `mu`, and is almost always 0 and `Inf`, respectively. `lower_criterion` and
 `upper_criterion` are the posterior probabilities above or below which a decision is
 made.
 
@@ -236,7 +235,7 @@ estimate_k <- function(mean) {
   b = 1.21
   
   (mean^2) / ((a * mean^(b)) - mean)
-  }
+}
 ```
 we can also incorporate more realistic values of overdispersion to the generated counts
 by including `estimate_k` in the count generation function:
@@ -247,16 +246,15 @@ counts1a
 and the test can be specified as:
 ```{r}
 test_counts1a <- stbp_composite(data = counts1a,
-                          greater_than = TRUE,
-                          hypothesis = 9,
-                          density_func = "negative binomial",
-                          overdispersion = "estimate_k",
-                          prior = 0.5,
-                          lower_bnd = 0,
-                          upper_bnd = Inf,
-                          lower_criterion = 0.01,
-                          upper_criterion = 0.99)
-
+                                greater_than = TRUE,
+                                hypothesis = 9,
+                                density_func = "negative binomial",
+                                overdispersion = "estimate_k",
+                                prior = 0.5,
+                                lower_bnd = 0,
+                                upper_bnd = Inf,
+                                lower_criterion = 0.01,
+                                upper_criterion = 0.99)
 test_counts1a
 ```
 the overdispersion function is specified as a character string with the function name
@@ -296,40 +294,40 @@ introduced like:
 ```{r}
 binom1 <- list()
 for(i in 1: 7) {
-  binom1[[i]] <- matrix(c(emdbook::rbetabinom(3, prob = 0.2, 
-                                     size = 10, 
-                                     theta = 6.5), rep(10, 3)),
-                         3, 2)
-  }
+  binom1[[i]] <- matrix(c(emdbook::rbetabinom(3, prob = 0.2,
+                                              size = 10,
+                                              theta = 6.5), rep(10, 3)), 3, 2)
+}
 
 head(binom1, 3) # only first three sampling bouts out of seven are shown.
 ```
-The data generated in in `binom1` is overdispersed with a constant overdispersion
-parameter, `theta`. All the required support to work with the beta-binomial 
-distribution is in the `emdbook` package, so it must be loaded before running any
-sequential tests that involve this distribution. The STBP can be run with:
+The data generated in the list `binom1` is overdispersed with a constant overdispersion
+parameter, `theta` and mean incidence of `prob = 0.2`. All the required support 
+to work with the beta-binomial distribution is in the `emdbook` package, so it must 
+be loaded before running any sequential tests that involve this distribution. The 
+STBP can be run on the data `binom1` with:
 ```{r}
 library(emdbook)
 test_bin1 <- stbp_composite(data = binom1,
-                          greater_than = TRUE,
-                          hypothesis = 0.15,
-                          density_func = "beta-binomial",
-                          overdispersion = 6.5,
-                          prior = 0.5,
-                          lower_bnd = 0,
-                          upper_bnd = 1,
-                          lower_criterion = 0.001,
-                          upper_criterion = 0.999)
-
+                            greater_than = TRUE,
+                            hypothesis = 0.15,
+                            density_func = "beta-binomial",
+                            overdispersion = 6.5,
+                            prior = 0.5,
+                            lower_bnd = 0,
+                            upper_bnd = 1,
+                            lower_criterion = 0.001,
+                            upper_criterion = 0.999)
 test_bin1
 ```
-Like overdispersed count data, overdispersion for binomial data can also be included
-as a function of mean proportion (sometines called incidence). Again, the 
-overdispersion model is derived from the variance-mean (variance-incidence) relationship,
-and the most popular form is the one provided by Madden et al. (2007), although the
-`sequential.pops` package allows you to pick whatever function you want. The function
-that describes overdispersion, `theta`, as a function of the mean proportion for the
-tomato leafminer is defined as (Madden et al. 2007):
+where the STBP correctly infers that the data in `binom1` is consistent with 
+H: `mu > 0.15`. Like overdispersed count data, overdispersion for binomial data 
+can also be included as a function of mean proportion (sometines called incidence). 
+Again, the overdispersion model is derived from the variance-mean (variance-incidence) 
+relationship, and the most popular form is the one provided by Madden et al. (2007), 
+although the `sequential.pops` package allows you to pick whatever function you want. 
+The function that describes overdispersion, `theta`, as a function of the mean proportion 
+for the tomato leafminer is defined as (Madden et al. 2007):
 ```{r}
 estimate_theta <- function(mean) {
   A = 780.72
@@ -337,7 +335,7 @@ estimate_theta <- function(mean) {
   R = 10
   
   (1 / (R - 1)) * (((A * R^(1 - b))/ ((mean * (1 - mean))^(1 - b))) - 1)
-  }
+}
 ```
 where `A` and `b` are parameters from the variance-incidence model and `R` is the 
 number of samples in each sampling unit (cluster). We can generate a new binomial 
@@ -345,39 +343,38 @@ dataset that includes variable overdispersion:
 ```{r}
 binom2 <- list()
 for(i in 1: 7) {
-  binom2[[i]] <- matrix(c(rbetabinom(3, prob = 0.2, 
-                                     size = 10, 
-                                     theta = estimate_theta(0.2)), 
-                          rep(10, 3)),
-                         3, 2)
-  }
+  binom2[[i]] <- matrix(c(rbetabinom(3, prob = 0.2,
+                                     size = 10,
+                                     theta = estimate_theta(0.2)),
+                          rep(10, 3)), 3, 2)
+}
+
 head(binom2, 3) # only first three sampling bouts out of seven are shown.
 ```
 and then we can specify and run a STBP as:
 ```{r}
 test_bin2 <- stbp_composite(data = binom2,
-                          greater_than = TRUE,
-                          hypothesis = 0.15,
-                          density_func = "beta-binomial",
-                          overdispersion = "estimate_theta",
-                          prior = 0.5,
-                          lower_bnd = 0,
-                          upper_bnd = 1,
-                          lower_criterion = 0.001,
-                          upper_criterion = 0.999)
-
+                            greater_than = TRUE,
+                            hypothesis = 0.15,
+                            density_func = "beta-binomial",
+                            overdispersion = "estimate_theta",
+                            prior = 0.5,
+                            lower_bnd = 0,
+                            upper_bnd = 1,
+                            lower_criterion = 0.001,
+                            upper_criterion = 0.999)
 test_bin2
 ```
 Notice that the argument `upper_bnd` in the tests `test_bin1` and `test_bin2` is set
 to 1, rather than `Inf` like in the tests that processed counts, `test_counts1` and 
-`test_counts1a`. This is because the parameter space of population density, mu, for
+`test_counts1a`. This is because the parameter space of population density, `mu`, for
 binomial data is `[0, 1]` but it is `[0, Inf]` for count data.
 
 #### Test evaluation
 
 The `sequential.pops` package is equipped with tools to evaluate the accuracy and
 efficiency of specifications for the STBP. For a perfectly accurate sequential test, 
-the acceptance rates of H: mu > psi are zero when the true population is < psi and 
+the acceptance rates of H: `mu > psi` are zero when the true population is < psi and 
 1 when it is > psi, with a minimum (efficient) average number of samples. Thus, 
 the evaluation of STBP involves the analysis of the proportion of times H is accepted 
 across a range of true population densities and the corresponding number of sampling 
@@ -393,7 +390,7 @@ in case you are using one.
 
 To demonstrate the evaluation of STBP we will use the `STBP` objects created above.
 The simplest one is `test_counts1`, which is a purely sequential design that tests
-H: mu > 9 with constant overdispersion of `k = 4.5`. For the evaluation, the only 
+H: `mu > 9` with constant overdispersion of `k = 4.5`. For the evaluation, the only 
 relevant information that is extracted from `test_counts1` has to do with the test
 specification, and the data is not really used. To run evaluation of `test_counts1`
 we call the function `STBP.eval`:
@@ -462,7 +459,7 @@ estimate_k_stoch <- function(mean) {
                                            mean = 0, 
                                            sd = RMSE))) 
      - mean)
-  }
+}
 ```
 Notice that `estimate_k_stoch` is similar to `estimate_k` except that the former
 includes the exponential of a normal random variable as a factor in the denominator.
@@ -473,11 +470,11 @@ overdispersion parameter. To run the evaluation including stochasticity, we just
 specify `estimate_stoch` as a character string in the argument `overdispersion.sim`.
 ```{r}
 eval1a <- STBP.eval(test_counts1,
-                   eval.range = seq(3, 12),
-                   n = 1,
-                   prior = 0.5,
-                   overdispersion.sim = "estimate_k_stoch",
-                   N = 20)
+                    eval.range = seq(3, 12),
+                    n = 1,
+                    prior = 0.5,
+                    overdispersion.sim = "estimate_k_stoch",
+                    N = 20)
 eval1a
 ```
 Test evaluation is a useful tool to compare different sequential analysis approaches,
@@ -486,18 +483,18 @@ of (incorrect) initial priors of sequential designs. For example, you can compar
 both accuracy and efficiency of tests with different sample sizes within bouts.
 ```{r}
 eval3a <- STBP.eval(test_counts1,
-                   eval.range = seq(3, 12),
-                   n = 3,
-                   prior = 0.5,
-                   overdispersion.sim = "estimate_k_stoch",
-                   N = 20)
+                    eval.range = seq(3, 12),
+                    n = 3,
+                    prior = 0.5,
+                    overdispersion.sim = "estimate_k_stoch",
+                    N = 20)
 
 eval6a <- STBP.eval(test_counts1,
-                   eval.range = seq(3, 12),
-                   n = 6,
-                   prior = 0.5,
-                   overdispersion.sim = "estimate_k_stoch",
-                   N = 20)
+                    eval.range = seq(3, 12),
+                    n = 6,
+                    prior = 0.5,
+                    overdispersion.sim = "estimate_k_stoch",
+                    N = 20)
 ```
 Here `eval3a` includes not 1 but 3 samples per sampling bout and `eval6a` includes
 6 samples. We can now visualize how sample size within bouts affects both accuracy
@@ -533,7 +530,7 @@ estimate_theta_stoch <- function(mean) {
   
   ((1 / (R - 1)) * (((A * R^(1 - b) *
     exp(rnorm(1, mean = 0, sd = RMSE))) / ((mean * (1 - mean))^(1 - b))) - 1))
-  }
+}
 ```
 Now, we can run a similar analysis to compare sample sizes for a binomial design.
 One important difference between binomial and count sampling is that sample sizes
@@ -548,28 +545,28 @@ for evaluation should be set to 30, `n = 30`. Here we test 10, 20 and 30 total
 observations.
 ```{r}
 evalB10 <- STBP.eval(test_bin2,
-                   eval.range = seq(0.01, 0.25, 0.02),
-                   n = 10,
-                   prior = 0.5,
-                   overdispersion.sim = "estimate_theta_stoch",
-                   N = 20)
+                     eval.range = seq(0.01, 0.25, 0.02),
+                     n = 10,
+                     prior = 0.5,
+                     overdispersion.sim = "estimate_theta_stoch",
+                     N = 20)
 
 evalB20 <- STBP.eval(test_bin2,
-                   eval.range = seq(0.01, 0.25, 0.02),
-                   n = 20,
-                   prior = 0.5,
-                   overdispersion.sim = "estimate_theta_stoch",
-                   N = 20)
+                     eval.range = seq(0.01, 0.25, 0.02),
+                     n = 20,
+                     prior = 0.5,
+                     overdispersion.sim = "estimate_theta_stoch",
+                     N = 20)
 
 evalB30 <- STBP.eval(test_bin2,
-                   eval.range = seq(0.01, 0.25, 0.02),
-                   n = 30,
-                   prior = 0.5,
-                   overdispersion.sim = "estimate_theta_stoch",
-                   N = 20)
+                     eval.range = seq(0.01, 0.25, 0.02),
+                     n = 30,
+                     prior = 0.5,
+                     overdispersion.sim = "estimate_theta_stoch",
+                     N = 20)
 ```
 Notice that the evaluation range are proportions on `[0.01, 0.25]`, excluding 0
-to avoid `warnings`, and considering that H was set to H: mu > 0.15 in `test_bin2`.
+to avoid `warnings`, and considering that H was set to H: `mu > 0.15` in `test_bin2`.
 We can also visualize acceptance rate of H and average number of bouts across true
 incidences:
 ```{r}
@@ -604,9 +601,10 @@ of densities over time based on current densities and growth rates, so the profi
 of population dynamics that result in problematic population sizes is often known.
 
 An example with real data is presented by Rincon et al. (2025). Here we use the
-logistic population growth model to make up an outbreak population trajectory that 
-results in densities that cannot be tolerated, with approximately 87 individuals
-per sample unit at `t = 20`, where `t` is given in weeks. 
+logistic population growth model, `pop.outB`, to make up an outbreak population 
+trajectory of 20 weekly population densities that results in densities that cannot 
+be tolerated. We will call such trajectory `OB_pop <- pop.outB(t = seq(1, 20))`, 
+where `t` is given in weeks.
 ```{r}
 pop.outB <- function(t) {
   N0 = 15
@@ -615,49 +613,209 @@ pop.outB <- function(t) {
   
   K / (1 + (K / N0 - 1) * exp(-r * t))
 }
-round(pop.outB(seq(1, 20)), digits = 2)
+
+OB_pop <- pop.outB(t = seq(1, 20))
+
+plot(seq(1, 20), OB_pop, xlab = "Time (weeks)", 
+     ylab  = "Population density", lwd = 2, type = "o", pch = 19)
 ```
-The function `pop.outB` produces the outbreak population trajectory. The goal is 
-to determine with the fewest possible number of sampling bouts collected 
-over time if a sampled population is consistent with the trajectory produced by 
-`pop.outB`. One complication that the threshold is a moving target and the differences 
-between outbreak and non-outbreak population configurations early in the season/crop 
-cycle are often tiny over time. So the test should be able to detect those early 
-tiny differences and produce correct early warnings.
+
+The goal is to determine, with the fewest possible number of sampling bouts collected 
+over time, if a sampled population is consistent with one equivalent or greater than 
+`pop.outB`. One complication that the threshold here is a moving target and the 
+differences between outbreak and non-outbreak population configurations during the 
+first few weeks (when we want to make an informed decision) are often tiny, but 
+tend to amplify over time. Thus, the test should be able to detect those early tiny 
+differences and produce correct early warnings.
 
 Every cycle/season the population may behave differently but we can use the outbreak
-configuration as a reference to quantify how severe are them. For example, non-outbreaks
+configuration as a reference to quantify how severe they are. For example, non-outbreaks
 are a portion of the outbreak, and very bad seasons/cycles could even take larger 
-population sizes than a full outbreak. For example, we can produce several population
-variants based on the outbreak model:
+population sizes than a the reference outbreak. We can produce several variants of 
+population trajectories based on the outbreak:
 ```{r}
-plot(seq(1, 20), pop.outB(seq(1, 20)), ylim = c(0, 95), type = "o", 
+plot(seq(1, 20), OB_pop, ylim = c(0, 95), type = "o", 
      lwd = 2, ylab = "Population size", xlab = "Time (weeks)", pch = 19)
-points(seq(1, 20), pop.outB(seq(1, 20)) * 0.9, type = "o")
-points(seq(1, 20), pop.outB(seq(1, 20)) * 0.7, type = "o", pch = 0)
-points(seq(1, 20), pop.outB(seq(1, 20)) * 0.5, type = "o", pch = 2)
-points(seq(1, 20), pop.outB(seq(1, 20)) * 1.1, type = "o", pch = 5)
+points(seq(1, 20), OB_pop * 0.9, type = "o")
+points(seq(1, 20), OB_pop * 0.7, type = "o", pch = 0)
+points(seq(1, 20), OB_pop * 0.5, type = "o", pch = 2)
+points(seq(1, 20), OB_pop * 1.1, type = "o", pch = 5)
 ```
 
-The bold trajectory is the outbreak population configuration, and the rest are
-outbreak and non-outbreak variants. The pattern with triangles is a configuration 
+The trajectory in bold is the outbreak population configuration, `OB_pop`, and the 
+rest are outbreak and non-outbreak variants. The pattern with triangles is a configuration 
 of 50% of an outbreak, the one with squares one of 70% of an outbreak, circles 90% of
-an outbreak, and diamonds one that surpasses the outbreak by 10%. Modeling variants 
-using the outbreak as a reference (with proportions) is more realistic than varying 
-single parameters in the `pop.outB` function, since there should be multiple mechanisms 
-that drive simultaneously outbreak severity. As we'll see below, the evaluation range 
-to evaluate STBP for dynamic thresholds in `STBP.eval` should be provided in proportions 
-of the threshold trajectory.
+an outbreak, and diamonds represents one that surpasses the outbreak by 10%. Modeling 
+variants using the outbreak as a reference (with proportions) is more realistic than 
+varying single parameters in the `pop.outB` function, since there are multiple 
+mechanisms that drive simultaneously outbreak severity. As we'll see below, the 
+evaluation range to evaluate STBP for dynamic thresholds in `STBP.eval` is provided 
+as factors of the threshold trajectory.
 
+Like for static hypotheses, data for dynamic hypotheses come in sequential bouts of
+counts or proportions with or without overdispersion, and the data is structured in
+the same way. The only difference is that true density varies over time according
+to the population model. For example, data collected sequentially in bouts of 10
+samples each on a population that is 70% of an outbreak ca be generated as:
+```{r}
+pop70 <- OB_pop * 0.7
+count70 <- matrix(NA, 10, 20)
 
+for(i in 1:20){
+  count70[, i] <- rnbinom(10, mu = pop70[i], size = estimate_k(pop70[i]))
+}
 
+head(count70, 3) # only first three samples out of ten are shown
+```
+Notice that we are using the same negative binomial specification of example 2,
+with varying overdispersion described with the function `estimate_k`, but a constant 
+overdispersion could also be used. We can visualize the sample means per sampling bout 
+(means across columns of `counts70`) along with the outbreak trajectory, `OB_pop`:
+```{r}
+plot(seq(1, 20), OB_pop, ylim = c(0, 95), type = "o", 
+     lwd = 2, ylab = "Population size", xlab = "Time (weeks)", pch = 19)
+points(seq(1, 20), colMeans(count70), type = "o")
+```
 
+To run the test on `count70`, we only have to specify the outbreak trajectory (not 
+the function) in the `hypothesis` argument of `stbp_composite`:
+```{r}
+test_dyn <- stbp_composite(data = count70,
+                           greater_than = TRUE,
+                           hypothesis = OB_pop,
+                           density_func = "negative binomial",
+                           overdispersion = "estimate_k",
+                           prior = 0.5,
+                           lower_bnd = 0,
+                           upper_bnd = Inf,
+                           lower_criterion = 0.001,
+                           upper_criterion = 0.999)
+test_dyn
+```
+The STBP rejects H: `trajectory mu > trajectory OB_pop` after only two bouts. The 
+procedure to test dynamic hypotheses with binomial data is similar, except that 
+trajectories should be provided as proportions (incidence) and data should be 
+structured as `list()` of matrices with column 1 with successes and column 2 with 
+samples.
+
+#### Test evaluation
+
+STBP for dynamic hypotheses can be evaluated the same way as tests for static
+hypotheses. The only difference is that `eval.range` is provided as factors of the
+threshold trajectory. For example, for `test_dyn`, the evaluation is run on data 
+generated for a range of percentages of `OB_pop = pop.outB(seq(1, 20))`, such 
+as `OB_pop * 0.5` for 50% an outbreak, `OB_pop * 0.7` for 70% an outbreak, or 
+`OB_pop * 1.2` for 20% *above* the outbreak. We can refer to these factors as 
+"outbreak intensities".
+```{r}
+eval_dyn <- STBP.eval(test_dyn,
+                      eval.range = seq(0.2, 1.5, 0.2),
+                      n = 10,
+                      prior = 0.5, 
+                      N = 20)
+```
+We can visualize the average number of bouts required to make a decision and the
+acceptance rate of H across true outbreak intensities.
+```{r}
+plot(seq(0.2, 1.5, 0.2), eval_dyn$AvgSamples, type = "o", xlab = "True outbreak 
+     intensity", ylab = "Average number of bouts")
+abline(v = 1, lty = 2)
+
+plot(seq(0.2, 1.5, 0.2), eval_dyn$AcceptRate, type = "o", xlab = "True outbreak 
+     intensity", ylab = "Acceptance rate of H")
+abline(v = 1, lty = 2)
+```
+
+The pattern is similar to the one shown for static hypotheses (example 2). Average 
+sampling bouts peaks at the threshold (outbreak intensity = 1) where decision-making 
+is toughest and more samples are required to distinguish outbreaks from non-outbreaks. 
+Acceptance rate of H is 0 at low outbreak intensities and reaches 1 above the threshold 
+(outbreak intensity = 1). Again, the value of this analysis stems from the ability 
+to check the balance between sampling effort and accuracy that results from varying 
+decision criteria (arguments `lower_criterion` or `upper_criterion`) and sampling 
+size within bouts.
 
 ## 2. The Sequential Probability Ratio Test
 
+The SPRT was invented in the context of quality control back in the 40s, but it is
+widely applied in many fields, including population management and clinical trials.
+In fact, there are other R packages that implement the SPRT, particularly in the 
+field of clinical trials (see introduction for a list). The SPRT is popular among 
+practitioners of Integrated Pest Management, who are often familiar with the charts
+with two parallel lines on which cumulative pest counts are overlapped to decide if
+sampling should continue or if there is enough evidence to stop and decide in favor
+or against the hypothesis being tested. The SPRT has been extensively tested and it
+has been shown to be optimal under a restricted range of contexts. The SPRT can be
+easily implemented even without a calculator just by comparing data with stop lines
+"on the fly".
 
+One important drawback of the SPRT is that it requires the specification of two 
+non-related hypotheses. You can't test a single hypothesis against its complementary
+like in STBP because the SPRT requires two simple hypothesis to produce a probability
+ratio each time new data come. The SPRT can't process group sequential data, unless
+you use the mean, median or mode and in its conventional form cannot be used to test
+dynamic hypotheses. If you want to use SPRT for dynamic hypotheses, you must use a
+variation called Time-Sequential Probability Ratio Test, which is not implemented in
+the `sequential.pops` package yet.
 
-## Whishlist for future versions
+### Example 4: Testing if a population is above a threshold
+
+Like other sequential tests, the SPRT assist in situations where one wants to test 
+if a given population is above or below a threshold. The main difference with the
+STBP is that SPRT is specified with two hypotheses instead of one. There are no rules
+on how those hypotheses should be stated when you only want to test a single threshold-style
+hypothesis. Conventionally, they are formulated equidistant from the threshold density,
+using confidence intervals for the threshold, but there are other approaches.
+
+For this example, we will use once again the case study of the tomato leafminer 
+in greenhouse tomatoes. Let's assume again the economic threshold is static (constant) 
+at 9 larvae per plant and we want to test, through sequential sampling, if a population 
+has exceeded such threshold. In the `sequential.pops` package, the same probability
+distributions available for the STBP are also available for the SPRT, except for 
+the beta-binomial, for which stop lines have not been derived yet.
+
+Similar to the STBP, distributions without overdispersion (poisson and binomial) are 
+used to test and sample small population sizes. But when population grow they start 
+to aggregate and overdispersion becomes a nuisance that must be accounted for by
+using appropriate distributions (negative binomial). However, the to specify a SPRT 
+the overdispersion parameter is only used for the threshold density to calculate 
+stop lines. If there a function to obtain reliable values for the overdispersion 
+parameter based on the mean, it can be used for model evaluation to generate more 
+realistic data.
+
+Unlike the STBP, you can specify a SPRT without data, in which case you'll get the a
+chart with the corresponding stop lines as output. For example, if we want build 
+a test specification for H: `mu > 9` larvae per plant, we have to provide two
+hypotheses that allow for the sequential calculation of probability ratios, so that
+would be H0: `mu = 8` and H1: `mu = 10`. We also must provide a probability distribution,
+an overdispersion parameter value (in case the distribution is negative binomial),
+and tolerable type I (`alpha`) and type II (`beta`) error rates:
+```{r}
+sprt(mu0 = 8,
+     mu1 = 10,
+     density_func = "negative binomial",
+     overdispersion = estimate_k(9),
+     alpha = 0.1,
+     beta = 0.1)
+```
+
+Notice that no data have to be provided, and that `overdispersion` is not a function
+but a value specified through a function for the threshold density of 9 larvae per 
+plant. Also, notice that the output is a chart with the stop line ready to contrast
+with cumulative counts and the coefficients for the stops lines.
+
+Now let's generate some data with the same specifications as in example 2, and 
+including the function `estimate_k` to obtain overdispersion as a function of
+the mean:
+```{r}
+counts1a <- rnbinom(20, mu = 5, size = estimate_k(5))
+counts1a
+```
+This is 20 random counts from a population of 5 larvae per sample unit (plant) in 
+size that follows a negative binomial distribution with an overdispersion determined
+from `estimate_k`. 
+
+## Wishlist for future versions
 
 - Implement cluster sampling in eval
 - Include time-sequential probability ratio test for dynamic thresholds
@@ -676,5 +834,5 @@ Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complement
 hypotheses about population density. Methods in Ecology and Evolution. 
 <https://doi.org/10.1111/2041-210X.70053>
 
-Wald, A. (1945) Sequential Tests of Statistical Hypotheses. 
-The Annals of Mathematical Statistics 16(2): 117-186.
+Wald, A. (1945) Sequential Tests of Statistical Hypotheses. The Annals of Mathematical
+Statistics 16(2): 117-186.
