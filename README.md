@@ -7,4 +7,3 @@ This package includes tools to run and evaluate sequential tests, produce charts
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/rincondf/sequential.pops/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rincondf/sequential.pops/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
-
