@@ -201,6 +201,9 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #' @export
 #'
 #' @examples
+#' # These examples are run with very few simulation runs (argument N), so they
+#' # provide unrealistic results. For more reasonable demonstrations check the
+#' # vignettes.
 #'
 #' # Assuming a negative binomial count variable whose overdispersion parameter,
 #' # k, varies as a function of the mean, and that the variance-mean relationship
@@ -255,13 +258,13 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #' # of 'estimate_k'.
 #'
 #' # Run model evaluation for testF1 with varying overdispersion and
-#' # added stochasticity.
+#' # added stochasticity with very few simulations to save time.
 #'
 #' eval1 <- STBP.eval(test1F,
 #'                     eval.range = seq(2, 11),
 #'                     n = 1, prior = 0.5,
 #'                     overdispersion.sim = "estimate_k_stoch",
-#'                     N = 20)
+#'                     N = 3)
 #'
 #' plot(seq(2, 11), eval1$AvgSamples, type = "o", xlab = "True population size",
 #'       ylab = "Average number of bouts")
@@ -271,12 +274,12 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #'
 #' # Alternatively, the evaluation could be carried out omitting variation about
 #' # overdispersion. For that the overdispersion argument is omitted and the same
-#' # specification of the model is used
+#' # specification of the model is used. Very few simulations to save time.
 #'
 #' eval2 <- STBP.eval(test1F,
 #'                     eval.range = seq(2, 11),
 #'                     n = 1, prior = 0.5,
-#'                     N = 20)
+#'                     N = 3)
 #'
 #' plot(seq(2, 11), eval2$AvgSamples, type = "o", xlab = "True population size",
 #'       ylab = "Average number of bouts")
@@ -299,12 +302,12 @@ int_eval <- function(pop_mean, prior, n, obj, overdispersion.sim = NA, seed = NU
 #'
 #' test2F
 #'
-#' # Overdispersion is omitted here
+#' # Overdispersion is omitted here. Again, very few simulations (N) to save time.
 #'
 #' eval3 <- STBP.eval(test2F,
 #'                   eval.range = seq(1, 8),
 #'                   n = 1,
-#'                   prior = 0.5, N = 20)
+#'                   prior = 0.5, N = 3)
 #'
 #' plot(seq(1, 8), eval3$AvgSamples, type = "o", xlab = "True population size",
 #'       ylab = "Average number of bouts")
