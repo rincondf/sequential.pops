@@ -132,7 +132,10 @@ and Evolution</em>. &lt;https://doi.org/10.1111/2041-210X.70053&gt;</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># These examples are run with very few simulation runs (argument N), so they</span></span></span>
+<span class="r-in"><span><span class="co"># provide unrealistic results. For more reasonable demonstrations check the</span></span></span>
+<span class="r-in"><span><span class="co"># vignettes.</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Assuming a negative binomial count variable whose overdispersion parameter,</span></span></span>
 <span class="r-in"><span><span class="co"># k, varies as a function of the mean, and that the variance-mean relationship</span></span></span>
 <span class="r-in"><span><span class="co"># is well described with Taylor's Power Law, a function to obtain k can be:</span></span></span>
@@ -188,13 +191,13 @@ and Evolution</em>. &lt;https://doi.org/10.1111/2041-210X.70053&gt;</p>
 <span class="r-in"><span><span class="co"># of 'estimate_k'.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Run model evaluation for testF1 with varying overdispersion and</span></span></span>
-<span class="r-in"><span><span class="co"># added stochasticity.</span></span></span>
+<span class="r-in"><span><span class="co"># added stochasticity with very few simulations to save time.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">eval1</span> <span class="op">&lt;-</span> <span class="fu">STBP.eval</span><span class="op">(</span><span class="va">test1F</span>,</span></span>
 <span class="r-in"><span>                    eval.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">11</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                    n <span class="op">=</span> <span class="fl">1</span>, prior <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>                    overdispersion.sim <span class="op">=</span> <span class="st">"estimate_k_stoch"</span>,</span></span>
-<span class="r-in"><span>                    N <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                    N <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'test1F' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">11</span><span class="op">)</span>, <span class="va">eval1</span><span class="op">$</span><span class="va">AvgSamples</span>, type <span class="op">=</span> <span class="st">"o"</span>, xlab <span class="op">=</span> <span class="st">"True population size"</span>,</span></span>
@@ -207,12 +210,12 @@ and Evolution</em>. &lt;https://doi.org/10.1111/2041-210X.70053&gt;</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Alternatively, the evaluation could be carried out omitting variation about</span></span></span>
 <span class="r-in"><span><span class="co"># overdispersion. For that the overdispersion argument is omitted and the same</span></span></span>
-<span class="r-in"><span><span class="co"># specification of the model is used</span></span></span>
+<span class="r-in"><span><span class="co"># specification of the model is used. Very few simulations to save time.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">eval2</span> <span class="op">&lt;-</span> <span class="fu">STBP.eval</span><span class="op">(</span><span class="va">test1F</span>,</span></span>
 <span class="r-in"><span>                    eval.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">11</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                    n <span class="op">=</span> <span class="fl">1</span>, prior <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
-<span class="r-in"><span>                    N <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                    N <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'test1F' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">11</span><span class="op">)</span>, <span class="va">eval2</span><span class="op">$</span><span class="va">AvgSamples</span>, type <span class="op">=</span> <span class="st">"o"</span>, xlab <span class="op">=</span> <span class="st">"True population size"</span>,</span></span>
@@ -244,12 +247,12 @@ and Evolution</em>. &lt;https://doi.org/10.1111/2041-210X.70053&gt;</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Probability: 1 from 17 sampling bouts</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Recommendation based on provided criteria: accept H</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Overdispersion is omitted here</span></span></span>
+<span class="r-in"><span><span class="co"># Overdispersion is omitted here. Again, very few simulations (N) to save time.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">eval3</span> <span class="op">&lt;-</span> <span class="fu">STBP.eval</span><span class="op">(</span><span class="va">test2F</span>,</span></span>
 <span class="r-in"><span>                  eval.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">8</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                  n <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>                  prior <span class="op">=</span> <span class="fl">0.5</span>, N <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                  prior <span class="op">=</span> <span class="fl">0.5</span>, N <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">8</span><span class="op">)</span>, <span class="va">eval3</span><span class="op">$</span><span class="va">AvgSamples</span>, type <span class="op">=</span> <span class="st">"o"</span>, xlab <span class="op">=</span> <span class="st">"True population size"</span>,</span></span>
 <span class="r-in"><span>      ylab <span class="op">=</span> <span class="st">"Average number of bouts"</span><span class="op">)</span></span></span>
