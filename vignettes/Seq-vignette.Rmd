@@ -156,6 +156,7 @@ sequential design with 30 samples:
 ```{r}
 plot(test30)
 ```
+
 and for the sequential design with 3 samples:
 ```{r}
 plot(test3)
