@@ -126,7 +126,7 @@ eval1 <- STBP.eval(test1F,
                     eval.range = seq(2, 11),
                     n = 1, prior = 0.5,
                     overdispersion.sim = "estimate_k_stoch",
-                    N = 3)
+                    N = 2)
 
 plot(seq(2, 11), eval1$AvgSamples, type = "o", xlab = "True population size",
       ylab = "Average number of bouts")
@@ -141,7 +141,7 @@ plot(seq(2, 11), eval1$AcceptRate, type = "o", xlab = "True population size",
 eval2 <- STBP.eval(test1F,
                     eval.range = seq(2, 11),
                     n = 1, prior = 0.5,
-                    N = 3)
+                    N = 2)
 
 plot(seq(2, 11), eval2$AvgSamples, type = "o", xlab = "True population size",
       ylab = "Average number of bouts")
@@ -169,7 +169,7 @@ test2F
 eval3 <- STBP.eval(test2F,
                   eval.range = seq(1, 8),
                   n = 1,
-                  prior = 0.5, N = 3)
+                  prior = 0.5, N = 2)
 
 plot(seq(1, 8), eval3$AvgSamples, type = "o", xlab = "True population size",
       ylab = "Average number of bouts")
