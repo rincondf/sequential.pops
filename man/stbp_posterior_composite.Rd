@@ -6,7 +6,7 @@
 \usage{
 stbp_posterior_composite(
   data,
-  greater_than = TRUE,
+  greater_than,
   hypothesis,
   density_func,
   overdispersion = NA,
@@ -20,7 +20,7 @@ stbp_posterior_composite(
 (NAs allowed). For binomial data, a matrix with observations in col 1 and
 samples in col 2 (NAs \emph{not} allowed).}
 
-\item{greater_than}{logical; if TRUE (default), the tested hypothesis is of
+\item{greater_than}{logical; if TRUE, the tested hypothesis is of
 the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.}
 
 \item{hypothesis}{Single non-negative value with the hypothesized value

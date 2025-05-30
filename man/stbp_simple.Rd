@@ -31,7 +31,8 @@ specifying the overdispersion parameter. Only required when using
 \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
 See details.}
 
-\item{prior}{Single number with initial prior. Must be in the interval \eqn{[0,1]}.}
+\item{prior}{Single number with initial prior. Must be in the interval
+\eqn{[0,1]}. If no prior information is available 0.5 (default) is recommended.}
 
 \item{upper_bnd}{Single number indicating the greatest possible value for \eqn{\mu}.
 For count data, is often \code{Inf} (default), but it must be \eqn{\leq 1}

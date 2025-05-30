@@ -14,7 +14,8 @@ LazyData: true
 Imports: 
     methods,
     emdbook,
-    truncdist
+    truncdist,
+    rlang
 RoxygenNote: 7.3.2
 Suggests: 
     knitr,
@@ -23,4 +24,5 @@ Suggests:
 Config/testthat/edition: 3
 License: GPL (>= 3)
 URL: https://github.com/rincondf/sequential.pops, https://rincondf.github.io/sequential.pops/
+BugReports: https://github.com/rincondf/sequential.pops/issues
 VignetteBuilder: knitr

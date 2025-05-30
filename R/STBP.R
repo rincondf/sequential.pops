@@ -10,7 +10,7 @@
 #' @param data For count data, a numeric vector with for a single sampling bout
 #' (NAs allowed). For binomial data, a matrix with observations in col 1 and
 #' samples in col 2 (NAs \emph{not} allowed).
-#' @param greater_than logical; if TRUE (default), the tested hypothesis is of
+#' @param greater_than logical; if TRUE, the tested hypothesis is of
 #' the form \eqn{H:\mu > \psi} otherwise, \eqn{H:\mu < \psi}.
 #' @param hypothesis Single non-negative value with the hypothesized value
 #' of \eqn{\mu}.
@@ -76,7 +76,7 @@
 #' @export
 
 stbp_posterior_composite <- function(data,
-                                     greater_than = TRUE,
+                                     greater_than,
                                      hypothesis,
                                      density_func,
                                      overdispersion = NA,
@@ -236,17 +236,17 @@ stbp_posterior_composite <- function(data,
 #' \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
 #' See details.
 #' @param prior Single number with initial prior. Must be on the interval
-#' \eqn{[0,1]}.
+#' \eqn{[0,1]}. If no prior information is available 0.5 (default) is recommended.
 #' @param lower_bnd Single number indicating the lower bound of the parameter
 #' space for \eqn{\mu}. Most cases is \eqn{0} (default).
 #' @param upper_bnd Single number indicating the upper bound of the parameter
 #' space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it
 #' must be \eqn{\leq 1} for binomial data.
 #' @param lower_criterion Criterion to decide against the tested hypothesis.
-#' This is the lowest credibility to the hypothesis to stop sampling and
+#' This is the maximum credibility to the hypothesis to stop sampling and
 #' decide against.
 #' @param upper_criterion Criterion to decide in favor of the tested hypothesis.
-#' This is the greatest credibility to the hypothesis to stop sampling and
+#' This is the minimum credibility to the hypothesis to stop sampling and
 #' decide in favor.
 #'
 #' @details
@@ -392,10 +392,10 @@ stbp_composite <- function(data,
                            prior = 0.5,
                            lower_bnd = 0,
                            upper_bnd = Inf,
-                           lower_criterion = 0.01,
-                           upper_criterion = 0.99) {
+                           lower_criterion,
+                           upper_criterion) {
 
-  call <- match.call()
+  call <- rlang::call_match(defaults = TRUE)
 
   if(density_func == "poisson" | density_func == "negative binomial") {
 
@@ -689,7 +689,8 @@ stbp_posterior_simple <- function(data,
 #' specifying the overdispersion parameter. Only required when using
 #' \code{"negative binomial"} or \code{"beta-binomial"} as kernel densities.
 #' See details.
-#' @param prior Single number with initial prior. Must be in the interval \eqn{[0,1]}.
+#' @param prior Single number with initial prior. Must be in the interval
+#' \eqn{[0,1]}. If no prior information is available 0.5 (default) is recommended.
 #' @param upper_bnd Single number indicating the greatest possible value for \eqn{\mu}.
 #' For count data, is often \code{Inf} (default), but it must be \eqn{\leq 1}
 #' for binomial data.
@@ -769,7 +770,7 @@ stbp_simple <- function(data,
                         lower_criterion,
                         upper_criterion) {
 
-  call <- match.call()
+  call <- rlang::call_match(defaults = TRUE)
 
   if(density_func == "poisson" | density_func == "negative binomial") {
 

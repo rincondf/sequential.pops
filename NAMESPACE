@@ -7,3 +7,4 @@ importFrom("stats", "dbinom", "dnbinom", "dpois", "na.omit", "rbinom", "rnbinom"
 importFrom("emdbook", "rbetabinom")
 importFrom("truncdist", "rtrunc")
 importFrom("graphics", "plot", "par", "axis", "abline", "title", "lines")
+importFrom("rlang", "call_match")

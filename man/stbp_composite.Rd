@@ -13,8 +13,8 @@ stbp_composite(
   prior = 0.5,
   lower_bnd = 0,
   upper_bnd = Inf,
-  lower_criterion = 0.01,
-  upper_criterion = 0.99
+  lower_criterion,
+  upper_criterion
 )
 }
 \arguments{
@@ -44,7 +44,7 @@ specifying the overdispersion parameter. Only required when using
 See details.}
 
 \item{prior}{Single number with initial prior. Must be on the interval
-\eqn{[0,1]}.}
+\eqn{[0,1]}. If no prior information is available 0.5 (default) is recommended.}
 
 \item{lower_bnd}{Single number indicating the lower bound of the parameter
 space for \eqn{\mu}. Most cases is \eqn{0} (default).}
@@ -54,11 +54,11 @@ space for \eqn{\mu}. For count data, is often \code{Inf} (default), but it
 must be \eqn{\leq 1} for binomial data.}
 
 \item{lower_criterion}{Criterion to decide against the tested hypothesis.
-This is the lowest credibility to the hypothesis to stop sampling and
+This is the maximum credibility to the hypothesis to stop sampling and
 decide against.}
 
 \item{upper_criterion}{Criterion to decide in favor of the tested hypothesis.
-This is the greatest credibility to the hypothesis to stop sampling and
+This is the minimum credibility to the hypothesis to stop sampling and
 decide in favor.}
 }
 \value{

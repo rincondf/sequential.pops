@@ -130,8 +130,8 @@ setMethod("plot", signature = c(x = "STBP", y = "missing"), function(x, y) {
        cex.axis = 2)
 
   if(as.character(x@call[1]) == "stbp_simple") {
-    abline(h = as.numeric(as.character(x@call[6])), lty = 2)
     abline(h = as.numeric(as.character(x@call[7])), lty = 2)
+    abline(h = as.numeric(as.character(x@call[8])), lty = 2)
   }
 
   if(as.character(x@call[1]) == "stbp_composite") {
