@@ -53,7 +53,7 @@ sequential framework, and called on the sequential test <code><a href="stbp_comp
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">stbp_posterior_composite</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
-<span>  greater_than <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">greater_than</span>,</span>
 <span>  <span class="va">hypothesis</span>,</span>
 <span>  <span class="va">density_func</span>,</span>
 <span>  overdispersion <span class="op">=</span> <span class="cn">NA</span>,</span>
@@ -74,7 +74,7 @@ samples in col 2 (NAs <em>not</em> allowed).</p></dd>
 
 
 <dt id="arg-greater-than">greater_than<a class="anchor" aria-label="anchor" href="#arg-greater-than"></a></dt>
-<dd><p>logical; if TRUE (default), the tested hypothesis is of
+<dd><p>logical; if TRUE, the tested hypothesis is of
 the form \(H:\mu &gt; \psi\) otherwise, \(H:\mu &lt; \psi\).</p></dd>
 
 

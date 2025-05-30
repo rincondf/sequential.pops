@@ -57,8 +57,8 @@ Data is treated in a sequential framework.</p>
 <span>  prior <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lower_bnd <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  upper_bnd <span class="op">=</span> <span class="cn">Inf</span>,</span>
-<span>  lower_criterion <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  upper_criterion <span class="op">=</span> <span class="fl">0.99</span></span>
+<span>  <span class="va">lower_criterion</span>,</span>
+<span>  <span class="va">upper_criterion</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -103,7 +103,7 @@ See details.</p></dd>
 
 <dt id="arg-prior">prior<a class="anchor" aria-label="anchor" href="#arg-prior"></a></dt>
 <dd><p>Single number with initial prior. Must be on the interval
-\([0,1]\).</p></dd>
+\([0,1]\). If no prior information is available 0.5 (default) is recommended.</p></dd>
 
 
 <dt id="arg-lower-bnd">lower_bnd<a class="anchor" aria-label="anchor" href="#arg-lower-bnd"></a></dt>
@@ -119,13 +119,13 @@ must be \(\leq 1\) for binomial data.</p></dd>
 
 <dt id="arg-lower-criterion">lower_criterion<a class="anchor" aria-label="anchor" href="#arg-lower-criterion"></a></dt>
 <dd><p>Criterion to decide against the tested hypothesis.
-This is the lowest credibility to the hypothesis to stop sampling and
+This is the maximum credibility to the hypothesis to stop sampling and
 decide against.</p></dd>
 
 
 <dt id="arg-upper-criterion">upper_criterion<a class="anchor" aria-label="anchor" href="#arg-upper-criterion"></a></dt>
 <dd><p>Criterion to decide in favor of the tested hypothesis.
-This is the greatest credibility to the hypothesis to stop sampling and
+This is the minimum credibility to the hypothesis to stop sampling and
 decide in favor.</p></dd>
 
 </dl></div>
