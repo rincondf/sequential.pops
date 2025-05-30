@@ -270,6 +270,7 @@ For the test with a constant overdispersion:
 ```{r}
 plot(test_counts1)
 ```
+
 and with overdispersion as a function of the mean:
 ```{r}
 plot(test_counts1a)
@@ -292,6 +293,8 @@ For example, if a sequential sampling is designed to collect 3 clusters (samplin
 each made of 10 samples and 7 sampling bouts have been collected data should be 
 introduced like:
 ```{r}
+library(emdbook) # for rbetabinom()
+
 binom1 <- list()
 for(i in 1: 7) {
   binom1[[i]] <- matrix(c(emdbook::rbetabinom(3, prob = 0.2,
@@ -307,7 +310,6 @@ to work with the beta-binomial distribution is in the `emdbook` package, so it m
 be loaded before running any sequential tests that involve this distribution. The 
 STBP can be run on the data `binom1` with:
 ```{r}
-library(emdbook)
 test_bin1 <- stbp_composite(data = binom1,
                             greater_than = TRUE,
                             hypothesis = 0.15,
