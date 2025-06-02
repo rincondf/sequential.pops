@@ -28,9 +28,9 @@ are consistent with an outbreak. Sequential analyses can also be useful in field
 outside ecology and pest management, such as quality control, fraud detection and
 adaptive clinical trials, but those applications are out of the scope of this package.
 
-Sequential data come in sampling bouts over time that should be processed as they come 
-to evaluate one or several hypotheses and stop collecting data (sampling) when there
-is enough evidence to make a decision. Sequential designs are typically more cost-efficient
+Sequential data arrive in sampling bouts over time and are processed as they come, 
+in order to evaluate hypotheses on which practical decisions are made once sufficient 
+evidence has been collected. Sequential designs are typically more cost-efficient
 than conventional fixed-sample-size approaches, and can be purely sequential (one-at-a-time)
 or group sequential (`n > 1` per sampling bout). The analysis of biological population
 densities is often carried out by collecting count data from traps or field observations
