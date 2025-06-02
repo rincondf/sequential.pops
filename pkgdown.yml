@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   Seq-vignette: Seq-vignette.html
-last_built: 2025-06-02T19:18Z
+last_built: 2025-06-02T20:02Z
 urls:
   reference: https://rincondf.github.io/sequential.pops/reference
   article: https://rincondf.github.io/sequential.pops/articles
