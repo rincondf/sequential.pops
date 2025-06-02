@@ -11,3 +11,8 @@ navbar:
       href: articles/Seq-vignette.html
     - text: Blog post on STBP
       href: https://wp.me/pzdYt-41n
+
+authors:
+  footer:
+    roles: [cre]
+    text: "Website developed by"
