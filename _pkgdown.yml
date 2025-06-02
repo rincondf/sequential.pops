@@ -2,3 +2,12 @@ url: https://rincondf.github.io/sequential.pops/
 template:
   bootstrap: 5
 
+navbar:
+ components:
+   articles:
+    text: Articles
+    menu:
+    - text: Package vignette
+      href: articles/Seq-vignette.html
+    - text: Blog post on STBP
+      href: https://wp.me/pzdYt-41n
