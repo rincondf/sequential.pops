@@ -13,7 +13,7 @@ in a sequential framework."><meta property="og:image" content="https://rincondf.
 
     <a class="navbar-brand me-2" href="../index.html">sequential.pops</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,16 +123,18 @@ of Mathematical Statistics</em> 16(2): 117-186.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># If no data is provided, a chart with stop lines and a summary of the test</span></span></span>
-<span class="r-in"><span><span class="co"># with coefficients for stop lines is returned,</span></span></span>
+<span class="r-in"><span><span class="co"># If no data is provided, an object of class "SPRT" is returned from which a</span></span></span>
+<span class="r-in"><span><span class="co"># chart with stop lines or a summary of the test with coefficients for stop lines</span></span></span>
+<span class="r-in"><span><span class="co"># can be extracted.</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">sprt</span><span class="op">(</span>data <span class="op">=</span> <span class="cn">NA</span>,</span></span>
-<span class="r-in"><span>      mu0 <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>      mu1 <span class="op">=</span> <span class="fl">4</span>,</span></span>
-<span class="r-in"><span>      density_func <span class="op">=</span> <span class="st">"negative binomial"</span>,</span></span>
-<span class="r-in"><span>      overdispersion <span class="op">=</span> <span class="fl">4.6</span>,</span></span>
-<span class="r-in"><span>      alpha <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
-<span class="r-in"><span>      beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="co">#returns a summary and a chart</span></span></span>
+<span class="r-in"><span><span class="va">test00</span> <span class="op">&lt;-</span> <span class="fu">sprt</span><span class="op">(</span>mu0 <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                mu1 <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>                density_func <span class="op">=</span> <span class="st">"negative binomial"</span>,</span></span>
+<span class="r-in"><span>                overdispersion <span class="op">=</span> <span class="fl">4.6</span>,</span></span>
+<span class="r-in"><span>                alpha <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>                beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test00</span> <span class="co"># returns test specification and stop lines coefficients</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sequential Probability Ratio Test - Stop lines</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Family: negative binomial</span>
@@ -145,8 +147,11 @@ of Mathematical Statistics</em> 16(2): 117-186.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Lower line coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Intercept =  -5.128255</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slope =  2.841808</span>
+<span class="r-in"><span><span class="fu"><a href="plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="va">test00</span><span class="op">)</span> <span class="co"># returns a chart with stop lines</span></span></span>
+<span class="r-plt img"><img src="sprt-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># If data is provided, an object of class "SPRT" is returned.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># If data is provided, an object of class "SPRT" is returned with test results.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">2</span>, <span class="fl">7</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
