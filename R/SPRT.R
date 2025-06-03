@@ -47,18 +47,22 @@
 #'
 #' @examples
 #'
-#' # If no data is provided, a chart with stop lines and a summary of the test
-#' # with coefficients for stop lines is returned,
+#' # If no data is provided, an object of class "SPRT" is returned from which a
+#' # chart with stop lines or a summary of the test with coefficients for stop lines
+#' # can be extracted.
 #'
-#' sprt(data = NA,
-#'       mu0 = 2,
-#'       mu1 = 4,
-#'       density_func = "negative binomial",
-#'       overdispersion = 4.6,
-#'       alpha = 0.1,
-#'       beta = 0.1) #returns a summary and a chart
+#' test00 <- sprt(mu0 = 2,
+#'                 mu1 = 4,
+#'                 density_func = "negative binomial",
+#'                 overdispersion = 4.6,
+#'                 alpha = 0.1,
+#'                 beta = 0.1)
 #'
-#' # If data is provided, an object of class "SPRT" is returned.
+#' test00 # returns test specification and stop lines coefficients
+#' plot(test00) # returns a chart with stop lines
+#'
+#'
+#' # If data is provided, an object of class "SPRT" is returned with test results.
 #'
 #' counts <- c(2, 5, 6, 2, 7)
 #'

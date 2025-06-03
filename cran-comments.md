@@ -18,3 +18,4 @@ This is a resubmission. In this version I have:
  * Rewritten the output for R/SPRT.R. The output is now an object from which users may extract the information they are interested in.
  * Removed all cat()/print() that generated not easily suppressed information messages to the console.
  * Updated the corresponding comments, examples and vignettes.
+ * Increased version number from 0.1.0 to 0.1.1
