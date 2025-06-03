@@ -62,8 +62,10 @@ in a sequential framework.</p>
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>Optional vector of count data (NAs not allowed). Each value is
 considered a sampling bout over time. Can't process group sequential data.
-If not provided (NA), returns a chart with stop lines and stop lines
-coefficients. If provided, returns a <code>"SPRT"</code> object.</p></dd>
+If not provided (NA), returns a <code>"SPRT"</code> object that can be used to plot
+a chart with stop lines or to return stop lines coefficients. If provided, returns
+a <code>"SPRT"</code> object that can be used to plot a chart with stop lines and data
+or to return test summary.</p></dd>
 
 
 <dt id="arg-mu-">mu0<a class="anchor" aria-label="anchor" href="#arg-mu-"></a></dt>
@@ -131,7 +133,6 @@ of Mathematical Statistics</em> 16(2): 117-186.</p>
 <span class="r-in"><span>      overdispersion <span class="op">=</span> <span class="fl">4.6</span>,</span></span>
 <span class="r-in"><span>      alpha <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
 <span class="r-in"><span>      beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="co">#returns a summary and a chart</span></span></span>
-<span class="r-plt img"><img src="sprt-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sequential Probability Ratio Test - Stop lines</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Family: negative binomial</span>

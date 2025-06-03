@@ -1044,14 +1044,24 @@ an overdispersion parameter value (in case the distribution is negative
 binomial), and tolerable type I (<code>alpha</code>) and type II
 (<code>beta</code>) error rates:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sprt.html">sprt</a></span><span class="op">(</span>mu0 <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>     mu1 <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>     density_func <span class="op">=</span> <span class="st">"negative binomial"</span>,</span>
-<span>     overdispersion <span class="op">=</span> <span class="fu">estimate_k</span><span class="op">(</span><span class="fl">9</span><span class="op">)</span>,</span>
-<span>     alpha <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>     beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
+<code class="sourceCode R"><span><span class="va">testPR10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sprt.html">sprt</a></span><span class="op">(</span>mu0 <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>                 mu1 <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                 density_func <span class="op">=</span> <span class="st">"negative binomial"</span>,</span>
+<span>                 overdispersion <span class="op">=</span> <span class="fu">estimate_k</span><span class="op">(</span><span class="fl">9</span><span class="op">)</span>,</span>
+<span>                 alpha <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>                 beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
+<p>Notice that no data have to be provided, and that
+<code>overdispersion</code> is not a function but a value specified
+through a function for the threshold density of 9 larvae per plant. A
+chart with the stop line ready to contrast with cumulative counts is
+returned with the call <code>plot</code>:</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="va">testPR10</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
+<p>and the coefficients for the stops lines by calling the object:</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">testPR10</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sequential Probability Ratio Test - Stop lines</span></span>
 <span><span class="co">#&gt; Family: negative binomial</span></span>
 <span><span class="co">#&gt; H0: mu = 8</span></span>
@@ -1062,18 +1072,12 @@ binomial), and tolerable type I (<code>alpha</code>) and type II
 <span><span class="co">#&gt; Slope =  8.93856</span></span>
 <span><span class="co">#&gt; Lower line coefficients:</span></span>
 <span><span class="co">#&gt; Intercept =  -28.45668</span></span>
-<span><span class="co">#&gt; Slope =  8.93856</span></span></code></pre>
-<p>Notice that no data have to be provided, and that
-<code>overdispersion</code> is not a function but a value specified
-through a function for the threshold density of 9 larvae per plant.
-Also, notice that the output is a chart with the stop line ready to
-contrast with cumulative counts and the coefficients for the stops
-lines.</p>
+<span><span class="co">#&gt; Slope =  8.93856</span></span></code></pre></div>
 <p>Now let’s generate some data with the same specifications as in
 example 2. This is from a negative binomial distribution and the
 function <code>estimate_k</code> to obtain overdispersion based on the
 mean:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">counts1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">rnbinom</a></span><span class="op">(</span><span class="fl">20</span>, mu <span class="op">=</span> <span class="fl">5</span>, size <span class="op">=</span> <span class="fu">estimate_k</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">counts1a</span></span>
 <span><span class="co">#&gt;  [1]  2  2  5  1  7 17  4  6  5 11  7  5  4  5  4  5  8  6  4  5</span></span></code></pre></div>
@@ -1081,7 +1085,7 @@ mean:</p>
 unit (plant) in size. If we run the function <code>sprt</code> with
 data, a SPRT test is performed and a new <code>"SPRT"</code> object is
 created.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">testPR1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sprt.html">sprt</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">counts1a</span>,</span>
 <span>                mu0 <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>                mu1 <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -1109,9 +1113,9 @@ of the final decision relies on the selected values for
 overdispersion is provided as a value through a function. There is also
 a <code>plot</code> method for <code>"SPRT"</code> objects, which
 overlap the stop lines with cumulative counts:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="va">testPR1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
+<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 <p>In this case, the whole sequence of 20 counts is displayed, but the
 sampling should have been terminated after the 9th bout when cumulative
 counts touched the area below the lower stop line. The procedure for
@@ -1124,7 +1128,7 @@ structured in a vector that can only contain 1 and 0. For example, we
 can generate some binary data for a population with mean incidence of
 <code>prob = 0.5</code>, without cluster sampling,
 <code>size = 1</code>:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binPR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fl">40</span>, prob <span class="op">=</span> <span class="fl">0.5</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">binPR</span></span>
 <span><span class="co">#&gt;  [1] 0 1 1 1 1 0 0 1 1 1 1 0 1 0 1 0 1 1 0 0 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 0 0</span></span>
@@ -1132,16 +1136,20 @@ can generate some binary data for a population with mean incidence of
 <p>Again, we could get the stop lines in a chart and the corresponding
 coefficients to set up a sampling plan for H: <code>mu &gt; 0.4</code>
 just by specifying the test as H0: <code>mu = 0.35</code> vs. H1:
-<code>mu = 0.45</code> and omiting the argument <code>data</code> in the
-function <code>sprt</code>:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sprt.html">sprt</a></span><span class="op">(</span>mu0 <span class="op">=</span> <span class="fl">0.35</span>,</span>
-<span>     mu1 <span class="op">=</span> <span class="fl">0.45</span>,</span>
-<span>     density_func <span class="op">=</span> <span class="st">"binomial"</span>,</span>
-<span>     alpha <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>     beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
+<code>mu = 0.45</code> and omitting the argument <code>data</code> in
+the function <code>sprt</code>:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">testPR20</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sprt.html">sprt</a></span><span class="op">(</span>mu0 <span class="op">=</span> <span class="fl">0.35</span>,</span>
+<span>                 mu1 <span class="op">=</span> <span class="fl">0.45</span>,</span>
+<span>                 density_func <span class="op">=</span> <span class="st">"binomial"</span>,</span>
+<span>                 alpha <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>                 beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="va">testPR20</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+<p>and obtain the stop lines coefficients with:</p>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">testPR20</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sequential Probability Ratio Test - Stop lines</span></span>
 <span><span class="co">#&gt; Family: binomial</span></span>
 <span><span class="co">#&gt; H0: mu = 0.35</span></span>
@@ -1152,9 +1160,9 @@ function <code>sprt</code>:</p>
 <span><span class="co">#&gt; Slope =  0.3992989</span></span>
 <span><span class="co">#&gt; Lower line coefficients:</span></span>
 <span><span class="co">#&gt; Intercept =  -5.251888</span></span>
-<span><span class="co">#&gt; Slope =  0.3992989</span></span></code></pre>
-<p>and run a SPRT for the data in <code>binPR</code> as:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; Slope =  0.3992989</span></span></code></pre></div>
+<p>Now, we can run a SPRT for the data in <code>binPR</code> with:</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">testPR2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sprt.html">sprt</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">binPR</span>,</span>
 <span>                mu0 <span class="op">=</span> <span class="fl">0.35</span>,</span>
 <span>                mu1 <span class="op">=</span> <span class="fl">0.45</span>,</span>
@@ -1174,9 +1182,9 @@ function <code>sprt</code>:</p>
 were required to make a decision between H0 or H1. The object
 <code>testPR2</code> can also be used to produce a chart that compares
 stop lines with the cumulative data:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="va">testPR2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
 <div class="section level4">
 <h4 id="test-evaluation-2">Test evaluation<a class="anchor" aria-label="anchor" href="#test-evaluation-2"></a>
 </h4>
@@ -1187,31 +1195,31 @@ similar. For test evaluation, overdispersion for the negative binomial
 can be specified as a function with or without stochasticity. The
 evaluation with a constant overdispersion (as is in the model
 <code>testPR1</code>) is performed with:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">evalPR1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SPRT.eval.html">SPRT.eval</a></span><span class="op">(</span><span class="va">testPR1</span>, eval.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, N <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <p>Notice that there is no need to specify once more overdispersion when
 it is a constant because the same use for the model is used by default.
 If we wanted to add a function that describes overdipersion with added
 stochasticity the scrip would be:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">evalPR1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SPRT.eval.html">SPRT.eval</a></span><span class="op">(</span><span class="va">testPR1</span>, eval.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>,</span>
 <span>                      overdispersion.sim <span class="op">=</span> <span class="st">"estimate_k_stoch"</span>,</span>
 <span>                      N <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <p>Now we can compare both evaluations, with and without functional
 description of overdispersion with stochasticity:</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="va">evalPR1a</span><span class="op">$</span><span class="va">AvgSamples</span>, xlab <span class="op">=</span> <span class="st">"True population size"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Average number of bouts"</span>, type <span class="op">=</span> <span class="st">"o"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="va">evalPR1</span><span class="op">$</span><span class="va">AvgSamples</span>, type <span class="op">=</span> <span class="st">"o"</span>, pch <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">9</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-48-1.png" width="700"></p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="va">evalPR1a</span><span class="op">$</span><span class="va">AcceptRate</span>, xlab <span class="op">=</span> <span class="st">"True population size"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Acceptance rate of H1"</span>, type <span class="op">=</span> <span class="st">"o"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="va">evalPR1</span><span class="op">$</span><span class="va">AcceptRate</span>, type <span class="op">=</span> <span class="st">"o"</span>, pch <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">9</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-45-2.png" width="700"></p>
+<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-48-2.png" width="700"></p>
 <p>Notice the the evaluation for SPRT is performed on the acceptance
 rate for H1. As mentioned above, the addition of realistic descriptions
 of overdispersion across count of binomial data provides a more
@@ -1224,18 +1232,18 @@ nature of overdispersion underestimate the number of sampling bouts
 required to make a decision and the rate of incorrect decisions,
 specially when the true population size is above the threshold.</p>
 <p>Evaluation of tests with binomial data is similar:</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">evalPR2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SPRT.eval.html">SPRT.eval</a></span><span class="op">(</span><span class="va">testPR2</span>, eval.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span><span class="op">)</span>, N <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span><span class="op">)</span>, <span class="va">evalPR2</span><span class="op">$</span><span class="va">AvgSamples</span>, xlab <span class="op">=</span> <span class="st">"True incidence"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Average number of bouts"</span>, type <span class="op">=</span> <span class="st">"o"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">0.4</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-49-1.png" width="700"></p>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot-STBP-missing-method.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span><span class="op">)</span>, <span class="va">evalPR2</span><span class="op">$</span><span class="va">AcceptRate</span>, xlab <span class="op">=</span> <span class="st">"True incidence"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Acceptance rate of H1"</span>, type <span class="op">=</span> <span class="st">"o"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">0.4</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-46-2.png" width="700"></p>
+<p><img src="Seq-vignette_files/figure-html/unnamed-chunk-49-2.png" width="700"></p>
 <p>Although binomial sampling is quicker and easier, it requires
 significantly more samples than count sampling and precision is often
 compromised too. However, binomial sampling can be a good alternative
@@ -1248,7 +1256,8 @@ for a discussion].</p>
 <h2 id="wishlist-for-future-versions">Wishlist for future versions<a class="anchor" aria-label="anchor" href="#wishlist-for-future-versions"></a>
 </h2>
 <ul>
-<li>Implement cluster sampling in eval</li>
+<li>Implement cluster sampling in eval functions for both STBP and
+SPRT</li>
 <li>Include time-sequential probability ratio test for dynamic
 thresholds</li>
 <li>Implement cluster sampling for SPRT</li>
@@ -1268,6 +1277,10 @@ MN (USA). 421pp.</p>
 <p>Rincon, D.F., McCabe, I. &amp; Crowder, D.W. (2025) Sequential
 testing of complementary hypotheses about population density. Methods in
 Ecology and Evolution. <a href="https://doi.org/10.1111/2041-210X.70053" class="external-link uri">https://doi.org/10.1111/2041-210X.70053</a></p>
+<p>Rincon, D. F., Rivera- Trujillo, H. F., Mojica- Ramos, L., &amp;
+BorreroEcheverry, F. (2021) Sampling plans promoting farmers’ memory
+provide decision support in <em>Tuta absoluta</em> management. Agronomy
+for Sustainable Development, 41: 33. <a href="https://doi.org/10.1007/s13593-021-00693-0" class="external-link uri">https://doi.org/10.1007/s13593-021-00693-0</a></p>
 <p>Wald, A. (1945) Sequential Tests of Statistical Hypotheses. The
 Annals of Mathematical Statistics 16(2): 117-186.</p>
 </div>
