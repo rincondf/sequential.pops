@@ -108,17 +108,17 @@ setMethod("plot", signature = c(x = "SPRT", y = "missing"), function(x, y) {
   opar <- par(no.readonly = TRUE)
   on.exit(par(opar), add = TRUE)
 
-  # Lower stop line:
-  low_seq_c <- function(t){
-    x@slope * t + x@low_int
-  }
-
-  # Upper stop line:
-  hi_seq_c <- function(t){
-    x@slope * t + x@hi_int
-  }
-
   if(all(is.na(x@data))) {
+
+    # Lower stop line:
+    low_seq_c <- function(t){
+      x@slope * t + x@low_int
+    }
+
+    # Upper stop line:
+    hi_seq_c <- function(t){
+      x@slope * t + x@hi_int
+    }
 
     max.n <- ((x@low_int - hi_seq_c(15)) / (-x@slope))
 
