@@ -5,14 +5,15 @@
 \alias{SPRT-class}
 \title{Class "SPRT". Result of a Sequential Probability Ratio Test}
 \description{
-This class encapsulates results of a Sequential Probability Ratio Test.
+This class encapsulates results or specification of a Sequential Probability
+Ratio Test.
 }
 \section{Slots}{
 
 \describe{
 \item{\code{call}}{(language) The call to \code{\link{sprt}}.}
 
-\item{\code{data}}{(numeric) Vector with cumulative counts.}
+\item{\code{data}}{(numeric, logical) Either a vector with cumulative counts or NA.}
 
 \item{\code{hi_int}}{(numeric) Intercept of the lower stop line.}
 
@@ -20,10 +21,11 @@ This class encapsulates results of a Sequential Probability Ratio Test.
 
 \item{\code{slope}}{(numeric) Slope of stop lines.}
 
-\item{\code{recommendation}}{(character) Recommendation on whether to accept H0 or H1,
-or keep sampling.}
+\item{\code{recommendation}}{(character, logical) Either a recommendation on whether
+to accept H0 or H1, or keep sampling, or NA.}
 
-\item{\code{iterations}}{(numeric) Number of sequential sampling bouts required or processed.}
+\item{\code{iterations}}{(numeric) Number of sequential sampling bouts required or
+processed.}
 }}
 
 \examples{

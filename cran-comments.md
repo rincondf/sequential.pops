@@ -15,5 +15,6 @@ We checked 0 reverse dependencies, comparing R CMD check results across CRAN and
 
 This is a resubmission. In this version I have:
 
- * Reduced the number of simulation runs in examples of STBP.eval to reduce computing time
- * Updated the corresponding comments which now direct users to vignettes for examples with appropriate number of runs.
+ * Rewritten the output for R/SPRT.R. The output is now an object from which users may extract the information they are interested in.
+ * Removed all cat()/print() that generated not easily suppressed information messages to the console.
+ * Updated the corresponding comments, examples and vignettes.

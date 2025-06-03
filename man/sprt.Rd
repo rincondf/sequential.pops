@@ -9,8 +9,10 @@ sprt(data = NA, mu0, mu1, density_func, overdispersion, alpha, beta)
 \arguments{
 \item{data}{Optional vector of count data (NAs not allowed). Each value is
 considered a sampling bout over time. Can't process group sequential data.
-If not provided (NA), returns a chart with stop lines and stop lines
-coefficients. If provided, returns a \code{"SPRT"} object.}
+If not provided (NA), returns a \code{"SPRT"} object that can be used to plot
+a chart with stop lines or to return stop lines coefficients. If provided, returns
+a \code{"SPRT"} object that can be used to plot a chart with stop lines and data
+or to return test summary.}
 
 \item{mu0}{Single non-negative number with the value for the low
 hypothesized population density, \eqn{\psi_{0}}.}

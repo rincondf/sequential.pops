@@ -807,18 +807,25 @@ would be H0: `mu = 8` and H1: `mu = 10`. We also must provide a probability dist
 an overdispersion parameter value (in case the distribution is negative binomial),
 and tolerable type I (`alpha`) and type II (`beta`) error rates:
 ```{r}
-sprt(mu0 = 8,
-     mu1 = 10,
-     density_func = "negative binomial",
-     overdispersion = estimate_k(9),
-     alpha = 0.1,
-     beta = 0.1)
+testPR10 <- sprt(mu0 = 8,
+                 mu1 = 10,
+                 density_func = "negative binomial",
+                 overdispersion = estimate_k(9),
+                 alpha = 0.1,
+                 beta = 0.1)
 ```
-
 Notice that no data have to be provided, and that `overdispersion` is not a function
 but a value specified through a function for the threshold density of 9 larvae per 
-plant. Also, notice that the output is a chart with the stop line ready to contrast
-with cumulative counts and the coefficients for the stops lines.
+plant. A chart with the stop line ready to contrast with cumulative counts is returned
+with the call `plot`:
+```{r}
+plot(testPR10)
+```
+
+and the coefficients for the stops lines by calling the object:
+```{r}
+testPR10
+```
 
 Now let's generate some data with the same specifications as in example 2. This is
 from a negative binomial distribution and the function `estimate_k` to obtain 
@@ -868,15 +875,22 @@ binPR
 ```
 Again, we could get the stop lines in a chart and the corresponding coefficients to 
 set up a sampling plan for H: `mu > 0.4` just by specifying the test as H0: `mu = 0.35` 
-vs. H1: `mu = 0.45` and omiting the argument `data` in the function `sprt`:
+vs. H1: `mu = 0.45` and omitting the argument `data` in the function `sprt`:
 ```{r}
-sprt(mu0 = 0.35,
-     mu1 = 0.45,
-     density_func = "binomial",
-     alpha = 0.1,
-     beta = 0.1)
+testPR20 <- sprt(mu0 = 0.35,
+                 mu1 = 0.45,
+                 density_func = "binomial",
+                 alpha = 0.1,
+                 beta = 0.1)
+plot(testPR20)
 ```
-and run a SPRT for the data in `binPR` as:
+
+and obtain the stop lines coefficients with:
+```{r}
+testPR20
+```
+
+Now, we can run a SPRT for the data in `binPR` with:
 ```{r}
 testPR2 <- sprt(data = binPR,
                 mu0 = 0.35,
@@ -955,7 +969,7 @@ sampling can be a good alternative when the threshold population density is smal
 
 ## Wishlist for future versions
 
-- Implement cluster sampling in eval
+- Implement cluster sampling in eval functions for both STBP and SPRT
 - Include time-sequential probability ratio test for dynamic thresholds
 - Implement cluster sampling for SPRT
 - Protocol to run eval functions faster with parallel computing
@@ -972,6 +986,10 @@ American Phytopathological Society. St. Paul, MN (USA). 421pp.
 Rincon, D.F., McCabe, I. & Crowder, D.W. (2025) Sequential testing of complementary 
 hypotheses about population density. Methods in Ecology and Evolution. 
 <https://doi.org/10.1111/2041-210X.70053>
+
+Rincon, D. F., Rivera- Trujillo, H. F., Mojica- Ramos, L., & BorreroEcheverry, F. 
+(2021) Sampling plans promoting farmers' memory provide decision support in *Tuta absoluta*
+management. Agronomy for Sustainable Development, 41: 33. <https://doi.org/10.1007/s13593-021-00693-0>
 
 Wald, A. (1945) Sequential Tests of Statistical Hypotheses. The Annals of Mathematical
 Statistics 16(2): 117-186.

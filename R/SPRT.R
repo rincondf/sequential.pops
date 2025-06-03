@@ -8,8 +8,10 @@
 #'
 #' @param data Optional vector of count data (NAs not allowed). Each value is
 #' considered a sampling bout over time. Can't process group sequential data.
-#' If not provided (NA), returns a chart with stop lines and stop lines
-#' coefficients. If provided, returns a \code{"SPRT"} object.
+#' If not provided (NA), returns a \code{"SPRT"} object that can be used to plot
+#' a chart with stop lines or to return stop lines coefficients. If provided, returns
+#' a \code{"SPRT"} object that can be used to plot a chart with stop lines and data
+#' or to return test summary.
 #' @param mu0 Single non-negative number with the value for the low
 #' hypothesized population density, \eqn{\psi_{0}}.
 #' @param mu1 Single non-negative number with the value for the high
@@ -97,7 +99,7 @@ sprt <- function(data = NA,
     stop("ERROR: error rates should single values be within the interval [0,1].")
 
 
-  call <- match.call()
+  call <- rlang::call_match(defaults = TRUE)
 
   if(density_func == "poisson") {
 
@@ -187,39 +189,22 @@ sprt <- function(data = NA,
     pen * x + hi_um
   }
 
-
-  # if there no data, returns a chart with stop lines
+  # if there no data, returns an object with test specification
   if(all(is.na(data))) {
-    opar <- par(no.readonly = TRUE)
-    on.exit(par(opar), add = TRUE)
-
-    max.n <- ((low_um - hi_seq_c(15)) / (-pen))
-
-    par(mar = c(5, 7, 2, 2))
-    plot(seq(0, max.n), hi_seq_c(seq(0, max.n)), type = "l",
-         ylim = c(0, hi_seq_c(15)), xlim = c(0, max.n), cex.lab = 2, yaxt = "n",
-         xaxt = "n", xlab = "Sampling bout",
-         ylab = "", cex.axis = 2, lwd = 2)
-
-    axis(2, at = seq(0, hi_seq_c(15), round(hi_seq_c(15)/5)), cex.axis = 2, las = 2)
-    axis(1, at = seq(0, max.n, round(max.n/7)), cex.axis = 2)
-
-    lines(seq(0, max.n), low_seq_c(seq(0, max.n)), lwd = 2)
-    title(ylab = "Cumulative counts", cex.lab = 2, line = 4.5)
-
-    cat("\nSequential Probability Ratio Test - Stop lines\n")
-    cat("Family:", density_func)
-    cat("\nH0: mu =", mu0)
-    cat("\nH1: mu =", mu1, "\n")
-    cat("\nUpper line coefficients:")
-    cat("\nIntercept = ", hi_um)
-    cat("\nSlope = ", pen)
-    cat("\nLower line coefficients:")
-    cat("\nIntercept = ", low_um)
-    cat("\nSlope = ", pen)
+    resp <- new("SPRT",
+                call = call,
+                data = NA,
+                hi_int = hi_um,
+                low_int = low_um,
+                slope = pen,
+                recommendation = NA,
+                iterations = 0)
   }
 
   if(all(!is.na(data))) {
+
+    if(!is.numeric(data))
+      stop("ERROR: data should be numeric.")
 
     if(any(is.na(data)))
       stop("ERROR: no NAs allowed.")
@@ -242,9 +227,6 @@ sprt <- function(data = NA,
                 slope = pen,
                 recommendation = rec,
                 iterations = i)
-
-    resp
-
   }
-
+  resp
 }

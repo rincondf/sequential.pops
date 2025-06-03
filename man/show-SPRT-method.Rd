@@ -11,12 +11,20 @@
 \item{object}{Created as a result of a call to \code{\link{sprt}}.}
 }
 \value{
-A summary of the test.
+A summary of test results or specification (if data = NA or omitted).
 }
 \description{
-Method for signature \code{"SPRT"} to show results.
+Method for signature \code{"SPRT"} to show results or test specification.
 }
 \examples{
+
+test00 <- sprt(mu0 = 2,
+                mu1 = 4,
+                density_func = "negative binomial",
+                overdispersion = 4.6,
+                alpha = 0.1,
+                beta = 0.1)
+show(test00) # returns test specification.
 
 counts <- c(2, 5, 6, 2, 7)
 
