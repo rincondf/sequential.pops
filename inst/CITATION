@@ -1,0 +1,17 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "sequential.pops: Sequential Analysis of Biological Population Sizes",
+  author   = c(person(given = "Diego F", family = "Rincon",
+       email = "diego.rincon@wsu.edu", role = c("aut", "cre", "cph"),
+       comment = c(ORCID = "0000-0001-6869-4430")),
+       person(given = "Izzy", family = "McCabe",
+       email = "israel.mcdonald@wsu.edu", role = c("aut"),
+       comment = c(ORCID = "0009-0004-5179-0345")),
+       person(given = "David W", family = "Crowder",
+       email = "dcrowder@wsu.edu", role = c("aut"),
+       comment = c(ORCID = "0000-0002-3720-1581"))),
+  note  = "R package version 0.1.1",
+  year  = "2025"",
+  url   = "https://CRAN.R-project.org/package=sequential.pops",
+  doi   = "10.32614/CRAN.package.sequential.pops"
+)
