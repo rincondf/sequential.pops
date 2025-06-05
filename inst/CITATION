@@ -11,7 +11,7 @@ bibentry(
        email = "dcrowder@wsu.edu", role = c("aut"),
        comment = c(ORCID = "0000-0002-3720-1581"))),
   note  = "R package version 0.1.1",
-  year  = "2025"",
+  year  = "2025",
   url   = "https://CRAN.R-project.org/package=sequential.pops",
   doi   = "10.32614/CRAN.package.sequential.pops"
 )
