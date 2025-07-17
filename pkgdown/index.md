@@ -5,6 +5,12 @@ The `sequential.pops` package provides tools to test sequentially hypotheses abo
 2. The sequential probability ratio test (Wald, A. 1945): This test is based on probability ratios obtained from the likelihood of the data for two contrasted (non-complementary) hypotheses.
 
 This package includes tools to run and evaluate sequential tests, produce charts with stop lines, and summarize results.
+
+## Useful links
+
+[A tutorial that illustrates the use `sequential.pops`](https://rincondf.github.io/sequential.pops/articles/Seq-vignette.html)
+[Blog post with motivation and some examples](https://methodsblog.com/2025/06/02/simple-intuitive-tool-for-population-management-decision-making/)
+
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/rincondf/sequential.pops/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rincondf/sequential.pops/actions/workflows/R-CMD-check.yaml)
 [![](https://www.r-pkg.org/badges/version/sequential.pops)](https://cran.r-project.org/package=sequential.pops)
