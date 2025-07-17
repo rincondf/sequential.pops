@@ -6,7 +6,7 @@ The `sequential.pops` package provides tools to test sequentially hypotheses abo
 
 This package includes tools to run and evaluate sequential tests, produce charts with stop lines, and summarize results.
 
-## Useful links
+## Useful readings
 
 [A tutorial that illustrates the use `sequential.pops`](https://rincondf.github.io/sequential.pops/articles/Seq-vignette.html)
 
