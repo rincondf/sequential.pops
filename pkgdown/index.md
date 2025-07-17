@@ -9,6 +9,7 @@ This package includes tools to run and evaluate sequential tests, produce charts
 ## Useful links
 
 [A tutorial that illustrates the use `sequential.pops`](https://rincondf.github.io/sequential.pops/articles/Seq-vignette.html)
+
 [Blog post with motivation and some examples](https://methodsblog.com/2025/06/02/simple-intuitive-tool-for-population-management-decision-making/)
 
 <!-- badges: start -->
