@@ -2,7 +2,7 @@
 The `sequential.pops` package provides tools to test sequentially hypotheses about population sizes. Two approaches are included:
 
 1. The sequential test of Bayesian posterior probabilities (Rincon, D.F., McCabe, I. & Crowder, D.W. 2025): This test is based on a sequence of conditional probabilities obtained from the data and can explicitly consider simple or composite hypotheses about static or dynamic population densities and process either purely sequential (one-at-a-time) or group sequential data.
-2. The sequential probability ratio test (Wald, A. 1945): This test is based on probability ratios obtained from the likelihood of the data for two contrasted (non-complementary) hypotheses.
+2. The sequential probability ratio test (Wald, A. 1945): This test is based on probability ratios obtained from the likelihood of the data for two contrasted (non-complementary) simple hypotheses. The SPRT is designed to test static hypotheses and process purely sequential data, but there are modifications to make it work for dynamic hypotheses and group sequential data too.
 
 This package includes tools to run and evaluate sequential tests, produce charts with stop lines, and summarize results.
 
